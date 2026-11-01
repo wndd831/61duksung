@@ -1757,12 +1757,36 @@ body.is-loaded .fold-svg .fold-paper-group {
   color: #999;
 }
 
-.fold-reset {
+.fold-ui {
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fold-hint {
+  transition: opacity 0.3s ease;
+}
+
+.fold-buttons {
+  display: flex;
+  gap: 20px;
   pointer-events: auto;
+}
+
+.fold-btn {
   font-size: 13px;
   color: var(--black);
-  padding: 4px 0;
+  padding: 2px 0;
   border-bottom: 1px solid var(--black);
+  transition: opacity 0.2s ease;
+}
+
+.fold-btn:disabled {
+  opacity: 0.3;
+}
+
+/* 완료 상태: 더 이상 접히지 않음 */
+.fold-stage.is-done .fold-svg {
+  pointer-events: none;
 }
 
 /* 같은 색 면이 겹쳐도 접힌 경계가 보이도록 아주 옅은 선 */
@@ -1771,4 +1795,13 @@ body.is-loaded .fold-svg .fold-paper-group {
   stroke-width: 1px;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
+}
+
+
+/* 소개글 단어 애니메이션이 끝나면 일반 글자로 되돌림
+   → 드래그(선택) 색이 띄어쓰기에서만 길쭉해지지 않게 */
+.scroll-intro-inner.settled .word {
+  display: inline;
+  transform: none;
+  transition: none;
 }

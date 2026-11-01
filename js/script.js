@@ -243,6 +243,9 @@
           if (entry.isIntersecting) {
             entry.target.classList.add('in-view');
             observer.unobserve(entry.target);
+            // 마지막 단어까지 다 떨어진 뒤 일반 글자로 (선택 영역 높이 통일)
+            const count = entry.target.querySelectorAll('.word').length;
+            setTimeout(() => entry.target.classList.add('settled'), count * 60 + 800);
           }
         });
       },
@@ -693,9 +696,32 @@
     foldSvg.addEventListener('pointerup', endDrag);
     foldSvg.addEventListener('pointercancel', endDrag);
 
+    const foldHint = document.getElementById('foldHint');
+    const foldDone = document.getElementById('foldDone');
+    const HINT_IDLE = '종이를 접어, 나만의 다음 점을 만들어보세요';
+    const HINT_DONE = '하나의 형태로 접혔어요. 이제, 다음 점으로.';
+
+    const setHint = (text) => {
+      if (!foldHint || foldHint.textContent === text) return;
+      foldHint.style.opacity = 0;
+      setTimeout(() => { foldHint.textContent = text; foldHint.style.opacity = 1; }, 300);
+    };
+
+    // 다시 펴기: 처음 종이로, 다시 접을 수 있게
     document.getElementById('foldReset')?.addEventListener('click', () => {
       layers = flatPaper();
+      foldStage.classList.remove('is-done');
+      if (foldDone) foldDone.disabled = false;
+      setHint(HINT_IDLE);
       render();
+    });
+
+    // 완료: 지금 모양으로 고정
+    foldDone?.addEventListener('click', () => {
+      foldStage.classList.add('is-done');
+      foldDone.disabled = true;
+      tapeCursor?.classList.remove('is-hovering');
+      setHint(HINT_DONE);
     });
 
     fitView();
