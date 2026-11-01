@@ -7,14 +7,14 @@ html {
    ※ 기본 폰트가 Bold라서 굵기 지정이 어떻든 전부 Bold 파일로 나오게 함 */
 @font-face {
     font-family: 'PyeojinGothic';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2504-1@1.0/PyeojinGothic-Bold.woff2') format('woff2');
+    src: url('../fonts/PyeojinGothic-Bold.woff2') format('woff2');
     font-weight: 100 900;
     font-display: swap;
 }
 
 @font-face {
     font-family: 'Paperlogy';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2');
+    src: url('../fonts/Paperlogy-9Black.woff2') format('woff2');
     font-weight: 900;
     font-display: swap;
 }
@@ -59,7 +59,7 @@ a {
 }
 
 button {
-  font-family: 'PyeojinGothic';
+  font-family: var(--font-kr);
   cursor: pointer;
   border: none;
   background: none;
@@ -141,7 +141,7 @@ button {
 
   padding: 2px 6px;
 
-  font-family: 'PyeojinGothic', sans-serif;
+  font-family: var(--font-kr);
   font-weight: 400;
 
   white-space: nowrap;
@@ -342,11 +342,11 @@ button {
 }
 
 .scroll-intro-inner h1 {
-  font-family: 'PyeojinGothic';
+  font-family: var(--font-kr);
   font-weight: 700;
   font-size: 25px;
   margin-bottom: 24px;
-  letter-spacing: 0.02em;
+  letter-spacing: var(--tracking);
 }
 
 .scroll-intro-inner p {
@@ -414,7 +414,7 @@ button {
 }
 
 .committee-title {
-  font-family: 'PyeojinGothic';
+  font-family: var(--font-kr);
   font-weight: 700;
   font-size: 25px;
   margin-bottom: 40px;
@@ -425,7 +425,7 @@ button {
 }
 
 .committee {
-  font-family: 'PyeojinGothic';
+  font-family: var(--font-kr);
   max-width: 400px;
   margin: 0 auto;
   text-align: left;
