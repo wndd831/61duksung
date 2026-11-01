@@ -722,11 +722,12 @@ button {
 .designer-tape {
   position: absolute;
   z-index: 1; /* 접힌 면 위로 올리기 */
-  left: 59.5%;
-  top: 80.1%;
-  transform: translate(-50%, -50%) rotate(-15.8deg); /* 접힘선 각도에 맞춤 */
+  /* 접힌 쐐기의 중심축(왼쪽 아래 꼭짓점 → 반대편 변 가운데) 위에 놓음 */
+  left: 62.9%;
+  top: 79.4%;
+  transform: translate(-50%, -50%) rotate(-23.6deg); /* 접힌 종이 기울기 */
 
-  font-size: clamp(9px, 5.6cqw, 14px);
+  font-size: clamp(12px, 8cqw, 20px);
   font-weight: 700;
   line-height: 1;
   color: var(--black);
@@ -764,7 +765,11 @@ button {
 /* 보드 위 메모 하나하나 */
 .guest-note {
   position: absolute;
-  width: 180px;
+  width: 190px;
+  aspect-ratio: 1 / 1; /* 정사각형 색종이 */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background: var(--orange);
   color: var(--black);
   padding: 16px 18px;
@@ -774,6 +779,15 @@ button {
   cursor: grab;
   user-select: none;
   touch-action: none;
+}
+
+.guest-note.note-blue {
+  background: var(--blue);
+}
+
+.guest-note .note-message {
+  flex: 1;
+  overflow: hidden;
 }
 
 .guest-note.dragging {
@@ -979,7 +993,7 @@ button {
   pointer-events: none;     /* 커서가 클릭 이벤트를 방해하지 않도록 설정 */
   transform: translate(-50%, -50%); /* 중심점을 마우스 끝으로 맞춤 */
   transition: transform 0.1s ease-out; /* 부드러운 움직임을 원할 때 (생략 가능) */
-  z-index: 9999;            /* 항상 최상단에 위치 */
+  z-index: 2147483647;      /* 팝업·로딩 위에서도 항상 최상단 */
   /* 2. 테두리선(두께 스타일 색상) 설정 */
   border: 2px solid var(--black); 
 }

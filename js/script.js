@@ -300,7 +300,9 @@
 
         function renderNote(note) {
       const el = document.createElement('div');
-      el.className = 'guest-note';
+      // 색종이 색: 저장된 값, 없으면(예전 메모) id로 고정
+      const color = note.color || (Math.floor(note.id) % 2 ? 'blue' : 'orange');
+      el.className = color === 'blue' ? 'guest-note note-blue' : 'guest-note';
       el.style.left = `${note.left}%`;
       el.style.top = `${note.top}px`;
       el.style.setProperty('--rot', `${note.rot}deg`);
@@ -403,6 +405,7 @@
         left: 5 + Math.random() * 80, // 5% ~ 85%
         top: 40 + Math.random() * (board.clientHeight - 200 || 400),
         rot: Math.floor(Math.random() * 17) - 8, // -8 ~ 8도
+        color: Math.random() < 0.5 ? 'blue' : 'orange', // 파랑/주황 랜덤
       };
 
       notes.push(newNote);
