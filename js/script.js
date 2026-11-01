@@ -1125,10 +1125,11 @@
       }
       const vw = window.innerWidth;
       const gap = 64;
+      const edge = 40;                                   // 로고 F 왼쪽 선
       const posterW = aboutPoster.offsetWidth;
-      const introW = Math.min(560, vw - posterW - gap - 120);
-      const groupLeft = (vw - (posterW + gap + introW)) / 2;
-      const shiftMax = groupLeft - (vw - posterW) / 2;   // 가운데 → 왼쪽까지 거리 (음수)
+      const introLeft = edge + posterW + gap;
+      const introW = Math.min(560, vw - introLeft - edge);
+      const shiftMax = edge - (vw - posterW) / 2;        // 가운데 → 왼쪽 끝까지 (음수)
 
       // 고정 구간 안에서 얼마나 스크롤했는지 0 ~ 1
       const total = aboutHero.offsetHeight - window.innerHeight;
@@ -1137,7 +1138,8 @@
       const show = ease(clamp01((p - 0.35) / 0.45));     // 이어서 설명 등장
 
       aboutPoster.style.setProperty('--poster-x', `${shiftMax * move}px`);
-      aboutIntro.style.setProperty('--intro-left', `${groupLeft + posterW + gap}px`);
+      aboutIntro.style.setProperty('--intro-left', `${introLeft}px`);
+      aboutIntro.style.setProperty('--intro-top', `${aboutPoster.offsetTop}px`);
       aboutIntro.style.setProperty('--intro-w', `${introW}px`);
       aboutIntro.style.setProperty('--intro-o', show);
       aboutIntro.style.setProperty('--intro-shift', `${30 * (1 - show)}px`);

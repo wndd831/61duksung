@@ -2350,7 +2350,7 @@ body.is-loaded .fold-svg .fold-paper-group {
   top: 140px;              /* 상단바 + 여유 */
   bottom: 40px;
   left: 50%;
-  aspect-ratio: 836 / 1188;
+  aspect-ratio: 900 / 1274;
   transform: translateX(calc(-50% + var(--poster-x, 0px)));
   will-change: transform;
 }
@@ -2427,4 +2427,69 @@ body.is-loaded .fold-svg .fold-paper-group {
     opacity: 1;
     transform: none;
   }
+}
+
+
+/* =========================================
+   ABOUT 스크롤 연출 v2
+   - 무빙 포스터(영상), 오른쪽 글은 포스터 윗선에 맞춤
+   - 포스터는 로고 F 왼쪽 선(40px)까지 밀림
+   - 전시 정보는 소개글 아래에 (라벨 위 / 내용 아래)
+   ========================================= */
+.about-poster video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: var(--bg);
+  border: 1px solid rgba(65, 68, 69, 0.15);
+}
+
+.about-sticky .about-intro.scroll-intro-inner {
+  top: var(--intro-top, 140px);
+  padding-top: 0;
+  transform: translateX(var(--intro-shift, 30px));
+}
+
+.about-intro h1 {
+  margin-top: -0.25em;      /* 글자 윗선을 포스터 윗선에 맞춤 */
+  margin-bottom: 18px;
+}
+
+.about-intro .scroll-text {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.about-info {
+  margin-top: 34px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.about-info dt {
+  font-family: var(--font-kr);
+  font-weight: 700;
+  margin-top: 18px;
+}
+.about-info dt:first-child {
+  margin-top: 0;
+}
+
+.about-info dd {
+  margin: 4px 0 0;
+  font-family: var(--font-kr-regular);
+  font-weight: 400;
+}
+
+.about-info-sub {
+  display: inline-block;
+  min-width: 84px;
+}
+
+@media (max-width: 960px) {
+  .about-sticky .about-intro.scroll-intro-inner {
+    transform: none;
+  }
+  .about-poster video { height: auto; }
 }
