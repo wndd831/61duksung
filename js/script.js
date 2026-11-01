@@ -480,3 +480,26 @@
       mainNav?.classList.remove('open');
     });
   });
+
+  /* =========================================
+     8. PAGE LOADER
+     페이지 다 불러오면 사라짐 (최소 한 바퀴는 보여줌)
+  ========================================= */
+
+  const pageLoader = document.getElementById('pageLoader');
+
+  if (pageLoader) {
+    const MIN_SHOW = 1200; // ms, 한 바퀴
+    const startedAt = performance.now();
+
+    const hideLoader = () => {
+      const wait = Math.max(0, MIN_SHOW - (performance.now() - startedAt));
+      setTimeout(() => pageLoader.classList.add('done'), wait);
+    };
+
+    if (document.readyState === 'complete') {
+      hideLoader();
+    } else {
+      window.addEventListener('load', hideLoader);
+    }
+  }
