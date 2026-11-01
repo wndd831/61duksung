@@ -2529,3 +2529,51 @@ body.is-loaded .fold-svg .fold-paper-group {
 .about-info-sub {
   min-width: 96px;
 }
+
+
+/* 전시 정보 | 졸준위 명단 나란히 (글자 크기는 전시 정보 본문과 같게) */
+.about-details {
+  display: flex;
+  align-items: flex-start;
+  gap: 56px;
+  margin-top: 34px;
+}
+.about-details .about-info {
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+.about-committee {
+  font-size: var(--intro-fs, 16px);
+  line-height: 1.7;
+  font-family: var(--font-kr-regular);
+  font-weight: 400;              /* 이름: Regular */
+}
+.about-committee-title {
+  font-family: var(--font-kr);
+  font-weight: 700;              /* 졸업전시준비위원회: Bold */
+  margin-bottom: 4px;
+}
+.about-committee p + p {
+  margin-top: 4px;
+}
+.about-committee b {
+  font-family: var(--font-kr);
+  font-weight: 700;              /* 직책: Bold */
+  margin-right: 0.35em;
+}
+.about-committee b:not(:first-child) {
+  margin-left: 1em;              /* 직책 묶음 사이 간격 */
+}
+
+@media (max-width: 960px) {
+  .about-details {
+    flex-direction: column;
+    gap: 40px;
+  }
+}
+/* 예전 '.scroll-intro-inner p { 18px }' 규칙이 명단에 걸리지 않게 */
+.about-intro .about-committee p {
+  font-size: inherit;
+  color: inherit;
+}
