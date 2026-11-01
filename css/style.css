@@ -1377,7 +1377,8 @@ button {
 }
 
 .fold-loader {
-  width: 90px;  /* 크기는 여기서 조절 */
+  width: 270px;  /* 크기는 여기서 조절 */
+  max-width: 60vw; /* 모바일에서 화면 밖으로 안 나가게 */
   height: auto;
 }
 
