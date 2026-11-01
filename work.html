@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>작품명 | NO, IT'S NECESSARY.</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page-loader" id="pageLoader" aria-hidden="true">
+  <svg class="fold-loader" viewBox="0 0 260 300">
+    <g class="fold-frame">
+      <polygon class="o" points="20,17 245,31 231,257 6,243"/>
+    </g>
+    <g class="fold-frame">
+      <polygon class="o" points="6,33 239,19 248,172 168,177 173,257 21,267"/>
+      <polygon class="b" points="168,177 248,172 173,257"/>
+    </g>
+    <g class="fold-frame">
+      <polygon class="b" points="25,7 75,10 60,254 10,251"/>
+      <polygon class="o" points="75,10 136,14 131,98 215,103 205,263 60,254"/>
+      <polygon class="b" points="136,14 215,103 131,98"/>
+    </g>
+    <g class="fold-frame">
+      <polygon class="b" points="11,26 57,21 81,272 36,276"/>
+      <polygon class="o" points="57,21 117,16 125,101 211,93 219,172 133,179 141,266 81,272"/>
+      <polygon class="b" points="117,16 211,93 125,101"/>
+      <polygon class="b" points="133,179 219,172 141,266"/>
+    </g>
+  </svg>
+</div>
+  <div class="custom-cursor"></div>
+  <header class="site-header">
+    <a href="index.html" class="logo-badge"><img src="images/logo.png" alt="NO, IT'S NECESSARY."></a>
+    <nav class="main-nav" id="mainNav">
+      <ul>
+        <li><a href="about.html">(ABOUT)</a></li>
+        <li><a href="project.html" class="active">PROJECTS</a></li>
+        <li><a href="designer.html">(DESIGNERS)</a></li>
+        <li><a href="guestbook.html">(GUEST BOOK)</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="메뉴 열기">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  </header>
+
+<main class="work-detail">
+
+  <!-- 왼쪽: 작품 정보 (스크롤해도 고정) -->
+  <aside class="work-detail-info">
+    <a class="work-back" href="project.html" id="workBack" aria-label="뒤로가기">
+      <svg viewBox="0 0 10 16" width="10" height="16"><polyline points="8,2 2,8 8,14" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    </a>
+
+    <h1 class="work-detail-title">작품명</h1>
+    <p class="work-detail-designer">디자이너</p>
+
+    <p class="work-detail-desc">작품설명작품설명작품설명작품설명작품설명작품설명</p>
+    <p class="work-detail-desc-en">영어설명영어설명영어설명영어설명영어설명영어설명</p>
+  </aside>
+
+  <!-- 오른쪽: 작품 이미지 (필요한 만큼 work-detail-image 추가) -->
+  <section class="work-detail-images">
+    <div class="work-detail-image"></div>
+    <div class="work-detail-image"></div>
+    <div class="work-detail-image"></div>
+    <!-- 실제 이미지는: <img class="work-detail-image" src="images/works/파일명.jpg" alt="작품명"> -->
+  </section>
+
+</main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 NO, IT'S NECESSARY. All rights reserved.</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

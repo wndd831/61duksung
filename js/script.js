@@ -514,3 +514,18 @@
       window.addEventListener('load', hideLoader);
     }
   }
+
+
+  /* =========================================
+     9. WORK DETAIL – 뒤로가기
+     이전 페이지(프로젝트/디자이너 팝업)가 있으면 그리로, 없으면 프로젝트로
+  ========================================= */
+
+  const workBack = document.getElementById('workBack');
+
+  workBack?.addEventListener('click', (e) => {
+    if (document.referrer && new URL(document.referrer).origin === location.origin && history.length > 1) {
+      e.preventDefault();
+      history.back();
+    }
+  });
