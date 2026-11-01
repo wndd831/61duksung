@@ -44,6 +44,18 @@
         <button class="fold-btn" id="foldDone" type="button">완료</button>
       </div>
     </div>
+
+    <!-- 광장: 모두가 보낸 종이가 모이는 곳 (같은 페이지에서 화면만 바뀜) -->
+    <section class="plaza" id="plaza" aria-hidden="true">
+      <p class="plaza-title">모두가 접은 종이가 모이는 광장이에요</p>
+      <div class="plaza-board" id="plazaBoard"></div>
+      <p class="plaza-empty" id="plazaEmpty">아직 광장에 도착한 종이가 없어요</p>
+    </section>
+
+    <!-- 하단: 종이접기 ↔ 광장 전환 -->
+    <button class="stage-switch" id="stageSwitch" type="button">
+      <i class="nav-dot" aria-hidden="true"></i><span>광장 보기</span>
+    </button>
   </main>
 
   <!-- 완료 팝업: 카드 만들기 -->
@@ -56,8 +68,8 @@
       <!-- 카드 미리보기 (글자는 카드 위에서 바로 입력) -->
       <div class="fold-card" id="foldCard" data-bg="blue">
         <div class="fold-card-title">
-          <span>FOLD TO</span>
-          <input class="fold-card-input fold-card-word" id="cardWord" type="text" placeholder="DOT" maxlength="10" aria-label="DOT 자리에 넣을 단어" autocomplete="off" spellcheck="false">
+          <span>Fold to</span>
+          <input class="fold-card-input fold-card-word" id="cardWord" type="text" placeholder="Dot" maxlength="10" aria-label="Dot 자리에 넣을 단어" autocomplete="off" spellcheck="false">
         </div>
         <img class="fold-card-paper" id="foldModalImg" alt="내가 접은 종이">
         <input class="fold-card-input fold-card-name" id="cardName" type="text" placeholder="이름" maxlength="10" aria-label="이름" autocomplete="off" spellcheck="false">
@@ -84,7 +96,16 @@
           <button class="fold-btn" id="foldShare" type="button">공유하기</button>
         </div>
       </div>
+      <button class="plaza-send" id="plazaSend" type="button">광장에 보내기</button>
       <p class="fold-modal-toast" id="foldToast" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- 광장에서 종이를 누르면 뜨는 카드 -->
+  <div class="fold-modal" id="plazaModal" aria-hidden="true">
+    <div class="fold-modal-box plaza-modal-box" role="dialog" aria-modal="true" aria-label="광장 카드">
+      <button class="fold-modal-close" id="plazaModalClose" type="button" aria-label="닫기">&times;</button>
+      <img class="plaza-card-img" id="plazaCardImg" alt="광장에 도착한 카드">
     </div>
   </div>
 

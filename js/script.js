@@ -750,8 +750,8 @@
     let paperBlob = null;
 
     // 접은 종이만 투명 배경 PNG로 그리기
-    function paperToCanvas(size = 1200) {
-      const pts = layers.flatMap((L) => L.pts);
+    function paperToCanvas(size = 1200, src = layers) {
+      const pts = src.flatMap((L) => L.pts);
       const xs = pts.map((p) => p[0]);
       const ys = pts.map((p) => p[1]);
       const minX = Math.min(...xs), maxX = Math.max(...xs);
@@ -773,7 +773,7 @@
       ctx.lineJoin = 'round';
       ctx.lineWidth = Math.max(1, size / 600);
       ctx.strokeStyle = 'rgba(65, 68, 69, 0.18)';
-      layers.forEach((L) => {
+      src.forEach((L) => {
         ctx.beginPath();
         L.pts.forEach(([x, y], i) => {
           const px = (x - minX + pad) * scale;
@@ -808,14 +808,25 @@
       });
     });
 
-    // 카드 PNG (1080 × 1440) – 미리보기와 같은 비율로 다시 그림
-    async function cardToCanvas() {
+    const CARD_COLORS = () => {
+      const root = getComputedStyle(document.documentElement);
+      const v = (n) => root.getPropertyValue(n).trim();
+      return {
+        orange: [v('--orange'), v('--black')],
+        blue:   [v('--blue'), v('--black')],
+        white:  [v('--bg'), v('--black')],
+        black:  [v('--black'), v('--bg')],
+      };
+    };
+
+    // 카드 PNG (1080 × 1440) – 미리보기와 같은 배치로 그림
+    // data: { layers, word, name, bg }  (광장 카드에도 같이 씀)
+    async function drawCard(data) {
       const W = 1080, H = 1440;
-      const css = getComputedStyle(foldCard);
-      const bg = css.getPropertyValue('--card-bg').trim();
-      const ink = css.getPropertyValue('--card-ink').trim();
-      const word = (cardWord.value.trim() || 'DOT').toUpperCase();
-      const name = cardName.value.trim().toUpperCase();
+      const [bg, ink] = CARD_COLORS()[data.bg] || CARD_COLORS().blue;
+      const word = (data.word || '').trim() || 'Dot';
+      const name = (data.name || '').trim();
+      const paper = paperToCanvas(1200, data.layers);
 
       await Promise.all([
         document.fonts.load('700 100px Paperlogy'),
@@ -827,9 +838,8 @@
       canvas.height = H;
       const ctx = canvas.getContext('2d');
       // 살짝 둥근 모서리 (바깥은 투명)
-      const R = W * (10 / 260);
       ctx.beginPath();
-      ctx.roundRect(0, 0, W, H, R);
+      ctx.roundRect(0, 0, W, H, W * (10 / 260));
       ctx.fillStyle = bg;
       ctx.fill();
       ctx.fillStyle = ink;
@@ -837,28 +847,26 @@
       ctx.textBaseline = 'middle';
 
       // 너무 긴 단어는 카드 폭에 맞춰 줄임
-      const fitText = (text, weight, size, family, maxW) => {
+      const fitText = (text, size, family, maxW, weight = 700) => {
         let s = size;
         do { ctx.font = `${weight} ${s}px ${family}`; s -= 2; } while (ctx.measureText(text).width > maxW && s > 10);
       };
 
       const titleSize = W * 0.10;
       const titleTop = H * 0.065;
-      fitText('FOLD TO', 700, titleSize, 'Paperlogy', W * 0.86);
-      ctx.fillText('FOLD TO', W / 2, titleTop + titleSize * 0.55);
-      fitText(word, 700, titleSize, 'Paperlogy', W * 0.86);
+      fitText('Fold to', titleSize, 'Paperlogy', W * 0.86);
+      ctx.fillText('Fold to', W / 2, titleTop + titleSize * 0.55);
+      fitText(word, titleSize, 'Paperlogy', W * 0.86);
       ctx.fillText(word, W / 2, titleTop + titleSize * 1.65);
 
       // 접은 종이 (누끼) – 상자 안에 비율 유지해서 가운데
-      if (paperCanvas) {
-        const bx = W * 0.145, by = H * 0.265, bw = W * 0.71, bh = H * 0.47;
-        const r = Math.min(bw / paperCanvas.width, bh / paperCanvas.height);
-        const dw = paperCanvas.width * r, dh = paperCanvas.height * r;
-        ctx.drawImage(paperCanvas, bx + (bw - dw) / 2, by + (bh - dh) / 2, dw, dh);
-      }
+      const bx = W * 0.145, by = H * 0.265, bw = W * 0.71, bh = H * 0.47;
+      const r = Math.min(bw / paper.width, bh / paper.height);
+      const dw = paper.width * r, dh = paper.height * r;
+      ctx.drawImage(paper, bx + (bw - dw) / 2, by + (bh - dh) / 2, dw, dh);
 
       if (name) {
-        fitText(name, 700, W * 0.075, 'Paperlogy', W * 0.8);
+        fitText(name, W * 0.075, 'Paperlogy', W * 0.8);
         ctx.fillText(name, W / 2, H * 0.785 + W * 0.075 * 0.6);
       }
 
@@ -866,6 +874,14 @@
       ctx.fillText('덕성여자대학교 시각디자인전공 졸업전시 Fold to Dot', W / 2, H * 0.965 - W * 0.0125);
       return canvas;
     }
+
+    const currentCard = () => ({
+      layers,
+      word: cardWord.value,
+      name: cardName.value,
+      bg: foldCard.dataset.bg,
+    });
+    const cardToCanvas = () => drawCard(currentCard());
 
     const canvasToBlob = (canvas) => new Promise((res) => canvas.toBlob(res, 'image/png'));
 
@@ -903,6 +919,7 @@
       foldModalImg.src = paperCanvas.toDataURL('image/png');
       paperBlob = null;
       paperCanvas.toBlob((b) => { paperBlob = b; }, 'image/png');
+      if (plazaSend) { plazaSend.disabled = false; plazaSend.textContent = '광장에 보내기'; }
       foldModal.classList.add('open');
       foldModal.setAttribute('aria-hidden', 'false');
     };
@@ -922,7 +939,7 @@
 
     document.getElementById('foldModalClose')?.addEventListener('click', closeModal);
     foldModal?.addEventListener('click', (e) => { if (e.target === foldModal) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closePlazaCard(); } });
 
     // 종이만: 투명 배경 PNG
     document.getElementById('foldSave')?.addEventListener('click', () => {
@@ -942,6 +959,114 @@
     document.getElementById('cardShare')?.addEventListener('click', async () => {
       const blob = await canvasToBlob(await cardToCanvas());
       shareImage(blob, 'fold-to-dot-card.png');
+    });
+
+
+    /* =========================================
+       광장 – 사람들이 보낸 종이가 모이는 곳
+       ※ 지금은 저장소가 '이 브라우저'라서 내가 보낸 것만 보임.
+         모두가 함께 보려면 plazaStore의 list/add만 서버(Firebase 등)로 바꾸면 됨.
+    ========================================= */
+    const plazaStore = {
+      KEY: 'foldPlaza',
+      async list() {
+        try { return JSON.parse(localStorage.getItem(this.KEY)) || []; } catch { return []; }
+      },
+      async add(entry) {
+        const all = await this.list();
+        all.push(entry);
+        try { localStorage.setItem(this.KEY, JSON.stringify(all)); } catch { /* 저장 공간 없음 */ }
+        return entry;
+      },
+    };
+
+    const plazaBoard = document.getElementById('plazaBoard');
+    const plazaEmpty = document.getElementById('plazaEmpty');
+    const plazaEl = document.getElementById('plaza');
+    const plazaSend = document.getElementById('plazaSend');
+    const plazaModal = document.getElementById('plazaModal');
+    const plazaCardImg = document.getElementById('plazaCardImg');
+    const stageSwitch = document.getElementById('stageSwitch');
+
+    // 종이 모양을 작은 SVG로
+    function paperSvg(src) {
+      const pts = src.flatMap((L) => L.pts);
+      const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+      const minX = Math.min(...xs), minY = Math.min(...ys);
+      const size = Math.max(Math.max(...xs) - minX, Math.max(...ys) - minY) || 1;
+      const offX = (size - (Math.max(...xs) - minX)) / 2;
+      const offY = (size - (Math.max(...ys) - minY)) / 2;
+      const svg = document.createElementNS(SVGNS, 'svg');
+      svg.setAttribute('viewBox', `${minX - offX} ${minY - offY} ${size} ${size}`);
+      src.forEach((L) => {
+        const poly = document.createElementNS(SVGNS, 'polygon');
+        poly.setAttribute('class', L.back ? 'back' : 'front');
+        poly.setAttribute('points', L.pts.map((p) => p.join(',')).join(' '));
+        svg.appendChild(poly);
+      });
+      return svg;
+    }
+
+    async function renderPlaza(newId) {
+      const all = await plazaStore.list();
+      plazaBoard.replaceChildren(...all.map((entry) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'plaza-paper' + (entry.id === newId ? ' is-new' : '');
+        btn.style.left = `${entry.x}%`;
+        btn.style.top = `${entry.y}%`;
+        btn.style.setProperty('--rot', `${entry.rot}deg`);
+        btn.setAttribute('aria-label', `${entry.name || '누군가'}의 종이`);
+        btn.appendChild(paperSvg(entry.layers));
+        btn.addEventListener('click', () => openPlazaCard(entry));
+        return btn;
+      }));
+      if (plazaEmpty) plazaEmpty.hidden = all.length > 0;
+    }
+
+    async function openPlazaCard(entry) {
+      const canvas = await drawCard(entry);
+      plazaCardImg.src = canvas.toDataURL('image/png');
+      plazaModal.classList.add('open');
+      plazaModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closePlazaCard() {
+      plazaModal?.classList.remove('open');
+      plazaModal?.setAttribute('aria-hidden', 'true');
+    }
+    document.getElementById('plazaModalClose')?.addEventListener('click', closePlazaCard);
+    plazaModal?.addEventListener('click', (e) => { if (e.target === plazaModal) closePlazaCard(); });
+
+    // 종이접기 ↔ 광장 화면 전환 (페이지 이동 없이)
+    function showPlaza(on, newId) {
+      foldStage.classList.toggle('is-plaza', on);
+      plazaEl?.setAttribute('aria-hidden', on ? 'false' : 'true');
+      if (stageSwitch) stageSwitch.querySelector('span').textContent = on ? '종이 접으러 가기' : '광장 보기';
+      tapeCursor?.classList.remove('is-hovering');
+      if (on) renderPlaza(newId);
+    }
+    stageSwitch?.addEventListener('click', () => showPlaza(!foldStage.classList.contains('is-plaza')));
+
+    // 완료 팝업 → 광장에 보내기
+    const round3 = (n) => Math.round(n * 1000) / 1000;
+    plazaSend?.addEventListener('click', async () => {
+      const entry = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        layers: layers.map((L) => ({ back: L.back, pts: L.pts.map(([x, y]) => [round3(x), round3(y)]) })),
+        word: cardWord.value.trim(),
+        name: cardName.value.trim(),
+        bg: foldCard.dataset.bg,
+        x: 6 + Math.random() * 88,
+        y: 8 + Math.random() * 84,
+        rot: Math.round(Math.random() * 24 - 12),
+        createdAt: Date.now(),
+      };
+      await plazaStore.add(entry);
+      plazaSend.disabled = true;
+      plazaSend.textContent = '광장에 보냈어요';
+      closeModal();
+      showPlaza(true, entry.id);
     });
 
     fitView();
