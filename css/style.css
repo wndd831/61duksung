@@ -1526,3 +1526,84 @@ a.designer-project-image:hover {
     padding: 30px 20px;
   }
 }
+
+
+/* =========================================
+   상단 로고 – Fold to · · · · · Dot.
+   평소: 텍스트만 / 호버: to와 Dot 사이가 벌어지며 점 → 점선 → 점
+   ========================================= */
+.site-logo {
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  font-family: var(--font-en-title);
+  font-weight: 900;
+  font-size: 38px;   /* 로고 크기 */
+  line-height: 1;
+  letter-spacing: var(--tracking);
+  color: var(--black);
+  white-space: nowrap;
+}
+
+/* to와 Dot 사이 공간 – 평소엔 띄어쓰기 한 칸 */
+.logo-link {
+  position: relative;
+  display: inline-block;
+  width: 0.28em;
+  height: 1em;
+  transition: width 0.45s cubic-bezier(0.6, 0, 0.2, 1) 0.15s;
+}
+
+.logo-dot {
+  position: absolute;
+  top: 50%;
+  width: 0.2em;
+  height: 0.2em;
+  border-radius: 50%;
+  background: currentColor;
+  transform: translateY(-50%) scale(0);
+  transition: transform 0.18s ease;
+}
+.logo-dot-start { left: 0.32em; }
+.logo-dot-end   { right: 0.32em; }
+
+.logo-dash {
+  position: absolute;
+  top: 50%;
+  left: 0.62em;
+  right: 0.62em;
+  height: 0.055em;
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(90deg, currentColor 0 0.12em, transparent 0.12em 0.24em);
+  clip-path: inset(0 100% 0 0); /* 왼쪽부터 그려짐 */
+  transition: clip-path 0.15s ease;
+}
+
+/* 호버 */
+.site-logo:hover .logo-link {
+  width: 3.8em;
+  transition-delay: 0s;
+}
+.site-logo:hover .logo-dot-start {
+  transform: translateY(-50%) scale(1);
+  transition-delay: 0.2s;
+}
+.site-logo:hover .logo-dash {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.45s linear 0.3s;
+}
+.site-logo:hover .logo-dot-end {
+  transform: translateY(-50%) scale(1);
+  transition-delay: 0.75s;
+}
+
+@media (max-width: 768px) {
+  .site-logo {
+    font-size: 26px;
+    left: 20px;
+  }
+  .site-logo:hover .logo-link {
+    width: 2.6em;
+  }
+}
