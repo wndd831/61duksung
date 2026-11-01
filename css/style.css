@@ -1,26 +1,35 @@
 html {
   overflow-y: scroll;
 }
-/* ---------- 폰트 ---------- */
-@font-face {
-    font-family: 'PyeojinGothic';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2504-1@1.0/PyeojinGothic-Light.woff2') format('woff2');
-    font-weight: 300;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'PyeojinGothic';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2504-1@1.0/PyeojinGothic-Regular.woff2') format('woff2');
-    font-weight: 400;
-    font-display: swap;
-}
-
+/* ---------- 폰트 (가이드라인) ----------
+   한글 기본: 펴진고딕 Bold / 자간 -10
+   영문 제목: 페이퍼로지 9 Black
+   ※ 기본 폰트가 Bold라서 굵기 지정이 어떻든 전부 Bold 파일로 나오게 함 */
 @font-face {
     font-family: 'PyeojinGothic';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2504-1@1.0/PyeojinGothic-Bold.woff2') format('woff2');
-    font-weight: 700;
+    font-weight: 100 900;
     font-display: swap;
+}
+
+@font-face {
+    font-family: 'Paperlogy';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2');
+    font-weight: 900;
+    font-display: swap;
+}
+
+:root {
+  --font-kr: 'PyeojinGothic', sans-serif;
+  --font-en-title: 'Paperlogy', 'PyeojinGothic', sans-serif;
+  --tracking: -0.01em; /* 자간 -10 = -10/1000em */
+}
+
+/* 영문 제목 (Fold to Dot) */
+.title-en {
+  font-family: var(--font-en-title);
+  font-weight: 900;
+  letter-spacing: var(--tracking);
 }
 
 /* ---------- 기본 리셋 ---------- */
@@ -31,9 +40,17 @@ html {
 }
 
 body {
-  font-family: 'PyeojinGothic';
+  font-family: var(--font-kr);
+  font-weight: 700;
+  letter-spacing: var(--tracking);
   color: #111;
   line-height: 1.6;
+}
+
+/* 버튼·입력창도 기본 폰트 따르게 */
+button, input, textarea, select {
+  font-family: inherit;
+  letter-spacing: inherit;
 }
 
 a {
@@ -739,12 +756,12 @@ button {
   background: #f47925;
   color: #333333;
   padding: 16px 18px;
-  font-family: 'KorailCondensed', 'PyeojinGothic', sans-serif;
+  font-family: var(--font-kr);
   animation: dropIn 0.4s ease-out;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: grab;
   user-select: none;
-  touch-action: none; /
+  touch-action: none;
 }
 
 .guest-note.dragging {
@@ -1006,7 +1023,7 @@ button {
 
   overflow: visible;
 
-  font-family: 'KorailCondensed', sans-serif;
+  font-family: var(--font-kr);
 }
 
 
@@ -1078,7 +1095,7 @@ button {
 
 .designer-modal-name {
 
-  font-family: 'KorailCondensed', sans-serif;
+  font-family: var(--font-kr);
   position: absolute;
 
   bottom: -22px;
