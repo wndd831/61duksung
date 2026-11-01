@@ -31,6 +31,7 @@ html {
   --font-kr-regular: 'PyeojinGothic Regular', sans-serif; /* 400 */
   --orange: #ef7425;  /* CMYK M65 Y97 (FOGRA39 변환값) – 주황은 전부 이거 */
   --bg: #f7fcfe;      /* CMYK C2 */
+  --black: #414445;   /* CMYK C10 K90 (FOGRA39 변환값) – 검정은 전부 이거 */
   --font-en-title: 'Paperlogy', 'PyeojinGothic', sans-serif;
   --tracking: -0.01em; /* 자간 -10 = -10/1000em */
 }
@@ -54,7 +55,7 @@ body {
   font-family: var(--font-kr);
   font-weight: 700;
   letter-spacing: var(--tracking);
-  color: #111;
+  color: var(--black);
   line-height: 1.6;
 }
 
@@ -183,7 +184,7 @@ button {
 /* ---------- 히어로 / 어바웃 비주얼 ---------- */
 .hero-visual {
   width: 100%;
-  background: #000;
+  background: var(--black);
 }
 
 /* =========================================
@@ -323,7 +324,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333333;
+  color: var(--black);
 
   padding: 80px 40px;
 }
@@ -363,12 +364,12 @@ button {
 .scroll-intro-inner p {
   font-size: 18px;
   font-weight: 400;
-  color: #333333;
+  color: var(--black);
 }
 
 .bold-text {
   font-weight: 700;
-  color: #333333;
+  color: var(--black);
 }
 /* ---------- 날짜/시간/장소 섹션 (화면 꽉 채움) ---------- */
 .info-section {
@@ -376,7 +377,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333;
+  color: var(--black);
 
   padding: 80px 40px;
 }
@@ -390,7 +391,7 @@ button {
   gap: 40px;
   margin-bottom: 20px;
   font-size: 18px;
-  color: #333333;
+  color: var(--black);
   line-height: 1.8;
 }
 
@@ -399,7 +400,7 @@ button {
   width: 70px;
   font-weight: 700;
   font-size: 18px;
-  color: #333333;
+  color: var(--black);
 }
 
 .info-sub-list {
@@ -416,7 +417,7 @@ button {
 .info-sub-label {
   flex-shrink: 0;
   width: 100px;
-  color: #333333;
+  color: var(--black);
 }
 
 .committee-section {
@@ -449,7 +450,7 @@ button {
   margin-bottom: 20px;
   font-size: 18px;
   font-weight: 400;
-  color: #333;
+  color: var(--black);
   line-height: 1.8;
 }
 
@@ -457,7 +458,7 @@ button {
   flex-shrink: 0;
   font-weight: 700;
   width: 70px;
-  color: #111;
+  color: var(--black);
 }
 
 /* =========================================
@@ -471,7 +472,7 @@ button {
   margin: 110px auto 0; /* 헤더 높이만큼 여백 */
   padding: 40px;
   align-items: flex-start;
-  color: #111;
+  color: var(--black);
 }
 
 /* 왼쪽 고정 정보 박스 */
@@ -505,7 +506,7 @@ button {
 }
 
 .project-item.active .project-tab {
-  color: #111;
+  color: var(--black);
   font-weight: 700;
 }
 
@@ -515,7 +516,7 @@ button {
   width: auto;
   font-size: 18px;
   background: var(--orange);
-  color: #333333;
+  color: var(--black);
   padding: 8px 14px;
   transform: rotate(-2deg);
   margin: 16px 0 8px;
@@ -547,7 +548,7 @@ button {
 
 .project-info-desc {
   font-size: 13px;
-  color: #333;
+  color: var(--black);
   line-height: 1.7;
   margin-bottom: 10px;
 }
@@ -566,7 +567,7 @@ button {
 
 .project-info-desc {
   font-size: 13px;
-  color: #333;
+  color: var(--black);
   line-height: 1.7;
   margin-bottom: 10px;
 }
@@ -658,7 +659,7 @@ button {
 }
 
 .filter-btn.active {
-  color: #111;
+  color: var(--black);
   font-weight: 600;
 }
 
@@ -728,7 +729,7 @@ button {
   font-size: clamp(9px, 5.6cqw, 14px);
   font-weight: 700;
   line-height: 1;
-  color: #333333;
+  color: var(--black);
   white-space: nowrap;
 
   opacity: 0;
@@ -765,7 +766,7 @@ button {
   position: absolute;
   width: 180px;
   background: var(--orange);
-  color: #333333;
+  color: var(--black);
   padding: 16px 18px;
   font-family: var(--font-kr);
   animation: dropIn 0.4s ease-out;
@@ -839,7 +840,7 @@ button {
 
   font-size: 30px;
   font-weight: 300;
-  color: #333;
+  color: var(--black);
   line-height: 1;
 
   display: flex;
@@ -980,7 +981,7 @@ button {
   transition: transform 0.1s ease-out; /* 부드러운 움직임을 원할 때 (생략 가능) */
   z-index: 9999;            /* 항상 최상단에 위치 */
   /* 2. 테두리선(두께 스타일 색상) 설정 */
-  border: 2px solid #000000; 
+  border: 2px solid var(--black); 
 }
 
 
@@ -1117,7 +1118,7 @@ button {
   font-size: 20px;
   font-weight: 700;
 
-  color: #333333;
+  color: var(--black);
 
   background: var(--orange);
 
@@ -1273,7 +1274,7 @@ button {
   display: block;
   width: 100%;
   height: 2px;
-  background: #111;
+  background: var(--black);
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
@@ -1397,4 +1398,19 @@ button {
 @keyframes foldStep {
   0%, 24.9%  { opacity: 1; }
   25%, 100%  { opacity: 0; }
+}
+
+
+/* =========================================
+   커서 상태: 기본 흰색 → 클릭 가능한 곳 파랑 → 누르는 중 주황
+   ========================================= */
+.custom-cursor {
+  border-color: var(--black);
+  transition: transform 0.1s ease-out, background-color 0.15s ease;
+}
+.custom-cursor.is-hovering {
+  background-color: var(--blue);
+}
+.custom-cursor.is-pressed {
+  background-color: var(--orange);
 }

@@ -59,6 +59,14 @@
     });
 
 
+    /* 누르는 중엔 주황 */
+    document.addEventListener('mousedown', () => {
+      tapeCursor.classList.add('is-pressed');
+    });
+    document.addEventListener('mouseup', () => {
+      tapeCursor.classList.remove('is-pressed');
+    });
+
     /* 클릭 가능한 요소 */
 
     const clickableSelector = `
