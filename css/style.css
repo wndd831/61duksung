@@ -1751,10 +1751,19 @@ body.is-loaded .fold-svg .fold-paper-group {
 }
 
 .fold-hint {
-  font-family: var(--font-kr-regular);
-  font-weight: 400;
-  font-size: 13px;
-  color: #999;
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* top은 JS가 종이 바로 위로 맞춰줌 */
+  text-align: center;
+  font-family: var(--font-en-title);  /* 페이퍼로지 */
+  font-weight: 900;
+  font-size: 22px;
+  line-height: 1.3;
+  letter-spacing: var(--tracking);
+  color: var(--black);
+  padding: 0 20px;
+  pointer-events: none;
 }
 
 .fold-ui {
@@ -1773,11 +1782,15 @@ body.is-loaded .fold-svg .fold-paper-group {
 }
 
 .fold-btn {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--black);
-  padding: 2px 0;
-  border-bottom: 1px solid var(--black);
-  transition: opacity 0.2s ease;
+  padding: 4px 2px;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+/* 밑줄 대신 마우스 올리면 주황 글씨 */
+.fold-btn:hover:not(:disabled) {
+  color: var(--orange);
 }
 
 .fold-btn:disabled {
@@ -1805,3 +1818,4 @@ body.is-loaded .fold-svg .fold-paper-group {
   transform: none;
   transition: none;
 }
+

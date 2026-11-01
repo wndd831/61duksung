@@ -568,17 +568,23 @@
     /* --- 화면 크기에 맞춰 종이 배치 --- */
     const foldUi = foldStage.querySelector('.fold-ui');
 
+    const foldHint = document.getElementById('foldHint');
+
+    // 멘트 / 종이 / 버튼 묶음을 브라우저 화면 세로 가운데에
     function fitView() {
       const r = foldStage.getBoundingClientRect();
+      const hintH = foldHint ? foldHint.offsetHeight : 0;
       const uiH = foldUi ? foldUi.offsetHeight : 0;
-      const gap = 28;                                   // 종이 ↔ 안내 문구 간격
-      const k = Math.min(r.height * 0.6, r.width * 0.8); // 종이 한 변(px)
-      // 종이 + 안내 문구 묶음을 '브라우저 화면 전체' 세로 가운데에 (상단바 포함 기준)
-      let centerY = (window.innerHeight / 2 - foldStage.offsetTop) - (gap + uiH) / 2;
-      centerY = Math.max(centerY, k / 2 + 24); // 상단바에 붙지 않게 최소 여백
+      const gap = 28;
+      const k = Math.min(r.height * 0.55, r.width * 0.8); // 종이 한 변(px)
+      const total = hintH + gap + k + gap + uiH;
+      let top = (window.innerHeight / 2 - foldStage.offsetTop) - total / 2;
+      top = Math.max(top, 24);                             // 상단바에 붙지 않게
+      const centerY = top + hintH + gap + k / 2;
       const vw = r.width / k;
       const vh = r.height / k;
       foldSvg.setAttribute('viewBox', `${-vw / 2} ${-centerY / k} ${vw} ${vh}`);
+      if (foldHint) foldHint.style.top = `${top}px`;
       if (foldUi) foldUi.style.top = `${centerY + k / 2 + gap}px`;
     }
 
@@ -685,10 +691,20 @@
       render();
     });
 
+    const history = [];               // 뒤로가기용 이전 모양들
+    const foldUndo = document.getElementById('foldUndo');
+    const syncUndo = () => {
+      if (foldUndo) foldUndo.disabled = history.length === 0; // 완료 후에도 뒤로가기로 다시 접기 가능
+    };
+
     const endDrag = () => {
       if (!drag) return;
       const next = foldLayers(layers, drag.g, drag.m);
-      if (next.length <= MAX_LAYERS) layers = next;
+      if (next.length <= MAX_LAYERS && next !== layers) {
+        history.push(layers);
+        layers = next;
+        syncUndo();
+      }
       drag = null;
       foldStage.classList.remove('is-folding');
       render();
@@ -696,23 +712,39 @@
     foldSvg.addEventListener('pointerup', endDrag);
     foldSvg.addEventListener('pointercancel', endDrag);
 
-    const foldHint = document.getElementById('foldHint');
     const foldDone = document.getElementById('foldDone');
-    const HINT_IDLE = '종이를 접어, 나만의 다음 점을 만들어보세요';
+    const HINT_IDLE = '종이를 접어 나만의 형태를 만들어보세요';
     const HINT_DONE = '하나의 형태로 접혔어요. 이제, 다음 점으로.';
 
+    let hintTarget = HINT_IDLE;
+    let hintTimer = null;
     const setHint = (text) => {
-      if (!foldHint || foldHint.textContent === text) return;
+      if (!foldHint || hintTarget === text) return;
+      hintTarget = text;
+      clearTimeout(hintTimer);
       foldHint.style.opacity = 0;
-      setTimeout(() => { foldHint.textContent = text; foldHint.style.opacity = 1; }, 300);
+      hintTimer = setTimeout(() => { foldHint.textContent = hintTarget; foldHint.style.opacity = 1; }, 300);
     };
 
     // 다시 펴기: 처음 종이로, 다시 접을 수 있게
     document.getElementById('foldReset')?.addEventListener('click', () => {
+      if (layers.length > 1) history.push(layers);
       layers = flatPaper();
       foldStage.classList.remove('is-done');
       if (foldDone) foldDone.disabled = false;
+      syncUndo();
       setHint(HINT_IDLE);
+      render();
+    });
+
+    // 뒤로가기: 한 번 접기 전으로 (완료 상태였으면 다시 접을 수 있게)
+    foldUndo?.addEventListener('click', () => {
+      if (!history.length) return;
+      layers = history.pop();
+      foldStage.classList.remove('is-done');
+      if (foldDone) foldDone.disabled = false;
+      setHint(HINT_IDLE);
+      syncUndo();
       render();
     });
 
@@ -720,6 +752,7 @@
     foldDone?.addEventListener('click', () => {
       foldStage.classList.add('is-done');
       foldDone.disabled = true;
+      syncUndo();
       tapeCursor?.classList.remove('is-hovering');
       setHint(HINT_DONE);
     });
