@@ -1374,39 +1374,38 @@ button {
 }
 
 /* 로딩 – 로고처럼 점 · 점선 · 점
-   점선이 로딩 진행에 따라 한 칸씩 왼쪽 → 오른쪽으로 채워짐 */
+   점선이 왼쪽 점 → 오른쪽 점으로 한 칸씩 또로롱 가는 걸 반복 */
 .load-line {
-  --dot: 14px;
-  --dash: 9px;    /* 점선 한 칸 길이 = 간격 (로고와 같은 1:1) */
   display: flex;
   align-items: center;
-  gap: 10px;
-  width: 260px;
-  max-width: 70vw;
-  color: var(--black);
+  color: var(--black);       /* 전체 약 168px = 기존의 2/3 */
 }
 
 .load-dot {
   flex-shrink: 0;
-  width: var(--dot);
-  height: var(--dot);
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: currentColor;
+  background: #fff;
+  border: 2px solid var(--black);   /* 커서랑 같은 흰 점 + 검정 테두리 */
 }
+.load-dot-start { margin-right: 7px; }
+.load-dot-end   { margin-left: 1px; }  /* 점선 마지막 빈칸 6px + 1px = 7px */
 
-.load-dot-end {
-  transform: scale(0);
-  transition: transform 0.2s cubic-bezier(0.3, 1.6, 0.5, 1);
-}
-.page-loader.complete .load-dot-end {
-  transform: scale(1);
-}
-
+/* 점선 11칸: 칸 6px + 간격 6px = 12px × 11 = 132px (한 칸씩 정확히 끊김) */
 .load-dash {
-  flex: 1;
-  height: 3px;
-  background: repeating-linear-gradient(90deg, currentColor 0 var(--dash), transparent var(--dash) calc(var(--dash) * 2));
-  clip-path: inset(0 calc(100% - var(--fill, 0px)) 0 0);
+  flex-shrink: 0;
+  width: 132px;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, currentColor 0 6px, transparent 6px 12px);
+  animation: dashRun 1s infinite;
+}
+
+/* 한 칸씩 채워지고(0~75%), 잠깐 다 이어진 채로 멈췄다가 다시 처음부터 */
+@keyframes dashRun {
+  0%   { clip-path: inset(0 100% 0 0); animation-timing-function: steps(11, end); }
+  75%  { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
 }
 
 

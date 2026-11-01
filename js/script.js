@@ -493,58 +493,28 @@
   });
 
   /* =========================================
-     8. PAGE LOADER – 점 · 점선 · 점
-     로딩 중엔 점선이 한 칸씩 차오르다(최대 90%), 다 불러오면 끝까지 채우고
-     오른쪽 점이 찍힌 뒤 사라짐
+     8. PAGE LOADER – 점 · 점선 · 점 (점선이 점→점으로 반복)
+     다 불러오면 사라짐 (최소 한 바퀴는 보여줌)
   ========================================= */
 
   const pageLoader = document.getElementById('pageLoader');
-  const loadDash = document.getElementById('loadDash');
 
   const markLoaded = () => document.body.classList.add('is-loaded');
 
-  if (pageLoader && loadDash) {
-    const MIN_SHOW = 900;            // ms – 너무 빨리 사라지지 않게
+  if (pageLoader) {
+    const MIN_SHOW = 1000; // ms – 점선 한 바퀴
     const startedAt = performance.now();
-    const unit = () => parseFloat(getComputedStyle(pageLoader.querySelector('.load-line')).getPropertyValue('--dash')) * 2 || 18;
 
-    let p = 0;                        // 0 ~ 1 진행도
-    let target = 0.9;                 // 로딩 끝나기 전엔 90%까지만
-    let finished = false;
-
-    const draw = () => {
-      const total = loadDash.offsetWidth;
-      const u = unit();
-      // 한 칸 단위로 끊어서 '또로롱' 채워지게
-      const steps = Math.ceil(total / u);
-      const filled = Math.round(p * steps) * u;
-      loadDash.style.setProperty('--fill', `${Math.min(filled, total)}px`);
-    };
-
-    const tick = () => {
-      p += (target - p) * (finished ? 0.25 : 0.04);
-      if (finished && target - p < 0.01) p = 1;
-      draw();
-
-      if (p >= 1) {
-        pageLoader.classList.add('complete');            // 오른쪽 점 톡
-        setTimeout(() => {
-          pageLoader.classList.add('done');
-          markLoaded();
-        }, 260);
-        return;
-      }
-      requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-
-    const finish = () => {
+    const hideLoader = () => {
       const wait = Math.max(0, MIN_SHOW - (performance.now() - startedAt));
-      setTimeout(() => { finished = true; target = 1; }, wait);
+      setTimeout(() => {
+        pageLoader.classList.add('done');
+        markLoaded();
+      }, wait);
     };
 
-    if (document.readyState === 'complete') finish();
-    else window.addEventListener('load', finish);
+    if (document.readyState === 'complete') hideLoader();
+    else window.addEventListener('load', hideLoader);
   } else {
     markLoaded();
   }
