@@ -2599,7 +2599,7 @@ body.is-loaded .fold-svg .fold-paper-group {
 .committee-grid {
   display: grid;
   grid-template-columns: repeat(6, max-content);
-  column-gap: 0.5em;
+  column-gap: 0.9em;               /* 직책 ↔ 이름 간격 */
   row-gap: 4px;
   padding-left: 21px;             /* 동그라미 옆 글자 라인에 맞춤 (날짜 덩어리와 같은 방식) */
   font-family: var(--font-kr-regular);
@@ -2615,4 +2615,17 @@ body.is-loaded .fold-svg .fold-paper-group {
   margin-right: 0.7em;
 }
 .committee-grid .span-rest   { grid-column: 2 / -1; }
+.committee-grid .span-rest-3 { grid-column: 3 / -1; }   /* 디자인팀 이름 칸이 2열 폭을 정함 → 부위원장·도록팀은 그 오른쪽부터 */
 .committee-grid .span-rest-2 { grid-column: 4 / -1; }
+
+
+/* 소개글이 다 뜬 뒤에 날짜·졸준위 덩어리가 스르륵 */
+.about-intro .about-details {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.about-intro.details-in .about-details {
+  opacity: 1;
+  transform: none;
+}

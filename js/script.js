@@ -1125,6 +1125,8 @@
       revealed = true;
       aboutIntro.classList.add('in-view');
       const count = aboutIntro.querySelectorAll('.word').length;
+      // 마지막 단어가 떨어진 뒤 → 날짜·졸준위 덩어리 등장
+      setTimeout(() => aboutIntro.classList.add('details-in'), count * 60 + 600);
       setTimeout(() => aboutIntro.classList.add('settled'), count * 60 + 800);
     };
 
