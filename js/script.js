@@ -245,7 +245,7 @@
   const scrollIntroInner =
     document.querySelector('.scroll-intro-inner');
 
-  if (scrollIntroInner) {
+  if (scrollIntroInner && scrollIntroInner.dataset.reveal !== 'manual') {
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -1093,4 +1093,59 @@
     fitView();
     render();
     window.addEventListener('resize', fitView);
+  }
+
+
+  /* =========================================
+     11. ABOUT – 스크롤하면 포스터 왼쪽으로, 설명 등장
+  ========================================= */
+
+  const aboutHero = document.getElementById('aboutHero');
+  const aboutPoster = document.getElementById('aboutPoster');
+  const aboutIntro = document.getElementById('aboutIntro');
+
+  if (aboutHero && aboutPoster && aboutIntro) {
+    const ease = (x) => 1 - Math.pow(1 - x, 3);
+    const clamp01 = (x) => Math.min(1, Math.max(0, x));
+    let revealed = false;
+
+    const reveal = () => {
+      if (revealed) return;
+      revealed = true;
+      aboutIntro.classList.add('in-view');
+      const count = aboutIntro.querySelectorAll('.word').length;
+      setTimeout(() => aboutIntro.classList.add('settled'), count * 60 + 800);
+    };
+
+    const update = () => {
+      if (window.innerWidth <= 960) {           // 좁은 화면: 그냥 보이면 등장
+        const r = aboutIntro.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.85) reveal();
+        return;
+      }
+      const vw = window.innerWidth;
+      const gap = 64;
+      const posterW = aboutPoster.offsetWidth;
+      const introW = Math.min(560, vw - posterW - gap - 120);
+      const groupLeft = (vw - (posterW + gap + introW)) / 2;
+      const shiftMax = groupLeft - (vw - posterW) / 2;   // 가운데 → 왼쪽까지 거리 (음수)
+
+      // 고정 구간 안에서 얼마나 스크롤했는지 0 ~ 1
+      const total = aboutHero.offsetHeight - window.innerHeight;
+      const p = clamp01(-aboutHero.getBoundingClientRect().top / (total * 0.75));
+      const move = ease(clamp01(p / 0.6));               // 앞 60% 동안 포스터 이동
+      const show = ease(clamp01((p - 0.35) / 0.45));     // 이어서 설명 등장
+
+      aboutPoster.style.setProperty('--poster-x', `${shiftMax * move}px`);
+      aboutIntro.style.setProperty('--intro-left', `${groupLeft + posterW + gap}px`);
+      aboutIntro.style.setProperty('--intro-w', `${introW}px`);
+      aboutIntro.style.setProperty('--intro-o', show);
+      aboutIntro.style.setProperty('--intro-shift', `${30 * (1 - show)}px`);
+      aboutIntro.style.setProperty('--intro-pe', show > 0.5 ? 'auto' : 'none');
+      if (show > 0.3) reveal();
+    };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
   }

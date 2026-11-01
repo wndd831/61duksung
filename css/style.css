@@ -2326,3 +2326,105 @@ body.is-loaded .fold-svg .fold-paper-group {
     width: 100%;
   }
 }
+
+
+/* =========================================
+   ABOUT – 스크롤 연출
+   포스터 구간이 화면에 고정된 채 스크롤하면
+   포스터는 왼쪽으로, 오른쪽에 제목·설명이 나타남 (위치는 JS가 계산)
+   ========================================= */
+.about-hero {
+  position: relative;
+  height: 230vh;           /* 고정된 채로 스크롤되는 길이 */
+}
+
+.about-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.about-poster {
+  position: absolute;
+  top: 140px;              /* 상단바 + 여유 */
+  bottom: 40px;
+  left: 50%;
+  aspect-ratio: 836 / 1188;
+  transform: translateX(calc(-50% + var(--poster-x, 0px)));
+  will-change: transform;
+}
+
+.about-poster img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border: 1px solid rgba(65, 68, 69, 0.15);   /* 배경과 분리되는 얇은 선 */
+}
+
+.about-intro {
+  position: absolute;
+  top: 50%;
+  left: var(--intro-left, 55%);
+  width: var(--intro-w, 520px);
+  max-width: none;
+  padding-top: 50px;       /* 상단바만큼 아래로 보정 */
+  text-align: left;
+  opacity: var(--intro-o, 0);
+  transform: translate(var(--intro-shift, 30px), -50%);
+  pointer-events: var(--intro-pe, none);
+}
+
+.about-intro h1 {
+  font-size: 22px;
+  margin-bottom: 22px;
+}
+
+.about-intro .scroll-text {
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+/* 좁은 화면: 연출 없이 포스터 → 설명 순서로 쌓기 */
+@media (max-width: 960px) {
+  .about-hero { height: auto; }
+  .about-sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+    padding: 130px 24px 40px;
+  }
+  .about-poster {
+    position: static;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    transform: none;
+  }
+  .about-poster img { height: auto; }
+  .about-intro {
+    position: static;
+    width: auto;
+    max-width: 560px;
+    margin: 60px auto 0;
+    padding-top: 0;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+}
+
+/* 예전 .scroll-intro-inner(.in-view) 규칙이 위치를 덮어쓰지 않게 */
+.about-sticky .about-intro.scroll-intro-inner {
+  max-width: none;
+  text-align: left;
+  opacity: var(--intro-o, 0);
+  transform: translate(var(--intro-shift, 30px), -50%);
+}
+@media (max-width: 960px) {
+  .about-sticky .about-intro.scroll-intro-inner {
+    opacity: 1;
+    transform: none;
+  }
+}
