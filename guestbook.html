@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guest Book | NO, IT'S NECESSARY.</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="custom-cursor"></div>
+<header class="site-header">
+<a href="index.html" class="logo-badge"><img src="images/logo.png" alt="NO, IT'S NECESSARY."></a>
+<nav class="main-nav" id="mainNav">
+<ul>
+<li><a href="about.html">(ABOUT)</a></li>
+<li><a href="project.html">(PROJECTS)</a></li>
+<li><a href="designer.html">(DESIGNERS)</a></li>
+<li><a href="guestbook.html" class="active">GUEST BOOK</a></li>
+</ul>
+</nav>
+<button class="menu-toggle" id="menuToggle" aria-label="메뉴 열기">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</header>
+
+<main>
+  <section class="board-section">
+    <div class="board" id="board"></div>
+
+    <button class="add-btn" id="addBtn">+</button>
+  </section>
+</main>
+
+<!-- 방명록 작성 모달 -->
+<div class="guest-modal" id="guestModal">
+  <div class="guest-modal-box">
+  <button class="guest-modal-close" id="guestModalClose">&times;</button>
+  <h3>방명록 남기기</h3>
+  <input type="text" id="guestTo" placeholder="To" maxlength="12">
+  <input type="text" id="guestFrom" placeholder="From" maxlength="12">
+  <textarea id="guestMessage" placeholder="메시지를 남겨주세요" maxlength="80"></textarea>
+  <button class="guest-submit" id="guestSubmit">붙이기</button>
+</div>
+</div>
+
+<footer class="site-footer">
+<p>&copy; 2026 NO, IT'S NECESSARY. All rights reserved.</p>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
