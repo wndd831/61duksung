@@ -46,6 +46,21 @@
     </div>
   </main>
 
+  <!-- 완료 팝업 -->
+  <div class="fold-modal" id="foldModal" aria-hidden="true">
+    <div class="fold-modal-box" role="dialog" aria-modal="true" aria-labelledby="foldModalTitle">
+      <button class="fold-modal-close" id="foldModalClose" type="button" aria-label="닫기">&times;</button>
+      <p class="fold-modal-title" id="foldModalTitle">나만의 형태가 완성되었어요</p>
+      <p class="fold-modal-sub">하나의 형태로 접힌 지금, 이제 다음 점으로.</p>
+      <img class="fold-modal-img" id="foldModalImg" alt="내가 접은 종이">
+      <div class="fold-buttons">
+        <button class="fold-btn" id="foldSave" type="button">저장하기</button>
+        <button class="fold-btn" id="foldShare" type="button">공유하기</button>
+      </div>
+      <p class="fold-modal-toast" id="foldToast" aria-live="polite"></p>
+    </div>
+  </div>
+
   <script src="js/script.js"></script>
 </body>
 </html>

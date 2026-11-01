@@ -21,6 +21,13 @@ html {
 
 @font-face {
     font-family: 'Paperlogy';
+    src: url('../fonts/Paperlogy-5Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Paperlogy';
     src: url('../fonts/Paperlogy-9Black.woff2') format('woff2');
     font-weight: 900;
     font-display: swap;
@@ -1756,9 +1763,9 @@ body.is-loaded .fold-svg .fold-paper-group {
   right: 0;
   /* top은 JS가 종이 바로 위로 맞춰줌 */
   text-align: center;
-  font-family: var(--font-en-title);  /* 페이퍼로지 */
-  font-weight: 900;
-  font-size: 22px;
+  font-family: var(--font-en-title);  /* 페이퍼로지 500 */
+  font-weight: 500;
+  font-size: 17px;
   line-height: 1.3;
   letter-spacing: var(--tracking);
   color: var(--black);
@@ -1819,3 +1826,91 @@ body.is-loaded .fold-svg .fold-paper-group {
   transition: none;
 }
 
+
+
+/* 접기 시작하면 멘트 사라짐 */
+.fold-stage.is-touched .fold-hint {
+  opacity: 0;
+}
+
+/* =========================================
+   완료 팝업 – 완료 멘트 + 내가 접은 종이 + 저장/공유
+   ========================================= */
+.fold-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.fold-modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.fold-modal-box {
+  position: relative;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  padding: 40px 32px 28px;
+  background: var(--bg);
+  text-align: center;
+  transform: translateY(12px) scale(0.97);
+  transition: transform 0.3s cubic-bezier(0.2, 1.2, 0.4, 1);
+}
+
+.fold-modal.open .fold-modal-box {
+  transform: none;
+}
+
+.fold-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--black);
+}
+
+.fold-modal-title {
+  font-family: var(--font-en-title);
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: var(--tracking);
+}
+
+.fold-modal-sub {
+  margin-top: 6px;
+  font-family: var(--font-kr-regular);
+  font-weight: 400;
+  font-size: 13px;
+  color: #999;
+}
+
+.fold-modal-img {
+  display: block;
+  width: 240px;
+  max-width: 100%;
+  height: 240px;
+  object-fit: contain;
+  margin: 26px auto 24px;
+}
+
+.fold-modal .fold-buttons {
+  justify-content: center;
+}
+
+.fold-modal-toast {
+  min-height: 18px;
+  margin-top: 10px;
+  font-family: var(--font-kr-regular);
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--orange);
+}

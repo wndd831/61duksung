@@ -677,7 +677,7 @@
       if (!layers.some((L) => inside(p, L.pts))) return; // 종이 위에서만
       drag = { g: p, m: p };
       foldSvg.setPointerCapture(e.pointerId);
-      foldStage.classList.add('is-folding');
+      foldStage.classList.add('is-folding', 'is-touched');
     });
 
     foldSvg.addEventListener('pointermove', (e) => {
@@ -707,33 +707,29 @@
       }
       drag = null;
       foldStage.classList.remove('is-folding');
+      syncHint();
       render();
     };
     foldSvg.addEventListener('pointerup', endDrag);
     foldSvg.addEventListener('pointercancel', endDrag);
 
     const foldDone = document.getElementById('foldDone');
-    const HINT_IDLE = '종이를 접어 나만의 형태를 만들어보세요';
-    const HINT_DONE = '하나의 형태로 접혔어요. 이제, 다음 점으로.';
 
-    let hintTarget = HINT_IDLE;
-    let hintTimer = null;
-    const setHint = (text) => {
-      if (!foldHint || hintTarget === text) return;
-      hintTarget = text;
-      clearTimeout(hintTimer);
-      foldHint.style.opacity = 0;
-      hintTimer = setTimeout(() => { foldHint.textContent = hintTarget; foldHint.style.opacity = 1; }, 300);
+    // 멘트: 접기 시작하면 사라지고, 종이가 다시 평평해지면 다시 보임
+    const syncHint = () => foldStage.classList.toggle('is-touched', layers.length > 1 || !!drag);
+
+    const unlock = () => {
+      foldStage.classList.remove('is-done');
+      if (foldDone) foldDone.disabled = false;
     };
 
-    // 다시 펴기: 처음 종이로, 다시 접을 수 있게
+    // 다시 펴기: 처음 종이로 (뒤로가기로 되돌릴 수 있음)
     document.getElementById('foldReset')?.addEventListener('click', () => {
       if (layers.length > 1) history.push(layers);
       layers = flatPaper();
-      foldStage.classList.remove('is-done');
-      if (foldDone) foldDone.disabled = false;
+      unlock();
       syncUndo();
-      setHint(HINT_IDLE);
+      syncHint();
       render();
     });
 
@@ -741,20 +737,121 @@
     foldUndo?.addEventListener('click', () => {
       if (!history.length) return;
       layers = history.pop();
-      foldStage.classList.remove('is-done');
-      if (foldDone) foldDone.disabled = false;
-      setHint(HINT_IDLE);
+      unlock();
       syncUndo();
+      syncHint();
       render();
     });
 
-    // 완료: 지금 모양으로 고정
+    /* --- 완료 팝업 --- */
+    const foldModal = document.getElementById('foldModal');
+    const foldModalImg = document.getElementById('foldModalImg');
+    const foldToast = document.getElementById('foldToast');
+    let paperBlob = null;
+
+    // 접은 종이만 투명 배경 PNG로 그리기
+    function paperToCanvas(size = 1200) {
+      const pts = layers.flatMap((L) => L.pts);
+      const xs = pts.map((p) => p[0]);
+      const ys = pts.map((p) => p[1]);
+      const minX = Math.min(...xs), maxX = Math.max(...xs);
+      const minY = Math.min(...ys), maxY = Math.max(...ys);
+      const pad = 0.02;
+      const w = maxX - minX + pad * 2;
+      const h = maxY - minY + pad * 2;
+      const scale = size / Math.max(w, h);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(w * scale);
+      canvas.height = Math.round(h * scale);
+      const ctx = canvas.getContext('2d');           // 배경을 칠하지 않으니 투명
+
+      const css = getComputedStyle(document.documentElement);
+      const front = css.getPropertyValue('--orange').trim() || '#ef7425';
+      const back = css.getPropertyValue('--blue').trim() || '#4dc3f1';
+
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = Math.max(1, size / 600);
+      ctx.strokeStyle = 'rgba(65, 68, 69, 0.18)';
+      layers.forEach((L) => {
+        ctx.beginPath();
+        L.pts.forEach(([x, y], i) => {
+          const px = (x - minX + pad) * scale;
+          const py = (y - minY + pad) * scale;
+          if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+        });
+        ctx.closePath();
+        ctx.fillStyle = L.back ? back : front;
+        ctx.fill();
+        ctx.stroke();
+      });
+      return canvas;
+    }
+
+    const toast = (msg) => {
+      if (!foldToast) return;
+      foldToast.textContent = msg;
+      clearTimeout(toast.t);
+      toast.t = setTimeout(() => { foldToast.textContent = ''; }, 2500);
+    };
+
+    const openModal = () => {
+      const canvas = paperToCanvas();
+      foldModalImg.src = canvas.toDataURL('image/png');
+      paperBlob = null;
+      canvas.toBlob((b) => { paperBlob = b; }, 'image/png');
+      foldModal.classList.add('open');
+      foldModal.setAttribute('aria-hidden', 'false');
+    };
+
+    const closeModal = () => {
+      foldModal.classList.remove('open');
+      foldModal.setAttribute('aria-hidden', 'true');
+    };
+
+    // 완료: 지금 모양으로 고정 + 팝업
     foldDone?.addEventListener('click', () => {
       foldStage.classList.add('is-done');
       foldDone.disabled = true;
-      syncUndo();
       tapeCursor?.classList.remove('is-hovering');
-      setHint(HINT_DONE);
+      if (foldModal) openModal();
+    });
+
+    document.getElementById('foldModalClose')?.addEventListener('click', closeModal);
+    foldModal?.addEventListener('click', (e) => { if (e.target === foldModal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    const FILE_NAME = 'fold-to-dot.png';
+
+    // 저장하기: 투명 배경 PNG 바로 다운로드
+    document.getElementById('foldSave')?.addEventListener('click', () => {
+      const a = document.createElement('a');
+      a.href = foldModalImg.src;
+      a.download = FILE_NAME;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      toast('이미지를 저장했어요');
+    });
+
+    // 공유하기: 폰 등 지원되면 이미지째 공유, 아니면 사이트 링크 복사
+    document.getElementById('foldShare')?.addEventListener('click', async () => {
+      const shareText = 'Fold to Dot. 덕성여자대학교 시각디자인전공 제61회 졸업전시';
+      try {
+        const file = paperBlob && new File([paperBlob], FILE_NAME, { type: 'image/png' });
+        if (file && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'Fold to Dot.', text: shareText });
+          return;
+        }
+        if (navigator.share) {
+          await navigator.share({ title: 'Fold to Dot.', text: shareText, url: location.href });
+          return;
+        }
+        await navigator.clipboard.writeText(location.href);
+        toast('사이트 링크를 복사했어요');
+      } catch (err) {
+        if (err?.name !== 'AbortError') toast('공유할 수 없어요. 저장하기로 이미지를 받아주세요');
+      }
     });
 
     fitView();
