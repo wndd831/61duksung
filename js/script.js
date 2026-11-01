@@ -881,7 +881,7 @@
       }
 
       ctx.font = `700 ${W * 0.025}px PyeojinGothic`;
-      ctx.fillText('덕성여자대학교 시각디자인전공 졸업전시 Fold to Dot', W / 2, H * 0.965 - W * 0.0125);
+      ctx.fillText('덕성여자대학교 시각디자인전공 졸업전시 Fold to Dot', W / 2, H * 0.94 - W * 0.0125);
       return canvas;
     }
 
@@ -1069,17 +1069,40 @@
       }, 2200);
     }
 
+    // 광장 빈자리 찾기: 후보 여러 개 중 기존 종이들과 가장 멀리 떨어진 곳
+    // (초반엔 거의 안 겹치고, 꽉 차면 그나마 덜 겹치는 곳으로)
+    async function findPlazaSpot() {
+      const all = await plazaStore.list();
+      const W = plazaBoard.clientWidth || window.innerWidth;
+      const H = plazaBoard.clientHeight || window.innerHeight * 0.6;
+      const toPx = (x, y) => [(x / 100) * W, (y / 100) * H];
+      let best = null;
+      for (let i = 0; i < 60; i++) {
+        const x = 6 + Math.random() * 88;
+        const y = 8 + Math.random() * 84;
+        const [px, py] = toPx(x, y);
+        const d = all.reduce((m, e) => {
+          const [ex, ey] = toPx(e.x, e.y);
+          return Math.min(m, Math.hypot(px - ex, py - ey));
+        }, Infinity);
+        if (!best || d > best.d) best = { x, y, d };
+        if (d > 140) break;                          // 종이 크기(92px)보다 충분히 떨어지면 바로 결정
+      }
+      return best;
+    }
+
     // 완료 팝업 → 광장에 보내기
     const round3 = (n) => Math.round(n * 1000) / 1000;
     plazaSend?.addEventListener('click', async () => {
+      const spot = await findPlazaSpot();
       const entry = {
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         layers: layers.map((L) => ({ back: L.back, pts: L.pts.map(([x, y]) => [round3(x), round3(y)]) })),
         word: cardWord.value.trim(),
         name: cardName.value.trim(),
         bg: foldCard.dataset.bg,
-        x: 6 + Math.random() * 88,
-        y: 8 + Math.random() * 84,
+        x: spot.x,
+        y: spot.y,
         rot: Math.round(Math.random() * 24 - 12),
         createdAt: Date.now(),
       };
@@ -1191,9 +1214,21 @@
       fs = Math.max(14, fs);              // 너무 작아지면 차라리 문장 안에서 줄바꿈
       aboutIntro.style.setProperty('--intro-fs', `${fs}px`);
       const details = aboutIntro.querySelector('.about-details');
-      const tooBig = () => aboutIntro.offsetHeight > aboutPoster.offsetHeight
-        || (details && details.scrollWidth > aboutIntro.clientWidth + 1);
-      while (tooBig() && fs > 12) {
+      const tooTall = () => aboutIntro.offsetHeight > aboutPoster.offsetHeight;
+      const tooWide = () => details && details.scrollWidth > aboutIntro.clientWidth + 1;
+
+      // 1) 가로가 넘치면 먼저 간격만 줄여보고
+      aboutIntro.classList.remove('is-compact', 'is-stacked');
+      if (tooWide()) aboutIntro.classList.add('is-compact');
+      // 간격을 줄여도 14px에서 안 들어가는 좁은 화면이면 졸준위를 날짜 아래로
+      if (tooWide()) {
+        const keep = fs;
+        aboutIntro.style.setProperty('--intro-fs', '14px');
+        if (tooWide()) aboutIntro.classList.add('is-stacked');
+        aboutIntro.style.setProperty('--intro-fs', `${keep}px`);
+      }
+      // 2) 그래도 넘치면 글자를 줄임 (가로 넘침은 14px까지만)
+      while (((tooWide() && fs > 14) || tooTall()) && fs > 12) {
         fs -= 0.5;
         aboutIntro.style.setProperty('--intro-fs', `${fs}px`);
       }

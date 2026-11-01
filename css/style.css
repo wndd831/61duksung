@@ -2629,3 +2629,47 @@ body.is-loaded .fold-svg .fold-paper-group {
   opacity: 1;
   transform: none;
 }
+
+
+/* 졸준위 v3 – 직책 Bold, 직책↔이름 간격 넓게, 두 번째 묶음은 디자인팀 이름에서 더 떨어지게 */
+.committee-grid {
+  column-gap: 1.2em;              /* 직책 ↔ 이름 */
+}
+.committee-grid > span { margin: 0; }
+.committee-grid .r {
+  font-family: var(--font-kr);
+  font-weight: 700;
+}
+.committee-grid .first { grid-column: 1; }
+.committee-grid .pair  { margin-left: 2em; }   /* 묶음 사이 간격 */
+.committee-grid .wide  { grid-column: span 3; }
+
+/* 시간 안의 Opening / 12일 / 13일 — 16일 Bold */
+.about-info-sub {
+  font-family: var(--font-kr);
+  font-weight: 700;
+}
+
+/* 완료 팝업: 둥근 모서리, 아래 여백 줄임 */
+.fold-modal-box {
+  border-radius: 16px;
+  padding-bottom: 22px;
+}
+.fold-modal-toast {
+  min-height: 0;
+  margin-top: 8px;
+}
+.fold-modal-toast:empty {
+  margin-top: 0;
+}
+
+/* 카드 하단 문구 살짝 위로 */
+.fold-card-footer {
+  bottom: 6%;
+}
+
+/* 화면이 좁아 한 줄에 안 들어갈 때만: 글자 대신 간격을 줄임 */
+.about-intro.is-compact .about-details { gap: 44px; }
+.about-intro.is-compact .committee-grid { column-gap: 0.9em; }
+.about-intro.is-compact .committee-grid .pair { margin-left: 1.4em; }
+.about-intro.is-stacked .about-details { flex-wrap: wrap; row-gap: 26px; }
