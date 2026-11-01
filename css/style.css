@@ -1726,7 +1726,7 @@ a.designer-project-image:hover {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 24px;
+  /* top은 JS가 종이 바로 아래로 맞춰줌 */
   display: flex;
   justify-content: center;
   align-items: center;

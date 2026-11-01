@@ -544,7 +544,7 @@
   if (foldStage && foldSvg) {
     const SVGNS = 'http://www.w3.org/2000/svg';
     const W = 1;
-    const H = Math.SQRT2;          // A4 비율 1 : 1.414
+    const H = 1;                   // 정사각형
     const MAX_LAYERS = 256;
 
     const flatPaper = () => [{
@@ -562,12 +562,20 @@
     group.style.setProperty('--pop-delay', document.getElementById('pageLoader') ? '1.3s' : '0s');
 
     /* --- 화면 크기에 맞춰 종이 배치 --- */
+    const foldUi = foldStage.querySelector('.fold-ui');
+
     function fitView() {
       const r = foldStage.getBoundingClientRect();
-      const k = Math.min((r.height * 0.72) / H, (r.width * 0.8) / W); // px per unit
+      const uiH = foldUi ? foldUi.offsetHeight : 0;
+      const gap = 28;                                   // 종이 ↔ 안내 문구 간격
+      const k = Math.min(r.height * 0.6, r.width * 0.8); // 종이 한 변(px)
+      // 종이 + 안내 문구 묶음을 '브라우저 화면 전체' 세로 가운데에 (상단바 포함 기준)
+      let centerY = (window.innerHeight / 2 - foldStage.offsetTop) - (gap + uiH) / 2;
+      centerY = Math.max(centerY, k / 2 + 24); // 상단바에 붙지 않게 최소 여백
       const vw = r.width / k;
       const vh = r.height / k;
-      foldSvg.setAttribute('viewBox', `${-vw / 2} ${-vh / 2 - 0.04} ${vw} ${vh}`);
+      foldSvg.setAttribute('viewBox', `${-vw / 2} ${-centerY / k} ${vw} ${vh}`);
+      if (foldUi) foldUi.style.top = `${centerY + k / 2 + gap}px`;
     }
 
     function toPaper(e) {
