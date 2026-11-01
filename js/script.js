@@ -1136,11 +1136,11 @@
         return;
       }
       const vw = window.innerWidth;
-      const gap = 64;
+      const gap = 48;
       const edge = 40;                                   // 로고 F 왼쪽 선
       const posterW = aboutPoster.offsetWidth;
       const introLeft = edge + posterW + gap;
-      const introW = Math.min(560, vw - introLeft - edge);
+      const introW = Math.min(780, vw - introLeft - edge);
       const shiftMax = edge - (vw - posterW) / 2;        // 가운데 → 왼쪽 끝까지 (음수)
 
       // 고정 구간 안에서 얼마나 스크롤했는지 0 ~ 1
@@ -1164,7 +1164,39 @@
       if (show > 0.3) reveal();
     };
 
+    // 소개글 크기: 문장마다 한 줄에 들어가고, 전체가 포스터 높이 안에 들어가는 가장 큰 크기 (최대 16px)
+    const sentenceWidthAt16 = (() => {
+      const p = aboutIntro.querySelector('.scroll-text');
+      const probe = document.createElement('span');
+      probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-size:16px;';
+      probe.style.fontFamily = getComputedStyle(p).fontFamily;
+      probe.style.letterSpacing = getComputedStyle(p).letterSpacing;
+      document.body.appendChild(probe);
+      const widths = p.innerText.split('\n').map((s) => s.trim()).filter(Boolean).map((s) => {
+        probe.textContent = s;
+        return probe.getBoundingClientRect().width;
+      });
+      probe.remove();
+      return Math.max(...widths);
+    });
+
+    let widest16 = 0;
+    const fitIntroText = () => {
+      if (window.innerWidth <= 960) { aboutIntro.style.removeProperty('--intro-fs'); return; }
+      if (!widest16) widest16 = sentenceWidthAt16();
+      const introW = parseFloat(aboutIntro.style.getPropertyValue('--intro-w')) || 560;
+      let fs = Math.min(16, Math.floor((16 * introW / widest16) * 2) / 2);
+      fs = Math.max(14, fs);              // 너무 작아지면 차라리 문장 안에서 줄바꿈
+      aboutIntro.style.setProperty('--intro-fs', `${fs}px`);
+      while (aboutIntro.offsetHeight > aboutPoster.offsetHeight && fs > 12) {
+        fs -= 0.5;
+        aboutIntro.style.setProperty('--intro-fs', `${fs}px`);
+      }
+    };
+
     update();
+    fitIntroText();
+    document.fonts?.ready.then(() => { widest16 = 0; fitIntroText(); });
     window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
+    window.addEventListener('resize', () => { update(); fitIntroText(); });
   }

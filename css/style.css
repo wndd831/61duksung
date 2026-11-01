@@ -2501,3 +2501,31 @@ body.is-loaded .fold-svg .fold-paper-group {
   .about-poster { position: relative; aspect-ratio: 1684 / 2384; }
   .about-poster .about-poster-video { opacity: 1; }
 }
+
+
+/* about 소개글: 문장(마침표) 단위로만 줄바꿈, 단어 중간에서 안 끊기게 + 글자 키움 */
+.about-intro .scroll-text {
+  font-size: var(--intro-fs, 16px);   /* 화면에 맞춰 JS가 최대 16px까지 */
+  line-height: 1.8;
+  word-break: keep-all;               /* 혹시 줄이 넘쳐도 단어 중간에선 안 끊김 */
+}
+
+.about-info {
+  font-size: var(--intro-fs, 16px);
+}
+.about-info dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.about-info dt .nav-dot {
+  width: 13px;
+  height: 13px;
+  border-width: 2px;
+}
+.about-info dd {
+  padding-left: 21px;      /* 동그라미 옆 글자 라인에 맞춤 */
+}
+.about-info-sub {
+  min-width: 96px;
+}
