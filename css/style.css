@@ -159,27 +159,9 @@ button {
   white-space: nowrap;
 }
 
-/* 선택된 메뉴 */
-.main-nav a.active {
-  transform: rotate(-4deg);
-}
+/* 선택된 메뉴 – 아래 '메뉴 도형' 섹션에서 처리 */
 
-/* 주황색 테이프 */
-.main-nav a.active::before {
-  content: '';
 
-  position: absolute;
-
-  left: -1px;
-  right: -1px;
-  top: 2px;
-
-  height: 22px;
-
-  background: var(--orange);
-
-  z-index: -1;
-}
 
 /* ---------- 히어로 / 어바웃 비주얼 ---------- */
 .hero-visual {
@@ -1552,7 +1534,7 @@ a.designer-project-image:hover {
   display: inline-block;
   width: 0.28em;
   height: 1em;
-  transition: width 0.45s cubic-bezier(0.6, 0, 0.2, 1) 0.15s;
+  transition: width 0.3s cubic-bezier(0.6, 0, 0.2, 1) 0.1s;
 }
 
 .logo-dot {
@@ -1587,15 +1569,15 @@ a.designer-project-image:hover {
 }
 .site-logo:hover .logo-dot-start {
   transform: translateY(-50%) scale(1);
-  transition-delay: 0.2s;
+  transition-delay: 0.12s;
 }
 .site-logo:hover .logo-dash {
   clip-path: inset(0 0 0 0);
-  transition: clip-path 0.45s linear 0.3s;
+  transition: clip-path 0.2s linear 0.17s;
 }
 .site-logo:hover .logo-dot-end {
   transform: translateY(-50%) scale(1);
-  transition-delay: 0.75s;
+  transition-delay: 0.37s;
 }
 
 @media (max-width: 768px) {
@@ -1607,3 +1589,94 @@ a.designer-project-image:hover {
     width: 2.6em;
   }
 }
+
+
+/* =========================================
+   메뉴 도형 – 로딩 그래픽 4단계 = ABOUT / PROJECTS / DESIGNERS / GUEST BOOK
+   평소: 점선 테두리만 / 현재 페이지·누를 때: 원래 색
+   ========================================= */
+.main-nav {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.main-nav ul {
+  gap: 16px;
+}
+
+.main-nav li {
+  width: auto;
+  height: auto;
+}
+
+.main-nav a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px;   /* 도형 크기 */
+  height: 100px;
+  padding: 0;
+  font-size: 12px;
+  color: var(--black);
+}
+
+.main-nav a span {
+  position: relative;
+  z-index: 1;
+}
+
+.nav-shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.nav-outline {
+  fill: none;
+  stroke: var(--black);
+  stroke-width: 1.2px;
+  stroke-dasharray: 4 4;     /* 로고 점선과 같은 1:1 비율 */
+  vector-effect: non-scaling-stroke;
+  transition: opacity 0.2s ease;
+}
+
+.nav-fill {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.nav-fill .o { fill: var(--orange); }
+.nav-fill .b { fill: var(--blue); }
+
+.main-nav a.active .nav-fill,
+.main-nav a:active .nav-fill {
+  opacity: 1;
+}
+.main-nav a.active .nav-outline,
+.main-nav a:active .nav-outline {
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .main-nav {
+    transform: translateY(-100%);
+    top: 0;
+  }
+  .main-nav.open {
+    transform: translateY(0);
+  }
+  .main-nav ul {
+    gap: 18px;
+  }
+  .main-nav a {
+    width: 140px;
+    height: 130px;
+    font-size: 15px;
+  }
+}
+
+/* 도형 모양에 맞춰 글자 위치 미세조정 (오른쪽이 좁은 도형) */
+.main-nav a[href="designer.html"] span  { transform: translateX(-3px); }
+.main-nav a[href="guestbook.html"] span { transform: translateX(-5px); }
