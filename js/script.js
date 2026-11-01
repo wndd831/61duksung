@@ -1188,7 +1188,10 @@
       let fs = Math.min(16, Math.floor((16 * introW / widest16) * 2) / 2);
       fs = Math.max(14, fs);              // 너무 작아지면 차라리 문장 안에서 줄바꿈
       aboutIntro.style.setProperty('--intro-fs', `${fs}px`);
-      while (aboutIntro.offsetHeight > aboutPoster.offsetHeight && fs > 12) {
+      const details = aboutIntro.querySelector('.about-details');
+      const tooBig = () => aboutIntro.offsetHeight > aboutPoster.offsetHeight
+        || (details && details.scrollWidth > aboutIntro.clientWidth + 1);
+      while (tooBig() && fs > 12) {
         fs -= 0.5;
         aboutIntro.style.setProperty('--intro-fs', `${fs}px`);
       }
