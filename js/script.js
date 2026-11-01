@@ -795,11 +795,110 @@
       toast.t = setTimeout(() => { foldToast.textContent = ''; }, 2500);
     };
 
+    /* --- 카드 --- */
+    const foldCard = document.getElementById('foldCard');
+    const cardWord = document.getElementById('cardWord');
+    const cardName = document.getElementById('cardName');
+    let paperCanvas = null;
+
+    document.querySelectorAll('.fold-swatch').forEach((sw) => {
+      sw.addEventListener('click', () => {
+        document.querySelectorAll('.fold-swatch').forEach((s) => s.classList.toggle('is-active', s === sw));
+        foldCard.dataset.bg = sw.dataset.bg;
+      });
+    });
+
+    // 카드 PNG (1080 × 1440) – 미리보기와 같은 비율로 다시 그림
+    async function cardToCanvas() {
+      const W = 1080, H = 1440;
+      const css = getComputedStyle(foldCard);
+      const bg = css.getPropertyValue('--card-bg').trim();
+      const ink = css.getPropertyValue('--card-ink').trim();
+      const word = (cardWord.value.trim() || 'DOT').toUpperCase();
+      const name = cardName.value.trim().toUpperCase();
+
+      await Promise.all([
+        document.fonts.load('900 100px Paperlogy'),
+        document.fonts.load('700 30px PyeojinGothic'),
+      ]);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = W;
+      canvas.height = H;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = ink;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // 너무 긴 단어는 카드 폭에 맞춰 줄임
+      const fitText = (text, weight, size, family, maxW) => {
+        let s = size;
+        do { ctx.font = `${weight} ${s}px ${family}`; s -= 2; } while (ctx.measureText(text).width > maxW && s > 10);
+      };
+
+      const titleSize = W * 0.10;
+      const titleTop = H * 0.065;
+      fitText('FOLD TO', 900, titleSize, 'Paperlogy', W * 0.86);
+      ctx.fillText('FOLD TO', W / 2, titleTop + titleSize * 0.55);
+      fitText(word, 900, titleSize, 'Paperlogy', W * 0.86);
+      ctx.fillText(word, W / 2, titleTop + titleSize * 1.65);
+
+      // 접은 종이 (누끼) – 상자 안에 비율 유지해서 가운데
+      if (paperCanvas) {
+        const bx = W * 0.145, by = H * 0.265, bw = W * 0.71, bh = H * 0.47;
+        const r = Math.min(bw / paperCanvas.width, bh / paperCanvas.height);
+        const dw = paperCanvas.width * r, dh = paperCanvas.height * r;
+        ctx.drawImage(paperCanvas, bx + (bw - dw) / 2, by + (bh - dh) / 2, dw, dh);
+      }
+
+      if (name) {
+        fitText(name, 900, W * 0.075, 'Paperlogy', W * 0.8);
+        ctx.fillText(name, W / 2, H * 0.785 + W * 0.075 * 0.6);
+      }
+
+      ctx.font = `700 ${W * 0.025}px PyeojinGothic`;
+      ctx.fillText('덕성여자대학교 시각디자인전공 졸업전시 FOLD TO DOT', W / 2, H * 0.965 - W * 0.0125);
+      return canvas;
+    }
+
+    const canvasToBlob = (canvas) => new Promise((res) => canvas.toBlob(res, 'image/png'));
+
+    const download = (url, name) => {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    };
+
+    const SHARE_TEXT = 'Fold to Dot. 덕성여자대학교 시각디자인전공 제61회 졸업전시';
+
+    async function shareImage(blob, fileName) {
+      try {
+        const file = blob && new File([blob], fileName, { type: 'image/png' });
+        if (file && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'Fold to Dot.', text: SHARE_TEXT });
+          return;
+        }
+        if (navigator.share) {
+          await navigator.share({ title: 'Fold to Dot.', text: SHARE_TEXT, url: location.href });
+          return;
+        }
+        await navigator.clipboard.writeText(location.href);
+        toast('사이트 링크를 복사했어요');
+      } catch (err) {
+        if (err?.name !== 'AbortError') toast('공유할 수 없어요. 저장하기로 이미지를 받아주세요');
+      }
+    }
+
     const openModal = () => {
-      const canvas = paperToCanvas();
-      foldModalImg.src = canvas.toDataURL('image/png');
+      paperCanvas = paperToCanvas();
+      foldModalImg.src = paperCanvas.toDataURL('image/png');
       paperBlob = null;
-      canvas.toBlob((b) => { paperBlob = b; }, 'image/png');
+      paperCanvas.toBlob((b) => { paperBlob = b; }, 'image/png');
       foldModal.classList.add('open');
       foldModal.setAttribute('aria-hidden', 'false');
     };
@@ -821,37 +920,24 @@
     foldModal?.addEventListener('click', (e) => { if (e.target === foldModal) closeModal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-    const FILE_NAME = 'fold-to-dot.png';
-
-    // 저장하기: 투명 배경 PNG 바로 다운로드
+    // 종이만: 투명 배경 PNG
     document.getElementById('foldSave')?.addEventListener('click', () => {
-      const a = document.createElement('a');
-      a.href = foldModalImg.src;
-      a.download = FILE_NAME;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      toast('이미지를 저장했어요');
+      download(foldModalImg.src, 'fold-to-dot-paper.png');
+      toast('종이 이미지를 저장했어요');
+    });
+    document.getElementById('foldShare')?.addEventListener('click', () => {
+      shareImage(paperBlob, 'fold-to-dot-paper.png');
     });
 
-    // 공유하기: 폰 등 지원되면 이미지째 공유, 아니면 사이트 링크 복사
-    document.getElementById('foldShare')?.addEventListener('click', async () => {
-      const shareText = 'Fold to Dot. 덕성여자대학교 시각디자인전공 제61회 졸업전시';
-      try {
-        const file = paperBlob && new File([paperBlob], FILE_NAME, { type: 'image/png' });
-        if (file && navigator.canShare?.({ files: [file] })) {
-          await navigator.share({ files: [file], title: 'Fold to Dot.', text: shareText });
-          return;
-        }
-        if (navigator.share) {
-          await navigator.share({ title: 'Fold to Dot.', text: shareText, url: location.href });
-          return;
-        }
-        await navigator.clipboard.writeText(location.href);
-        toast('사이트 링크를 복사했어요');
-      } catch (err) {
-        if (err?.name !== 'AbortError') toast('공유할 수 없어요. 저장하기로 이미지를 받아주세요');
-      }
+    // 카드
+    document.getElementById('cardSave')?.addEventListener('click', async () => {
+      const canvas = await cardToCanvas();
+      download(canvas.toDataURL('image/png'), 'fold-to-dot-card.png');
+      toast('카드를 저장했어요');
+    });
+    document.getElementById('cardShare')?.addEventListener('click', async () => {
+      const blob = await canvasToBlob(await cardToCanvas());
+      shareImage(blob, 'fold-to-dot-card.png');
     });
 
     fitView();
