@@ -84,17 +84,9 @@
         <button class="fold-swatch" type="button" data-bg="black" aria-label="검정"></button>
       </div>
 
-      <div class="fold-save-rows">
-        <div class="fold-save-row">
-          <span class="fold-save-label">카드</span>
-          <button class="fold-btn" id="cardSave" type="button">저장하기</button>
-          <button class="fold-btn" id="cardShare" type="button">공유하기</button>
-        </div>
-        <div class="fold-save-row">
-          <span class="fold-save-label">종이만</span>
-          <button class="fold-btn" id="foldSave" type="button">저장하기</button>
-          <button class="fold-btn" id="foldShare" type="button">공유하기</button>
-        </div>
+      <div class="fold-buttons fold-save-buttons">
+        <button class="fold-btn" id="cardSave" type="button">카드 저장하기</button>
+        <button class="fold-btn" id="foldSave" type="button">종이만 저장하기</button>
       </div>
       <button class="plaza-send" id="plazaSend" type="button">광장에 보내기</button>
       <p class="fold-modal-toast" id="foldToast" aria-live="polite"></p>
@@ -103,8 +95,8 @@
 
   <!-- 광장에서 종이를 누르면 뜨는 카드 -->
   <div class="fold-modal" id="plazaModal" aria-hidden="true">
-    <div class="fold-modal-box plaza-modal-box" role="dialog" aria-modal="true" aria-label="광장 카드">
-      <button class="fold-modal-close" id="plazaModalClose" type="button" aria-label="닫기">&times;</button>
+    <div class="plaza-modal-box" role="dialog" aria-modal="true" aria-label="광장 카드">
+      <button class="plaza-modal-close" id="plazaModalClose" type="button" aria-label="닫기">&times;</button>
       <img class="plaza-card-img" id="plazaCardImg" alt="광장에 도착한 카드">
     </div>
   </div>

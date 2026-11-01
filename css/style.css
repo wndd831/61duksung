@@ -21,6 +21,13 @@ html {
 
 @font-face {
     font-family: 'Paperlogy';
+    src: url('../fonts/Paperlogy-8ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Paperlogy';
     src: url('../fonts/Paperlogy-7Bold.woff2') format('woff2');
     font-weight: 700;
     font-display: swap;
@@ -1950,7 +1957,7 @@ body.is-loaded .fold-svg .fold-paper-group {
   flex-direction: column;
   align-items: center;
   font-family: var(--font-en-title);
-  font-weight: 700;
+  font-weight: 800;
   font-size: 10cqw;
   line-height: 1.1;
   letter-spacing: var(--tracking);
@@ -2006,7 +2013,7 @@ body.is-loaded .fold-svg .fold-paper-group {
   left: 20%;
   width: 60%;
   font-family: var(--font-en-title);
-  font-weight: 700;
+  font-weight: 800;
   font-size: 7.5cqw;
   line-height: 1.2;
   letter-spacing: var(--tracking);
@@ -2209,16 +2216,91 @@ body.is-loaded .fold-svg .fold-paper-group {
   opacity: 0.4;
 }
 
-/* 광장 카드 팝업 */
+/* 광장 카드 팝업 – 흰 상자 없이 카드만, X는 카드 바깥 */
 .plaza-modal-box {
-  width: auto;
-  padding: 52px 28px 28px;
+  position: relative;
+  transform: translateY(12px) scale(0.97);
+  transition: transform 0.3s cubic-bezier(0.2, 1.2, 0.4, 1);
+}
+.fold-modal.open .plaza-modal-box {
+  transform: none;
 }
 .plaza-card-img {
   display: block;
-  width: 300px;
-  max-width: 100%;
+  width: 320px;
+  max-width: calc(100vw - 80px);
+  max-height: calc(100vh - 80px);
   height: auto;
-  border-radius: 10px;
-  border: 1px solid rgba(65, 68, 69, 0.25);
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+.plaza-modal-close {
+  position: absolute;
+  top: -6px;
+  right: -38px;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--bg);
+}
+@media (max-width: 480px) {
+  .plaza-modal-close { right: 0; top: -40px; }
+}
+
+.fold-save-buttons {
+  justify-content: center;
+}
+
+/* =========================================
+   ABOUT – 첫 화면: 포스터 + 주황 배경 (화면 한 장 크기)
+   스크롤해서 지나가면 상단바는 원래 색
+   ========================================= */
+.site-header {
+  transition: background-color 0.3s ease;
+}
+.site-header.on-orange {
+  background: var(--orange);
+}
+.site-header.on-orange .main-nav a.active .nav-dot {
+  background: var(--black);   /* 주황 위에선 선택 표시를 검정으로 */
+}
+
+.about-visual {
+  height: 100vh;
+  min-height: 560px;
+  margin-top: 0;
+  padding: 140px 40px 40px;   /* 상단바 높이 + 여유 */
+  background: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-visual .poster-hover {
+  max-width: 100%;
+  max-height: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.about-visual .poster-hover img {
+  height: 100%;
+  max-height: none;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 768px) {
+  .about-visual {
+    height: auto;
+    min-height: 0;
+    padding: 130px 24px 40px;
+  }
+  .about-visual .poster-hover,
+  .about-visual .poster-hover img {
+    height: auto;
+    width: 100%;
+  }
 }

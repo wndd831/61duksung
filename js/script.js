@@ -829,7 +829,7 @@
       const paper = paperToCanvas(1200, data.layers);
 
       await Promise.all([
-        document.fonts.load('700 100px Paperlogy'),
+        document.fonts.load('800 100px Paperlogy'),
         document.fonts.load('700 30px PyeojinGothic'),
       ]);
 
@@ -847,7 +847,7 @@
       ctx.textBaseline = 'middle';
 
       // 너무 긴 단어는 카드 폭에 맞춰 줄임
-      const fitText = (text, size, family, maxW, weight = 700) => {
+      const fitText = (text, size, family, maxW, weight = 800) => {
         let s = size;
         do { ctx.font = `${weight} ${s}px ${family}`; s -= 2; } while (ctx.measureText(text).width > maxW && s > 10);
       };
@@ -946,19 +946,12 @@
       download(foldModalImg.src, 'fold-to-dot-paper.png');
       toast('종이 이미지를 저장했어요');
     });
-    document.getElementById('foldShare')?.addEventListener('click', () => {
-      shareImage(paperBlob, 'fold-to-dot-paper.png');
-    });
 
     // 카드
     document.getElementById('cardSave')?.addEventListener('click', async () => {
       const canvas = await cardToCanvas();
       download(canvas.toDataURL('image/png'), 'fold-to-dot-card.png');
       toast('카드를 저장했어요');
-    });
-    document.getElementById('cardShare')?.addEventListener('click', async () => {
-      const blob = await canvasToBlob(await cardToCanvas());
-      shareImage(blob, 'fold-to-dot-card.png');
     });
 
 
@@ -1072,4 +1065,22 @@
     fitView();
     render();
     window.addEventListener('resize', fitView);
+  }
+
+
+  /* =========================================
+     11. ABOUT – 포스터 구간에서는 상단바도 주황, 지나가면 원래 색
+  ========================================= */
+
+  const aboutHero = document.querySelector('.about-visual');
+  const siteHeader = document.querySelector('.site-header');
+
+  if (aboutHero && siteHeader) {
+    const syncHeader = () => {
+      const heroBottom = aboutHero.getBoundingClientRect().bottom;
+      siteHeader.classList.toggle('on-orange', heroBottom > siteHeader.offsetHeight);
+    };
+    syncHeader();
+    window.addEventListener('scroll', syncHeader, { passive: true });
+    window.addEventListener('resize', syncHeader);
   }
