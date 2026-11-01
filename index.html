@@ -8,26 +8,11 @@
 </head>
 <body>
 <div class="page-loader" id="pageLoader" aria-hidden="true">
-  <svg class="fold-loader" viewBox="0 0 260 300">
-    <g class="fold-frame">
-      <polygon class="o" points="20,17 245,31 231,257 6,243"/>
-    </g>
-    <g class="fold-frame">
-      <polygon class="o" points="6,33 239,19 248,172 168,177 173,257 21,267"/>
-      <polygon class="b" points="168,177 248,172 173,257"/>
-    </g>
-    <g class="fold-frame">
-      <polygon class="b" points="25,7 75,10 60,254 10,251"/>
-      <polygon class="o" points="75,10 136,14 131,98 215,103 205,263 60,254"/>
-      <polygon class="b" points="136,14 215,103 131,98"/>
-    </g>
-    <g class="fold-frame">
-      <polygon class="b" points="11,26 57,21 81,272 36,276"/>
-      <polygon class="o" points="57,21 117,16 125,101 211,93 219,172 133,179 141,266 81,272"/>
-      <polygon class="b" points="117,16 211,93 125,101"/>
-      <polygon class="b" points="133,179 219,172 141,266"/>
-    </g>
-  </svg>
+  <div class="load-line">
+    <i class="load-dot load-dot-start"></i>
+    <i class="load-dash" id="loadDash"></i>
+    <i class="load-dot load-dot-end"></i>
+  </div>
 </div>
   <div class="custom-cursor"></div>
   <header class="site-header">
