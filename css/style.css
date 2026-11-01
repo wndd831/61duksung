@@ -2102,22 +2102,50 @@ body.is-loaded .fold-svg .fold-paper-group {
   visibility: visible;
 }
 
-.plaza-title {
+.plaza-head {
   position: absolute;
-  top: 28px;
+  top: 26px;
   left: 0;
   right: 0;
   text-align: center;
-  font-family: var(--font-en-title);
-  font-weight: 500;
-  font-size: 17px;
-  letter-spacing: var(--tracking);
   pointer-events: none;
+}
+
+/* 로고 크기(38px)의 3/4 */
+.plaza-title {
+  font-family: var(--font-en-title);
+  font-weight: 900;
+  font-size: 28.5px;
+  line-height: 1.2;
+  letter-spacing: var(--tracking);
+  color: var(--black);
+}
+
+.plaza-word {
+  display: inline-block;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.plaza-word.is-out {
+  opacity: 0;
+  transform: translateY(-0.35em);
+}
+.plaza-word.is-in {
+  opacity: 0;
+  transform: translateY(0.35em);
+  transition: none;
+}
+
+.plaza-sub {
+  margin-top: 6px;
+  font-family: var(--font-kr-regular);
+  font-weight: 400;
+  font-size: 13px;
+  color: #999;
 }
 
 .plaza-board {
   position: absolute;
-  top: 80px;
+  top: 120px;
   left: 40px;
   right: 40px;
   bottom: 90px;
@@ -2233,7 +2261,6 @@ body.is-loaded .fold-svg .fold-paper-group {
   height: auto;
   object-fit: contain;
   border-radius: 12px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
 }
 .plaza-modal-close {
   position: absolute;
@@ -2249,28 +2276,24 @@ body.is-loaded .fold-svg .fold-paper-group {
 
 .fold-save-buttons {
   justify-content: center;
+  align-items: baseline;
+  gap: 18px;
+}
+.fold-save-buttons .fold-save-label {
+  width: auto;
+  font-size: 14px;
+  color: #999;
 }
 
 /* =========================================
-   ABOUT – 첫 화면: 포스터 + 주황 배경 (화면 한 장 크기)
-   스크롤해서 지나가면 상단바는 원래 색
+   ABOUT – 첫 화면: 포스터 (화면 한 장 크기)
    ========================================= */
-.site-header {
-  transition: background-color 0.3s ease;
-}
-.site-header.on-orange {
-  background: var(--orange);
-}
-.site-header.on-orange .main-nav a.active .nav-dot {
-  background: var(--black);   /* 주황 위에선 선택 표시를 검정으로 */
-}
-
 .about-visual {
   height: 100vh;
   min-height: 560px;
   margin-top: 0;
   padding: 140px 40px 40px;   /* 상단바 높이 + 여유 */
-  background: var(--orange);
+  background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2289,7 +2312,6 @@ body.is-loaded .fold-svg .fold-paper-group {
   width: auto;
   max-width: 100%;
   object-fit: contain;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
 }
 
 @media (max-width: 768px) {

@@ -47,7 +47,10 @@
 
     <!-- 광장: 모두가 보낸 종이가 모이는 곳 (같은 페이지에서 화면만 바뀜) -->
     <section class="plaza" id="plaza" aria-hidden="true">
-      <p class="plaza-title">모두가 접은 종이가 모이는 광장이에요</p>
+      <div class="plaza-head">
+        <h2 class="plaza-title">Fold to <span class="plaza-word" id="plazaWord">2027</span></h2>
+        <p class="plaza-sub">모두가 접은 종이가 모이는 광장이에요</p>
+      </div>
       <div class="plaza-board" id="plazaBoard"></div>
       <p class="plaza-empty" id="plazaEmpty">아직 광장에 도착한 종이가 없어요</p>
     </section>
@@ -85,8 +88,9 @@
       </div>
 
       <div class="fold-buttons fold-save-buttons">
-        <button class="fold-btn" id="cardSave" type="button">카드 저장하기</button>
-        <button class="fold-btn" id="foldSave" type="button">종이만 저장하기</button>
+        <span class="fold-save-label">저장</span>
+        <button class="fold-btn" id="cardSave" type="button">카드만</button>
+        <button class="fold-btn" id="foldSave" type="button">종이만</button>
       </div>
       <button class="plaza-send" id="plazaSend" type="button">광장에 보내기</button>
       <p class="fold-modal-toast" id="foldToast" aria-live="polite"></p>

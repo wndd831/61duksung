@@ -1,5 +1,15 @@
 
   /* =========================================
+     0. 페이지는 항상 맨 위에서 시작
+     (브라우저가 예전 스크롤 위치를 복원해서 중간부터 보이는 문제 방지)
+  ========================================= */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (!location.hash) {
+    window.scrollTo(0, 0);
+    window.addEventListener('pageshow', () => window.scrollTo(0, 0));
+  }
+
+  /* =========================================
      1. DESIGNER FILTER
   ========================================= */
 
@@ -1041,6 +1051,24 @@
     }
     stageSwitch?.addEventListener('click', () => showPlaza(!foldStage.classList.contains('is-plaza')));
 
+    // 광장 제목: Fold to ___ 단어가 번갈아 바뀜
+    const plazaWord = document.getElementById('plazaWord');
+    const PLAZA_WORDS = ['2027', '졸업', '시작', '내일', 'Design'];
+    if (plazaWord) {
+      let wi = 0;
+      setInterval(() => {
+        if (!foldStage.classList.contains('is-plaza')) return;
+        plazaWord.classList.add('is-out');
+        setTimeout(() => {
+          wi = (wi + 1) % PLAZA_WORDS.length;
+          plazaWord.textContent = PLAZA_WORDS[wi];
+          plazaWord.classList.remove('is-out');
+          plazaWord.classList.add('is-in');
+          requestAnimationFrame(() => requestAnimationFrame(() => plazaWord.classList.remove('is-in')));
+        }, 350);
+      }, 2200);
+    }
+
     // 완료 팝업 → 광장에 보내기
     const round3 = (n) => Math.round(n * 1000) / 1000;
     plazaSend?.addEventListener('click', async () => {
@@ -1065,22 +1093,4 @@
     fitView();
     render();
     window.addEventListener('resize', fitView);
-  }
-
-
-  /* =========================================
-     11. ABOUT – 포스터 구간에서는 상단바도 주황, 지나가면 원래 색
-  ========================================= */
-
-  const aboutHero = document.querySelector('.about-visual');
-  const siteHeader = document.querySelector('.site-header');
-
-  if (aboutHero && siteHeader) {
-    const syncHeader = () => {
-      const heroBottom = aboutHero.getBoundingClientRect().bottom;
-      siteHeader.classList.toggle('on-orange', heroBottom > siteHeader.offsetHeight);
-    };
-    syncHeader();
-    window.addEventListener('scroll', syncHeader, { passive: true });
-    window.addEventListener('resize', syncHeader);
   }
