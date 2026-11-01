@@ -529,3 +529,167 @@
       history.back();
     }
   });
+
+
+  /* =========================================
+     10. MAIN – 접을 수 있는 종이
+     종이 아무 곳이나 잡고 끌면, 잡은 점이 마우스를 따라오도록
+     (잡은 점 ↔ 마우스의 수직이등분선)을 따라 접힘. 놓으면 그대로 남고 계속 접을 수 있음.
+     앞면 주황 / 뒷면 파랑
+  ========================================= */
+
+  const foldStage = document.getElementById('foldStage');
+  const foldSvg = document.getElementById('foldSvg');
+
+  if (foldStage && foldSvg) {
+    const SVGNS = 'http://www.w3.org/2000/svg';
+    const W = 1;
+    const H = Math.SQRT2;          // A4 비율 1 : 1.414
+    const MAX_LAYERS = 256;
+
+    const flatPaper = () => [{
+      pts: [[-W / 2, -H / 2], [W / 2, -H / 2], [W / 2, H / 2], [-W / 2, H / 2]],
+      back: false,
+    }];
+
+    let layers = flatPaper();       // 아래 → 위 순서
+    let drag = null;                // { g: [x,y], m: [x,y] }
+
+    const group = document.createElementNS(SVGNS, 'g');
+    group.setAttribute('class', 'fold-paper-group');
+    foldSvg.appendChild(group);
+    // 로딩 화면이 걷힌 뒤에 뜨도록
+    group.style.setProperty('--pop-delay', document.getElementById('pageLoader') ? '1.3s' : '0s');
+
+    /* --- 화면 크기에 맞춰 종이 배치 --- */
+    function fitView() {
+      const r = foldStage.getBoundingClientRect();
+      const k = Math.min((r.height * 0.72) / H, (r.width * 0.8) / W); // px per unit
+      const vw = r.width / k;
+      const vh = r.height / k;
+      foldSvg.setAttribute('viewBox', `${-vw / 2} ${-vh / 2 - 0.04} ${vw} ${vh}`);
+    }
+
+    function toPaper(e) {
+      const pt = foldSvg.createSVGPoint();
+      pt.x = e.clientX;
+      pt.y = e.clientY;
+      const p = pt.matrixTransform(foldSvg.getScreenCTM().inverse());
+      return [p.x, p.y];
+    }
+
+    /* --- 기하 도우미 --- */
+    // 반평면 s(p) >= 0 쪽만 남기기 (볼록 다각형 자르기)
+    function clip(pts, s) {
+      const out = [];
+      for (let i = 0; i < pts.length; i++) {
+        const a = pts[i];
+        const b = pts[(i + 1) % pts.length];
+        const sa = s(a);
+        const sb = s(b);
+        if (sa >= 0) out.push(a);
+        if ((sa >= 0) !== (sb >= 0)) {
+          const t = sa / (sa - sb);
+          out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]);
+        }
+      }
+      return out;
+    }
+
+    function area(pts) {
+      let a = 0;
+      for (let i = 0; i < pts.length; i++) {
+        const [x1, y1] = pts[i];
+        const [x2, y2] = pts[(i + 1) % pts.length];
+        a += x1 * y2 - x2 * y1;
+      }
+      return Math.abs(a) / 2;
+    }
+
+    function inside(p, pts) {
+      let c = false;
+      for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+        const [xi, yi] = pts[i];
+        const [xj, yj] = pts[j];
+        if ((yi > p[1]) !== (yj > p[1]) && p[0] < ((xj - xi) * (p[1] - yi)) / (yj - yi) + xi) c = !c;
+      }
+      return c;
+    }
+
+    // 잡은 점 g를 m으로 옮기는 접기 결과
+    function foldLayers(src, g, m) {
+      const dx = m[0] - g[0];
+      const dy = m[1] - g[1];
+      const len = Math.hypot(dx, dy);
+      if (len < 0.004) return src;
+      const n = [dx / len, dy / len];
+      const mid = [(g[0] + m[0]) / 2, (g[1] + m[1]) / 2];
+      const side = (p) => (p[0] - mid[0]) * n[0] + (p[1] - mid[1]) * n[1];
+      const reflect = (p) => {
+        const d = 2 * side(p);
+        return [p[0] - d * n[0], p[1] - d * n[1]];
+      };
+
+      const stay = [];
+      const moved = [];
+      src.forEach((L) => {
+        const keep = clip(L.pts, side);
+        if (keep.length > 2 && area(keep) > 1e-6) stay.push({ pts: keep, back: L.back });
+        const flap = clip(L.pts, (p) => -side(p));
+        if (flap.length > 2 && area(flap) > 1e-6) moved.push({ pts: flap.map(reflect), back: !L.back });
+      });
+      // 접혀 넘어온 면은 위로, 순서는 뒤집혀서 쌓임
+      return stay.concat(moved.reverse());
+    }
+
+    /* --- 그리기 --- */
+    function render() {
+      const list = drag ? foldLayers(layers, drag.g, drag.m) : layers;
+      group.replaceChildren(...list.map((L) => {
+        const poly = document.createElementNS(SVGNS, 'polygon');
+        poly.setAttribute('class', `fold-layer ${L.back ? 'back' : 'front'}`);
+        poly.setAttribute('points', L.pts.map((p) => p.join(',')).join(' '));
+        return poly;
+      }));
+    }
+
+    /* --- 입력 --- */
+    foldSvg.addEventListener('pointerdown', (e) => {
+      const p = toPaper(e);
+      if (!layers.some((L) => inside(p, L.pts))) return; // 종이 위에서만
+      drag = { g: p, m: p };
+      foldSvg.setPointerCapture(e.pointerId);
+      foldStage.classList.add('is-folding');
+    });
+
+    foldSvg.addEventListener('pointermove', (e) => {
+      const p = toPaper(e);
+      // 종이 위에 있을 때 커서 파랑
+      if (!drag) {
+        tapeCursor?.classList.toggle('is-hovering', layers.some((L) => inside(p, L.pts)));
+        return;
+      }
+      drag.m = p;
+      render();
+    });
+
+    const endDrag = () => {
+      if (!drag) return;
+      const next = foldLayers(layers, drag.g, drag.m);
+      if (next.length <= MAX_LAYERS) layers = next;
+      drag = null;
+      foldStage.classList.remove('is-folding');
+      render();
+    };
+    foldSvg.addEventListener('pointerup', endDrag);
+    foldSvg.addEventListener('pointercancel', endDrag);
+
+    document.getElementById('foldReset')?.addEventListener('click', () => {
+      layers = flatPaper();
+      render();
+    });
+
+    fitView();
+    render();
+    window.addEventListener('resize', fitView);
+  }

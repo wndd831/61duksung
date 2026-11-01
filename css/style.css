@@ -1683,3 +1683,76 @@ a.designer-project-image:hover {
 .project-item.active .project-detail {
   padding-left: 24px; /* 동그라미 오른쪽 글자 라인에 맞춤 */
 }
+
+
+/* =========================================
+   메인 – 접을 수 있는 A4 종이
+   ========================================= */
+.fold-stage {
+  position: relative;
+  margin-top: 110px;
+  height: calc(100vh - 110px);
+  min-height: 480px;
+  overflow: hidden;
+  touch-action: none;   /* 폰에서 접을 때 화면 안 밀리게 */
+  user-select: none;
+}
+
+.fold-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 처음 들어올 때 종이가 '빡' 하고 뜸 */
+.fold-svg .fold-paper-group {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: paperPop 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  animation-delay: var(--pop-delay, 0s);
+}
+
+@keyframes paperPop {
+  from { opacity: 0; transform: scale(0.6) rotate(-6deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+.fold-layer.front { fill: var(--orange); }
+.fold-layer.back  { fill: var(--blue); }
+
+.fold-ui {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.fold-hint {
+  font-family: var(--font-kr-regular);
+  font-weight: 400;
+  font-size: 13px;
+  color: #999;
+}
+
+.fold-reset {
+  pointer-events: auto;
+  font-size: 13px;
+  color: var(--black);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--black);
+}
+
+/* 같은 색 면이 겹쳐도 접힌 경계가 보이도록 아주 옅은 선 */
+.fold-layer {
+  stroke: rgba(65, 68, 69, 0.18);
+  stroke-width: 1px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
