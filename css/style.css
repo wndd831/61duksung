@@ -2682,9 +2682,11 @@ body.is-loaded .fold-svg .fold-paper-group {
    ========================================= */
 .designer-tape {
   /* 위쪽 선을 따라 60% 지점, 선에서 살짝 안쪽(접힌 면 쪽)으로 */
-  left: 68.5%;
-  top: 75.6%;
-  transform: translate(-50%, -50%) rotate(-31.6deg);
+  /* 오른쪽 끝 기준: 글자 끝이 접힌 모서리 쪽 한 점에 고정 → 이름이 길면 왼쪽으로 늘어남 */
+  left: 75%;
+  top: 74.6%;
+  transform-origin: 100% 50%;
+  transform: translate(-100%, -50%) rotate(-31.6deg);
   transition: opacity 0.08s ease;          /* 뗄 때: 즉시 사라짐 */
 }
 
