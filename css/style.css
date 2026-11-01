@@ -2682,8 +2682,8 @@ body.is-loaded .fold-svg .fold-paper-group {
    ========================================= */
 .designer-tape {
   /* 위쪽 선을 따라 60% 지점, 선에서 살짝 안쪽(접힌 면 쪽)으로 */
-  left: 56.5%;
-  top: 79.9%;
+  left: 68.5%;
+  top: 75.6%;
   transform: translate(-50%, -50%) rotate(-31.6deg);
   transition: opacity 0.08s ease;          /* 뗄 때: 즉시 사라짐 */
 }
