@@ -1650,3 +1650,36 @@ a.designer-project-image:hover {
     height: 18px;
   }
 }
+
+
+/* =========================================
+   Projects 커리큘럼 탭 – 테이프/기울기 대신 메뉴처럼 동그라미
+   (위쪽의 예전 .project-tab 규칙들을 덮어씀)
+   ========================================= */
+.project-tab,
+.project-item.active .project-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 10px 0;
+  background: none;
+  transform: none;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: left;
+  color: #999;
+}
+
+.project-item.active .project-tab {
+  color: var(--black);
+}
+
+.project-item.active .project-tab .nav-dot {
+  background: var(--orange);
+}
+
+.project-item.active .project-detail {
+  padding-left: 24px; /* 동그라미 오른쪽 글자 라인에 맞춤 */
+}
