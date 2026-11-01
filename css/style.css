@@ -1590,10 +1590,8 @@ a.designer-project-image:hover {
   }
 }
 
-
 /* =========================================
-   메뉴 도형 – 로딩 그래픽 4단계 = ABOUT / PROJECTS / DESIGNERS / GUEST BOOK
-   평소: 점선 테두리만 / 현재 페이지·누를 때: 원래 색
+   메뉴 – 텍스트 옆 동그라미, 현재 페이지는 주황
    ========================================= */
 .main-nav {
   top: 50%;
@@ -1601,7 +1599,7 @@ a.designer-project-image:hover {
 }
 
 .main-nav ul {
-  gap: 16px;
+  gap: 40px;
 }
 
 .main-nav li {
@@ -1610,53 +1608,27 @@ a.designer-project-image:hover {
 }
 
 .main-nav a {
-  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 110px;   /* 도형 크기 */
-  height: 100px;
+  gap: 8px;
   padding: 0;
-  font-size: 12px;
+  font-size: 16px;
   color: var(--black);
 }
 
-.main-nav a span {
-  position: relative;
-  z-index: 1;
+.nav-dot {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--black);
+  background: #fff;            /* 커서랑 같은 흰 동그라미 */
+  transition: background-color 0.2s ease;
 }
 
-.nav-shape {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.nav-outline {
-  fill: none;
-  stroke: var(--black);
-  stroke-width: 1.2px;
-  stroke-dasharray: 4 4;     /* 로고 점선과 같은 1:1 비율 */
-  vector-effect: non-scaling-stroke;
-  transition: opacity 0.2s ease;
-}
-
-.nav-fill {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-.nav-fill .o { fill: var(--orange); }
-.nav-fill .b { fill: var(--blue); }
-
-.main-nav a.active .nav-fill,
-.main-nav a:active .nav-fill {
-  opacity: 1;
-}
-.main-nav a.active .nav-outline,
-.main-nav a:active .nav-outline {
-  opacity: 0;
+.main-nav a.active .nav-dot,
+.main-nav a:active .nav-dot {
+  background: var(--orange);
 }
 
 @media (max-width: 768px) {
@@ -1668,15 +1640,13 @@ a.designer-project-image:hover {
     transform: translateY(0);
   }
   .main-nav ul {
-    gap: 18px;
+    gap: 32px;
   }
   .main-nav a {
-    width: 140px;
-    height: 130px;
-    font-size: 15px;
+    font-size: 20px;
+  }
+  .nav-dot {
+    width: 18px;
+    height: 18px;
   }
 }
-
-/* 도형 모양에 맞춰 글자 위치 미세조정 (오른쪽이 좁은 도형) */
-.main-nav a[href="designer.html"] span  { transform: translateX(-3px); }
-.main-nav a[href="guestbook.html"] span { transform: translateX(-5px); }
