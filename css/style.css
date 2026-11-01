@@ -2350,7 +2350,7 @@ body.is-loaded .fold-svg .fold-paper-group {
   top: 140px;              /* 상단바 + 여유 */
   bottom: 40px;
   left: 50%;
-  aspect-ratio: 900 / 1274;
+  aspect-ratio: 1684 / 2384;
   transform: translateX(calc(-50% + var(--poster-x, 0px)));
   will-change: transform;
 }
@@ -2436,13 +2436,20 @@ body.is-loaded .fold-svg .fold-paper-group {
    - 포스터는 로고 F 왼쪽 선(40px)까지 밀림
    - 전시 정보는 소개글 아래에 (라벨 위 / 내용 아래)
    ========================================= */
-.about-poster video {
+.about-poster .about-poster-img,
+.about-poster .about-poster-video {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: var(--bg);
   border: 1px solid rgba(65, 68, 69, 0.15);
+}
+
+/* 옆으로 밀리는 만큼 이미지 → 영상으로 바뀜 (JS가 --video-o 조절) */
+.about-poster .about-poster-video {
+  opacity: var(--video-o, 0);
 }
 
 .about-sticky .about-intro.scroll-intro-inner {
@@ -2491,5 +2498,6 @@ body.is-loaded .fold-svg .fold-paper-group {
   .about-sticky .about-intro.scroll-intro-inner {
     transform: none;
   }
-  .about-poster video { height: auto; }
+  .about-poster { position: relative; aspect-ratio: 1684 / 2384; }
+  .about-poster .about-poster-video { opacity: 1; }
 }

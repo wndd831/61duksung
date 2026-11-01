@@ -40,7 +40,9 @@
     <section class="about-hero" id="aboutHero">
       <div class="about-sticky">
         <div class="about-poster" id="aboutPoster">
-          <video src="images/poster.mp4" poster="images/poster-frame.jpg" autoplay muted loop playsinline aria-label="Fold to Dot. 무빙 포스터"></video>
+          <!-- 처음: 포스터 이미지 / 옆으로 밀리면: 무빙 포스터(mp4) -->
+          <img class="about-poster-img" src="images/poster.png" alt="Fold to Dot. 전시 포스터">
+          <video class="about-poster-video" id="aboutPosterVideo" src="images/poster.mp4" muted loop playsinline preload="auto" aria-label="Fold to Dot. 무빙 포스터"></video>
         </div>
         <div class="about-intro scroll-intro-inner" id="aboutIntro" data-reveal="manual">
     <h1 class="reveal-text">덕성여자대학교 시각디자인전공 제61회 졸업전시 <br> <span class="title-en">Fold to Dot.</span></h1>

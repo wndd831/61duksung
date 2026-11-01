@@ -1109,6 +1109,17 @@
     const clamp01 = (x) => Math.min(1, Math.max(0, x));
     let revealed = false;
 
+    const posterVideo = document.getElementById('aboutPosterVideo');
+    const syncVideo = (on) => {
+      if (!posterVideo) return;
+      if (on && posterVideo.paused) {
+        posterVideo.play().catch(() => {});
+      } else if (!on && !posterVideo.paused) {
+        posterVideo.pause();
+        posterVideo.currentTime = 0;   // 다시 나타날 땐 처음부터
+      }
+    };
+
     const reveal = () => {
       if (revealed) return;
       revealed = true;
@@ -1118,7 +1129,8 @@
     };
 
     const update = () => {
-      if (window.innerWidth <= 960) {           // 좁은 화면: 그냥 보이면 등장
+      if (window.innerWidth <= 960) {           // 좁은 화면: 영상으로 보여주고, 글은 보이면 등장
+        syncVideo(true);
         const r = aboutIntro.getBoundingClientRect();
         if (r.top < window.innerHeight * 0.85) reveal();
         return;
@@ -1138,6 +1150,11 @@
       const show = ease(clamp01((p - 0.35) / 0.45));     // 이어서 설명 등장
 
       aboutPoster.style.setProperty('--poster-x', `${shiftMax * move}px`);
+
+      // 밀리기 시작하면 포스터 이미지 → 무빙 포스터로
+      const videoO = clamp01((move - 0.05) / 0.4);
+      aboutPoster.style.setProperty('--video-o', videoO);
+      syncVideo(videoO > 0);
       aboutIntro.style.setProperty('--intro-left', `${introLeft}px`);
       aboutIntro.style.setProperty('--intro-top', `${aboutPoster.offsetTop}px`);
       aboutIntro.style.setProperty('--intro-w', `${introW}px`);
