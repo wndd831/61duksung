@@ -818,7 +818,7 @@
       const name = cardName.value.trim().toUpperCase();
 
       await Promise.all([
-        document.fonts.load('900 100px Paperlogy'),
+        document.fonts.load('700 100px Paperlogy'),
         document.fonts.load('700 30px PyeojinGothic'),
       ]);
 
@@ -826,8 +826,12 @@
       canvas.width = W;
       canvas.height = H;
       const ctx = canvas.getContext('2d');
+      // 살짝 둥근 모서리 (바깥은 투명)
+      const R = W * (10 / 260);
+      ctx.beginPath();
+      ctx.roundRect(0, 0, W, H, R);
       ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, W, H);
+      ctx.fill();
       ctx.fillStyle = ink;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -840,9 +844,9 @@
 
       const titleSize = W * 0.10;
       const titleTop = H * 0.065;
-      fitText('FOLD TO', 900, titleSize, 'Paperlogy', W * 0.86);
+      fitText('FOLD TO', 700, titleSize, 'Paperlogy', W * 0.86);
       ctx.fillText('FOLD TO', W / 2, titleTop + titleSize * 0.55);
-      fitText(word, 900, titleSize, 'Paperlogy', W * 0.86);
+      fitText(word, 700, titleSize, 'Paperlogy', W * 0.86);
       ctx.fillText(word, W / 2, titleTop + titleSize * 1.65);
 
       // 접은 종이 (누끼) – 상자 안에 비율 유지해서 가운데
@@ -854,12 +858,12 @@
       }
 
       if (name) {
-        fitText(name, 900, W * 0.075, 'Paperlogy', W * 0.8);
+        fitText(name, 700, W * 0.075, 'Paperlogy', W * 0.8);
         ctx.fillText(name, W / 2, H * 0.785 + W * 0.075 * 0.6);
       }
 
       ctx.font = `700 ${W * 0.025}px PyeojinGothic`;
-      ctx.fillText('덕성여자대학교 시각디자인전공 졸업전시 FOLD TO DOT', W / 2, H * 0.965 - W * 0.0125);
+      ctx.fillText('덕성여자대학교 시각디자인전공 졸업전시 Fold to Dot', W / 2, H * 0.965 - W * 0.0125);
       return canvas;
     }
 
