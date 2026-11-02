@@ -2756,7 +2756,7 @@ body.is-loaded .home-track { animation-play-state: running; }
   flex: none;
   height: var(--step-h);
   width: auto;
-  aspect-ratio: 260 / 300;
+  aspect-ratio: 1 / 1;      /* 정사각형 색종이 */
   overflow: visible;
 }
 .home-step .o { fill: var(--orange); }
