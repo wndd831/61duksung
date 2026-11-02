@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fold to ___ | Fold to Dot.</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page-loader" id="pageLoader" aria-hidden="true">
+  <div class="load-line">
+    <i class="load-dot load-dot-start"></i>
+    <i class="load-dash" id="loadDash"></i>
+    <i class="load-dot load-dot-end"></i>
+  </div>
+</div>
+  <div class="custom-cursor"></div>
+  <header class="site-header">
+    <a href="index.html" class="logo-badge site-logo" aria-label="Fold to Dot. 홈으로">
+      <span class="logo-word">Fold to</span><span class="logo-link" aria-hidden="true"><i class="logo-dot logo-dot-start"></i><i class="logo-dash"></i><i class="logo-dot logo-dot-end"></i></span><span class="logo-word">Dot.</span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <ul>
+        <li><a href="about.html"><i class="nav-dot" aria-hidden="true"></i><span>ABOUT</span></a></li>
+        <li><a href="project.html"><i class="nav-dot" aria-hidden="true"></i><span>PROJECTS</span></a></li>
+        <li><a href="designer.html"><i class="nav-dot" aria-hidden="true"></i><span>DESIGNERS</span></a></li>
+        <li><a href="guestbook.html"><i class="nav-dot" aria-hidden="true"></i><span>GUEST BOOK</span></a></li>
+        <li><a href="fold.html" class="active"><i class="nav-dot" aria-hidden="true"></i><span>FOLD TO <span class="nav-blank" aria-label="빈칸"></span></span></a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="메뉴 열기">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  </header>
+
+  <main class="fold-stage" id="foldStage">
+    <svg class="fold-svg" id="foldSvg" aria-label="접을 수 있는 종이"></svg>
+    <p class="fold-hint" id="foldHint">종이를 접어 나만의 형태를 만들어보세요</p>
+    <div class="fold-ui">
+      <div class="fold-buttons">
+        <button class="fold-btn" id="foldUndo" type="button" disabled>뒤로가기</button>
+        <button class="fold-btn" id="foldReset" type="button">다시 펴기</button>
+        <button class="fold-btn" id="foldDone" type="button">완료</button>
+      </div>
+    </div>
+
+    <!-- 광장: 모두가 보낸 종이가 모이는 곳 (같은 페이지에서 화면만 바뀜) -->
+    <section class="plaza" id="plaza" aria-hidden="true">
+      <div class="plaza-head">
+        <h2 class="plaza-title">Fold to <span class="plaza-word" id="plazaWord">2027</span></h2>
+        <p class="plaza-sub">모두가 접은 종이가 모이는 광장이에요</p>
+      </div>
+      <div class="plaza-board" id="plazaBoard"></div>
+      <p class="plaza-empty" id="plazaEmpty">아직 광장에 도착한 종이가 없어요</p>
+    </section>
+
+    <!-- 하단: 종이접기 ↔ 광장 전환 -->
+    <button class="stage-switch" id="stageSwitch" type="button">
+      <i class="nav-dot" aria-hidden="true"></i><span>광장 보기</span>
+    </button>
+  </main>
+
+  <!-- 완료 팝업: 카드 만들기 -->
+  <div class="fold-modal" id="foldModal" aria-hidden="true">
+    <div class="fold-modal-box" role="dialog" aria-modal="true" aria-labelledby="foldModalTitle">
+      <button class="fold-modal-close" id="foldModalClose" type="button" aria-label="닫기">&times;</button>
+      <p class="fold-modal-title" id="foldModalTitle">나만의 형태가 완성되었어요</p>
+      <p class="fold-modal-sub">카드를 꾸며 저장하거나 공유해보세요</p>
+
+      <!-- 카드 미리보기 (글자는 카드 위에서 바로 입력) -->
+      <div class="fold-card" id="foldCard" data-bg="blue">
+        <div class="fold-card-title">
+          <span>Fold to</span>
+          <input class="fold-card-input fold-card-word" id="cardWord" type="text" placeholder="Dot" maxlength="10" aria-label="Dot 자리에 넣을 단어" autocomplete="off" spellcheck="false">
+        </div>
+        <img class="fold-card-paper" id="foldModalImg" alt="내가 접은 종이">
+        <input class="fold-card-input fold-card-name" id="cardName" type="text" placeholder="이름" maxlength="10" aria-label="이름" autocomplete="off" spellcheck="false">
+        <p class="fold-card-footer">덕성여자대학교 시각디자인전공 졸업전시 Fold to Dot</p>
+      </div>
+
+      <!-- 배경색 -->
+      <div class="fold-swatches" role="radiogroup" aria-label="카드 배경색">
+        <button class="fold-swatch" type="button" data-bg="orange" aria-label="주황"></button>
+        <button class="fold-swatch is-active" type="button" data-bg="blue" aria-label="파랑"></button>
+        <button class="fold-swatch" type="button" data-bg="white" aria-label="흰색"></button>
+        <button class="fold-swatch" type="button" data-bg="black" aria-label="검정"></button>
+      </div>
+
+      <div class="fold-buttons fold-save-buttons">
+        <span class="fold-save-label">저장</span>
+        <button class="fold-btn" id="cardSave" type="button">카드만</button>
+        <button class="fold-btn" id="foldSave" type="button">종이만</button>
+      </div>
+      <button class="plaza-send" id="plazaSend" type="button">광장에 보내기</button>
+      <p class="fold-modal-toast" id="foldToast" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- 광장에서 종이를 누르면 뜨는 카드 -->
+  <div class="fold-modal" id="plazaModal" aria-hidden="true">
+    <div class="plaza-modal-box" role="dialog" aria-modal="true" aria-label="광장 카드">
+      <button class="plaza-modal-close" id="plazaModalClose" type="button" aria-label="닫기">&times;</button>
+      <img class="plaza-card-img" id="plazaCardImg" alt="광장에 도착한 카드">
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

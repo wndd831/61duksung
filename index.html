@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NO, IT'S NECESSARY.</title>
+  <title>Fold to Dot. | 덕성여자대학교 시각디자인전공 제61회 졸업전시</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -25,6 +25,7 @@
         <li><a href="project.html"><i class="nav-dot" aria-hidden="true"></i><span>PROJECTS</span></a></li>
         <li><a href="designer.html"><i class="nav-dot" aria-hidden="true"></i><span>DESIGNERS</span></a></li>
         <li><a href="guestbook.html"><i class="nav-dot" aria-hidden="true"></i><span>GUEST BOOK</span></a></li>
+        <li><a href="fold.html"><i class="nav-dot" aria-hidden="true"></i><span>FOLD TO <span class="nav-blank" aria-label="빈칸"></span></span></a></li>
       </ul>
     </nav>
     <button class="menu-toggle" id="menuToggle" aria-label="메뉴 열기">
@@ -34,76 +35,26 @@
   </button>
   </header>
 
-  <main class="fold-stage" id="foldStage">
-    <svg class="fold-svg" id="foldSvg" aria-label="접을 수 있는 종이"></svg>
-    <p class="fold-hint" id="foldHint">종이를 접어 나만의 형태를 만들어보세요</p>
-    <div class="fold-ui">
-      <div class="fold-buttons">
-        <button class="fold-btn" id="foldUndo" type="button" disabled>뒤로가기</button>
-        <button class="fold-btn" id="foldReset" type="button">다시 펴기</button>
-        <button class="fold-btn" id="foldDone" type="button">완료</button>
-      </div>
+  <main class="home" id="home">
+    <!-- 포스터처럼 양옆 세로 글씨 -->
+    <p class="home-side home-side-left">덕성여자대학교 <i class="nav-dot" aria-hidden="true"></i> 시각디자인전공 <i class="nav-dot" aria-hidden="true"></i> 제61회 졸업전시회</p>
+    <p class="home-side home-side-right"><i class="nav-dot" aria-hidden="true"></i> Opening <i class="nav-dot" aria-hidden="true"></i> 2026. 11. 12. 17:00</p>
+
+    <!-- 메인 그래픽: 종이가 차례로 접히는 과정 (코드로 그림, 누르면 다시 접힘) -->
+    <div class="home-graphic">
+      <svg class="home-fold" id="homeFold" role="img" aria-label="종이가 접혀 Fold to Dot. 의 형태가 되는 그래픽"></svg>
     </div>
 
-    <!-- 광장: 모두가 보낸 종이가 모이는 곳 (같은 페이지에서 화면만 바뀜) -->
-    <section class="plaza" id="plaza" aria-hidden="true">
-      <div class="plaza-head">
-        <h2 class="plaza-title">Fold to <span class="plaza-word" id="plazaWord">2027</span></h2>
-        <p class="plaza-sub">모두가 접은 종이가 모이는 광장이에요</p>
-      </div>
-      <div class="plaza-board" id="plazaBoard"></div>
-      <p class="plaza-empty" id="plazaEmpty">아직 광장에 도착한 종이가 없어요</p>
-    </section>
-
-    <!-- 하단: 종이접기 ↔ 광장 전환 -->
-    <button class="stage-switch" id="stageSwitch" type="button">
-      <i class="nav-dot" aria-hidden="true"></i><span>광장 보기</span>
-    </button>
+    <!-- 하단: 날짜 · 장소 · 바로가기 -->
+    <div class="home-bottom">
+      <p class="home-date">2026. 11. 12. – 11. 16.</p>
+      <p class="home-place">서울특별시 종로구 대학로 57<br>홍익대 대학로 아트센터 지하 2층, 제3전시실</p>
+      <nav class="home-links" aria-label="바로가기">
+        <a href="project.html"><i class="nav-dot" aria-hidden="true"></i>작품 보러 가기</a>
+        <a href="fold.html"><i class="nav-dot" aria-hidden="true"></i>종이 접으러 가기</a>
+      </nav>
+    </div>
   </main>
-
-  <!-- 완료 팝업: 카드 만들기 -->
-  <div class="fold-modal" id="foldModal" aria-hidden="true">
-    <div class="fold-modal-box" role="dialog" aria-modal="true" aria-labelledby="foldModalTitle">
-      <button class="fold-modal-close" id="foldModalClose" type="button" aria-label="닫기">&times;</button>
-      <p class="fold-modal-title" id="foldModalTitle">나만의 형태가 완성되었어요</p>
-      <p class="fold-modal-sub">카드를 꾸며 저장하거나 공유해보세요</p>
-
-      <!-- 카드 미리보기 (글자는 카드 위에서 바로 입력) -->
-      <div class="fold-card" id="foldCard" data-bg="blue">
-        <div class="fold-card-title">
-          <span>Fold to</span>
-          <input class="fold-card-input fold-card-word" id="cardWord" type="text" placeholder="Dot" maxlength="10" aria-label="Dot 자리에 넣을 단어" autocomplete="off" spellcheck="false">
-        </div>
-        <img class="fold-card-paper" id="foldModalImg" alt="내가 접은 종이">
-        <input class="fold-card-input fold-card-name" id="cardName" type="text" placeholder="이름" maxlength="10" aria-label="이름" autocomplete="off" spellcheck="false">
-        <p class="fold-card-footer">덕성여자대학교 시각디자인전공 졸업전시 Fold to Dot</p>
-      </div>
-
-      <!-- 배경색 -->
-      <div class="fold-swatches" role="radiogroup" aria-label="카드 배경색">
-        <button class="fold-swatch" type="button" data-bg="orange" aria-label="주황"></button>
-        <button class="fold-swatch is-active" type="button" data-bg="blue" aria-label="파랑"></button>
-        <button class="fold-swatch" type="button" data-bg="white" aria-label="흰색"></button>
-        <button class="fold-swatch" type="button" data-bg="black" aria-label="검정"></button>
-      </div>
-
-      <div class="fold-buttons fold-save-buttons">
-        <span class="fold-save-label">저장</span>
-        <button class="fold-btn" id="cardSave" type="button">카드만</button>
-        <button class="fold-btn" id="foldSave" type="button">종이만</button>
-      </div>
-      <button class="plaza-send" id="plazaSend" type="button">광장에 보내기</button>
-      <p class="fold-modal-toast" id="foldToast" aria-live="polite"></p>
-    </div>
-  </div>
-
-  <!-- 광장에서 종이를 누르면 뜨는 카드 -->
-  <div class="fold-modal" id="plazaModal" aria-hidden="true">
-    <div class="plaza-modal-box" role="dialog" aria-modal="true" aria-label="광장 카드">
-      <button class="plaza-modal-close" id="plazaModalClose" type="button" aria-label="닫기">&times;</button>
-      <img class="plaza-card-img" id="plazaCardImg" alt="광장에 도착한 카드">
-    </div>
-  </div>
 
   <script src="js/script.js"></script>
 </body>
