@@ -2778,75 +2778,70 @@ body.is-loaded .home-track { animation-play-state: running; }
 
 
 /* =========================================
-   왼쪽 아래 고정: 학교 로고 + FOLD TO ___ 버튼 (모든 페이지)
+   왼쪽 아래 고정: FOLD TO ___ 동그라미 버튼(위) + 학교 로고(아래)
+   둘 다 같은 크기의 원
    ========================================= */
 .side-fab {
+  --fab: 66px;
   position: fixed;
   left: 40px;
   bottom: 32px;
   z-index: 900;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
+  align-items: center;
+  gap: 12px;
   pointer-events: none;
 }
 
 .side-logo {
   display: block;
-  width: 46px;
-  height: 46px;
+  width: var(--fab);
+  height: var(--fab);
 }
 
 .fold-fab {
   pointer-events: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 18px 9px 12px;
+  width: var(--fab);
+  height: var(--fab);
+  border-radius: 50%;
   border: 1.5px solid var(--black);
-  border-radius: 999px;
   background: var(--bg);
   color: var(--black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
   font-family: var(--font-en-title);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 11px;
+  line-height: 1;
   letter-spacing: var(--tracking);
   white-space: nowrap;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.fold-fab-icon {
-  width: 20px;
-  height: 23px;
-  flex: none;
-}
-.fold-fab-icon .o { fill: var(--orange); }
-.fold-fab-icon .b { fill: var(--blue); }
-
-/* 빈칸: 평소엔 점선, 마우스 올리면 단어가 바뀌어 들어감 */
+/* 빈칸: 평소엔 점선, 마우스 올리면 단어가 번갈아 들어감 */
 .fold-fab-blank {
-  display: inline-block;
-  min-width: 3.4em;
-  margin-left: 0.2em;
+  display: block;
+  width: 36px;
+  height: 13px;
   border-bottom: 1.5px dashed currentColor;
-  line-height: 1.1;
   text-align: center;
-  vertical-align: baseline;
+  overflow: visible;
 }
 .fold-fab-word {
   display: inline-block;
+  font-size: 11px;
+  line-height: 12px;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 .fold-fab:hover .fold-fab-word,
-.fold-fab.is-active .fold-fab-word {
-  opacity: 1;
-}
+.fold-fab.is-active .fold-fab-word { opacity: 1; }
 .fold-fab:hover .fold-fab-blank,
-.fold-fab.is-active .fold-fab-blank {
-  border-bottom-color: transparent;
-}
+.fold-fab.is-active .fold-fab-blank { border-bottom-color: transparent; }
 
 .fold-fab:hover {
   background: var(--orange);
@@ -2862,7 +2857,8 @@ body.is-loaded .home-track { animation-play-state: running; }
 }
 
 @media (max-width: 768px) {
-  .side-fab { left: 16px; bottom: 16px; gap: 10px; }
-  .side-logo { width: 36px; height: 36px; }
-  .fold-fab { font-size: 13px; padding: 7px 14px 7px 10px; }
+  .side-fab { --fab: 54px; left: 16px; bottom: 16px; gap: 8px; }
+  .fold-fab { font-size: 9.5px; }
+  .fold-fab-blank { width: 30px; height: 11px; }
+  .fold-fab-word { font-size: 9.5px; line-height: 10px; }
 }
