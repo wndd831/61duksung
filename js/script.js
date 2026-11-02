@@ -1264,3 +1264,8 @@
       fab.addEventListener('blur', stop);
     }
   });
+
+  /* 디자이너 카드: 긴 이름은 접힌 면 안에 들어가게 살짝 작게 */
+  document.querySelectorAll('.designer-tape').forEach((t) => {
+    if (t.textContent.trim().length >= 5) t.classList.add('is-long');
+  });
