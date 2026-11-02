@@ -2862,3 +2862,77 @@ body.is-loaded .home-track { animation-play-state: running; }
   .fold-fab-blank { width: 24px; height: 9px; }
   .fold-fab-word { font-size: 7.5px; line-height: 8px; }
 }
+
+/* =========================================
+   ABOUT 모바일 / 태블릿 (960px 이하)
+   PC용 위치값(left 50%, top 140px, 이동)을 초기화해서
+   포스터 → 소개글 → 전시 정보 → 졸준위 순서로 쌓기
+   ========================================= */
+@media (max-width: 960px) {
+  .about-hero { height: auto; }
+
+  .about-sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+    padding: 120px 20px 48px;
+  }
+
+  .about-poster {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    max-width: 440px;
+    height: auto;
+    margin: 0 auto;
+    aspect-ratio: 1684 / 2384;
+    transform: none;
+  }
+
+  .about-sticky .about-intro.scroll-intro-inner {
+    position: static;
+    left: auto;
+    top: auto;
+    width: auto;
+    max-width: 560px;
+    margin: 44px auto 0;
+    padding: 0;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    text-align: left;
+  }
+
+  .about-intro h1 { font-size: 19px; margin-top: 0; }
+
+  .about-intro .scroll-text,
+  .about-info,
+  .about-committee {
+    font-size: 14.5px;
+  }
+  .about-intro .scroll-text { line-height: 1.85; }
+  .about-intro .scroll-text br { display: inline; }   /* 문장 끝에서 줄바꿈은 유지 */
+
+  /* 날짜 · 졸준위: 위아래로 */
+  .about-details,
+  .about-intro.is-stacked .about-details,
+  .about-intro.is-compact .about-details {
+    flex-direction: column;
+    gap: 34px;
+  }
+
+  /* 졸준위 명단: 직책 | 이름 두 칸으로 */
+  .committee-grid {
+    grid-template-columns: max-content 1fr;
+    column-gap: 1em;
+  }
+  .committee-grid .first,
+  .committee-grid .pair { grid-column: 1; margin-left: 0; }
+  .committee-grid .n,
+  .committee-grid .wide { grid-column: 2; }
+}
+@media (max-width: 960px) {
+  .about-intro h1 { word-break: keep-all; font-size: 18px; }
+}
