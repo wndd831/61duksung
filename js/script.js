@@ -1240,3 +1240,27 @@
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', () => { update(); fitIntroText(); });
   }
+
+
+  /* =========================================
+     13. FOLD TO ___ 버튼 – 마우스 올리면 빈칸 단어가 번갈아 바뀜
+  ========================================= */
+
+  document.querySelectorAll('.fold-fab').forEach((fab) => {
+    const word = fab.querySelector('.fold-fab-word');
+    if (!word) return;
+    const words = (word.dataset.words || 'Dot').split(',');
+    let i = 0;
+    let timer = null;
+    const show = () => { word.textContent = words[i % words.length]; i += 1; };
+    const start = () => { if (timer) return; show(); timer = setInterval(show, 900); };
+    const stop = () => { clearInterval(timer); timer = null; };
+
+    if (fab.classList.contains('is-active')) start();
+    else {
+      fab.addEventListener('mouseenter', start);
+      fab.addEventListener('mouseleave', stop);
+      fab.addEventListener('focus', start);
+      fab.addEventListener('blur', stop);
+    }
+  });
