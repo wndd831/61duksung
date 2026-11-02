@@ -2965,3 +2965,18 @@ body.is-loaded .home-track { animation-play-state: running; }
 }
 /* 5글자 이상 이름은 살짝 작게 (접힌 면 안에 들어가게) */
 .designer-tape.is-long { font-size: clamp(8px, 6.4cqw, 16px); }
+
+/* 디자이너 카드 v4 – 오른쪽 변은 25%만 접힘 (덜 접힘) */
+.designer-card:hover .designer-photo {
+  clip-path: polygon(0 0, 100% 0, 100% 75%, 25% 100%, 0 100%);
+}
+.designer-card:hover .designer-photo::after {
+  clip-path: polygon(25% 100%, 100% 75%, 75.3% 58.2%);
+}
+.designer-tape {
+  left: 92.4%;
+  top: 75%;
+  transform: translate(-100%, -50%) rotate(42.1deg);   /* 접힌 면 위쪽 선 각도 */
+  font-size: clamp(9px, 6.5cqw, 15px);
+}
+.designer-tape.is-long { font-size: clamp(7px, 5.2cqw, 12px); }
