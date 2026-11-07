@@ -3185,13 +3185,7 @@ img.work-thumb { display: block; object-fit: cover; }
 }
 
 /* 소개글: 문장마다 새 줄에서 시작 + 긴 문장은 단어 단위로 이어서 줄바꿈, 문장 사이 살짝 띄움 */
-@media (min-width: 961px) {
-  .about-intro .scroll-text br {
-    display: block;
-    content: '';
-    margin-bottom: 0.7em;
-  }
-}
+/* 소개글 줄바꿈은 문구에 넣은 위치에서만 (긴 줄은 단어 단위로 넘어감) */
 
 /* 졸준위: 직책 | 이름 두 칸 목록 – 날짜 덩어리 옆에 나란히, 큰 글씨로 */
 @media (min-width: 961px) {

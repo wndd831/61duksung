@@ -1243,12 +1243,14 @@
         ['--intro-fs', '--intro-lh', '--title-fs', '--details-fs'].forEach((v) => aboutIntro.style.removeProperty(v));
         return;
       }
-      const textEl = aboutIntro.querySelector('.scroll-text');
       const introW = parseFloat(aboutIntro.style.getPropertyValue('--intro-w')) || 600;
       const posterH = aboutPoster.offsetHeight;
 
       // 소개글 덩어리가 포스터 높이를 채우는 가장 큰 크기 (문장 안 줄바꿈은 단어 단위)
-      let fs = 20;                 // 최대 크기
+      // 한 줄이 넘어가지 않는 가장 큰 크기 (최대 20px)
+      const textEl = aboutIntro.querySelector('.scroll-text');
+      const widestLine16 = measureAt16(textEl, true);
+      let fs = Math.max(13, Math.min(20, Math.floor((16 * introW / widestLine16) * 2) / 2));
       const lh = 1.75;
       const apply = () => {
         aboutIntro.style.setProperty('--intro-fs', `${fs}px`);
