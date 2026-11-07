@@ -3646,3 +3646,52 @@ img.work-thumb { display: block; object-fit: cover; }
   font-size: var(--fs-caption);
   color: var(--orange);
 }
+
+/* =========================================================
+   오픈 전 커밍순 화면 (js/gate.js)
+   ========================================================= */
+.soon-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: var(--bg);
+  color: var(--black);
+  text-align: center;
+}
+.soon-inner { display: flex; flex-direction: column; align-items: center; }
+.soon-mark { width: 120px; height: 120px; margin-bottom: 34px; animation: soonFloat 3.2s ease-in-out infinite; }
+.soon-mark svg { width: 100%; height: 100%; display: block; }
+@keyframes soonFloat { 0%,100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg) translateY(-6px); } }
+.soon-kr { font-family: var(--font-kr); font-size: var(--fs-small); }
+.soon-title { margin: 8px 0 26px; font-size: 56px; line-height: 1; }
+.soon-open {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-en-title); font-weight: 700; font-size: var(--fs-lead);
+}
+.soon-open .nav-dot { background: var(--orange); width: 13px; height: 13px; }
+.soon-count {
+  margin-top: 10px;
+  font-family: var(--font-en-title); font-weight: 500; font-size: var(--fs-body);
+  font-variant-numeric: tabular-nums; white-space: pre;
+}
+.soon-label { margin-top: 30px; font-size: var(--fs-display); color: var(--orange); }
+.soon-invite {
+  margin-top: 30px;
+  padding: 12px 26px;
+  border: 1.5px solid var(--black);
+  border-radius: 999px;
+  color: var(--black);
+  text-decoration: none;
+  font-family: var(--font-kr);
+  font-size: var(--fs-small);
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+.soon-invite:hover { background: var(--orange); border-color: var(--orange); color: #fff; }
+@media (max-width: 768px) {
+  .soon-title { font-size: 40px; }
+  .soon-mark { width: 96px; height: 96px; }
+}

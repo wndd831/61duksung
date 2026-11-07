@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>모바일 초대장 | Fold to Dot.</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <meta property="og:title" content="Fold to Dot. 모바일 초대장 | 덕성여대 시각디자인전공 제61회 졸업전시">
+  <meta property="og:description" content="2026.11.12 — 11.16 홍익대 대학로 아트센터 B2, 제3전시실">
+  <meta property="og:image" content="https://duksungvcd2026.com/images/og-image.png">
+  <meta property="og:url" content="https://duksungvcd2026.com/invitation">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/invitation.css">
+</head>
+<body class="invite-page">
+  <div class="custom-cursor"></div>
+
+  <main class="invite">
+    <header class="invite-top">
+      <span class="title-en">Fold to Dot.</span>
+      <span class="invite-top-label">INVITATION</span>
+    </header>
+
+    <!-- 포스터 (처음엔 이미지, 영상이 준비되면 한 번 재생) -->
+    <div class="invite-poster">
+      <video id="invitePosterVideo" src="images/poster.mp4" poster="images/poster.png" muted playsinline autoplay preload="auto" aria-label="Fold to Dot. 무빙 포스터"></video>
+    </div>
+
+    <section class="invite-sec invite-hello">
+      <p class="invite-kicker">덕성여자대학교 시각디자인전공 제61회 졸업전시</p>
+      <h1 class="invite-title title-en">Fold to Dot.</h1>
+      <p class="invite-text">
+        대학에서 머물던 각자의 점은 다양한 경험과 시간을 거치며 하나의 형태로 접힙니다.
+        서로 다른 배움과 가능성이 쌓인 시간은 각자의 일부가 되고,
+        우리는 그 경험을 바탕으로 다시 새로운 점을 향해 나아갑니다.
+        접힌 종이가 펼쳐지며 이전과는 다른 모습을 드러내듯,
+        졸업은 익숙한 자리에서 벗어나 새로운 가능성을 마주하는 과정입니다.
+      </p>
+      <p class="invite-text">
+        <span class="bold-text">Fold to Dot</span>은 지금까지의 경험을 바탕으로 각자의 다음 점을 찾아 나서는 졸업전시입니다.
+        서로 다른 방향으로 이어질 각자의 새로운 출발을 함께하는 이곳에 여러분을 초대합니다.
+      </p>
+    </section>
+
+    <section class="invite-sec">
+      <dl class="invite-info">
+        <dt><i class="nav-dot" aria-hidden="true"></i>날짜</dt>
+        <dd>2026.11.12.(목) — 2026.11.16.(월)</dd>
+        <dt><i class="nav-dot" aria-hidden="true"></i>시간</dt>
+        <dd><b>Opening</b> 11.12. 17:00<br><b>12일</b> 17:30~18:30<br><b>13일 — 16일</b> 9:00~18:00</dd>
+        <dt><i class="nav-dot" aria-hidden="true"></i>장소</dt>
+        <dd>서울특별시 종로구 대학로 57<br>홍익대 대학로 아트센터 B2, 제3전시실</dd>
+      </dl>
+      <div class="invite-maps">
+        <a class="invite-btn" href="https://map.naver.com/p/search/%ED%99%8D%EC%9D%B5%EB%8C%80%ED%95%99%EA%B5%90%20%EB%8C%80%ED%95%99%EB%A1%9C%20%EC%95%84%ED%8A%B8%EC%84%BC%ED%84%B0" target="_blank" rel="noopener">네이버 지도</a>
+        <a class="invite-btn" href="https://map.kakao.com/?q=%ED%99%8D%EC%9D%B5%EB%8C%80%ED%95%99%EA%B5%90%20%EB%8C%80%ED%95%99%EB%A1%9C%20%EC%95%84%ED%8A%B8%EC%84%BC%ED%84%B0" target="_blank" rel="noopener">카카오맵</a>
+      </div>
+    </section>
+
+    <!-- 방명록: PC 방명록과 같은 곳에 저장 (여기서 쓰면 PC 방명록에도 붙음) -->
+    <section class="invite-sec invite-guest">
+      <h2 class="invite-h2 title-en">Guest Book</h2>
+      <p class="invite-sub">졸업생들에게 응원 한마디를 남겨주세요</p>
+      <button type="button" class="invite-btn invite-btn-fill" id="addBtn">방명록 남기기</button>
+      <div class="board invite-board" id="board" data-layout="list"></div>
+    </section>
+
+    <section class="invite-sec invite-end">
+      <button type="button" class="invite-btn" id="inviteShare">초대장 공유하기</button>
+      <a class="invite-btn" href="index.html">웹사이트 바로가기</a>
+      <p class="invite-note">웹사이트는 11.12. 17:00에 열려요</p>
+      <div class="invite-logos">
+        <img src="images/duksung-logo.png" alt="덕성여자대학교">
+        <img src="images/visual-design-logo.png" alt="시각디자인전공 로고">
+      </div>
+    </section>
+  </main>
+
+  <!-- 방명록 작성 모달 (PC와 같은 작성창) -->
+  <div class="guest-modal" id="guestModal">
+    <form class="guest-sheet" id="guestSheet" data-color="orange" role="dialog" aria-modal="true" aria-label="방명록 작성" novalidate>
+      <div class="guest-row guest-row-msg">
+        <textarea id="guestMessage" class="guest-field guest-field-msg" placeholder="응원 한마디를 남겨주세요" maxlength="50"></textarea>
+        <span class="guest-count" data-for="guestMessage">0/50</span>
+      </div>
+      <div class="guest-bottom">
+        <hr class="guest-line">
+        <div class="guest-row">
+          <input type="text" id="guestFrom" class="guest-field guest-field-from" placeholder="보내는 사람" maxlength="10" autocomplete="off">
+          <span class="guest-count" data-for="guestFrom">0/10</span>
+        </div>
+      </div>
+      <p class="guest-error" id="guestError" hidden>잠시 후 다시 보내주세요</p>
+      <button type="submit" class="guest-send" id="guestSubmit"><span>보내기</span></button>
+    </form>
+  </div>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    // 공유하기: 폰이면 공유창, 아니면 링크 복사
+    document.getElementById('inviteShare').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      const url = 'https://duksungvcd2026.com/invitation';
+      const data = { title: 'Fold to Dot. 모바일 초대장', text: '덕성여대 시각디자인전공 제61회 졸업전시에 초대합니다', url };
+      try {
+        if (navigator.share) { await navigator.share(data); return; }
+        await navigator.clipboard.writeText(url);
+        btn.textContent = '링크가 복사됐어요';
+      } catch (err) {}
+    });
+  </script>
+</body>
+</html>

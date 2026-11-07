@@ -301,11 +301,18 @@
   if (board) {
 
     const STORAGE_KEY = 'guestbookNotes';
+    // 모바일 초대장: 메모를 자유 배치 대신 목록(2칸)으로 보여줌.
+    // 새 메모 위치는 PC 방명록 크기(1280px 기준)로 계산해서 PC 화면에서도 자연스럽게 붙음
+    const LIST_MODE = board.dataset.layout === 'list';
+    const VIRTUAL_W = 1280, VIRTUAL_H = 800;
+    const boardW = () => (LIST_MODE ? VIRTUAL_W : (board.clientWidth || window.innerWidth));
+    const viewH = () => (LIST_MODE ? VIRTUAL_H : window.innerHeight);
 
        const HEADER_HEIGHT = 110;
     const MAX_BOARD_HEIGHT = window.innerHeight * 3; // 최대 화면 3개 분량
 
     function updateBoardHeight() {
+      if (LIST_MODE) return;
       const notes = board.querySelectorAll('.guest-note');
       let maxBottom = window.innerHeight - HEADER_HEIGHT; // 기본(최소) 높이
 
@@ -335,8 +342,10 @@
       // 색종이 색: 저장된 값, 없으면(예전 메모) id로 고정
       const color = note.color || (Math.floor(note.id) % 2 ? 'blue' : 'orange');
       el.className = color === 'blue' ? 'guest-note note-blue' : 'guest-note';
-      el.style.left = `${note.left}%`;
-      el.style.top = `${note.top}px`;
+      if (!LIST_MODE) {
+        el.style.left = `${note.left}%`;
+        el.style.top = `${note.top}px`;
+      }
       el.style.setProperty('--rot', `${note.rot}deg`);
       el.style.transform = `rotate(${note.rot}deg)`;
 
@@ -353,7 +362,8 @@
       fromEl.textContent = note.from;
 
       el.append(msgEl, lineEl, fromEl);
-      board.appendChild(el);
+      if (LIST_MODE) board.prepend(el); // 초대장: 최신 메모가 맨 위
+      else board.appendChild(el);
     }
 
     function makeDraggable(el, note) {
@@ -455,7 +465,7 @@
     const NOTE = 190;          // 메모 크기(px)
     const OVERLAP_OK = 16;     // 이 정도까지는 겹쳐도 됨
     function findSpot(notes) {
-      const W = board.clientWidth || window.innerWidth;
+      const W = boardW();
       const rects = notes.map((n) => ({ x: (n.left / 100) * W, y: n.top }));
       const depth = (a, b) => Math.min(
         Math.max(0, Math.min(a.x, b.x) + NOTE - Math.max(a.x, b.x)),
@@ -463,7 +473,7 @@
       );
       const maxX = Math.max(0, W - NOTE - 10);
       const bottom = rects.reduce((m, r) => Math.max(m, r.y + NOTE), 0);
-      let rows = Math.max(window.innerHeight - 110 - NOTE - 60, bottom - NOTE + 40);
+      let rows = Math.max(viewH() - 110 - NOTE - 60, bottom - NOTE + 40);
       for (let round = 0; round < 6; round++) {
         let best = null;
         for (let i = 0; i < 120; i++) {
@@ -479,7 +489,7 @@
 
         async function addNote(from, message, color) {
       const spot = findSpot(notesCache);
-      const W = board.clientWidth || window.innerWidth;
+      const W = boardW();
 
       const newNote = {
         id: Date.now() + Math.random(),

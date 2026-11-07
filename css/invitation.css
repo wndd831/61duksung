@@ -1,0 +1,166 @@
+/* =========================================================
+   모바일 초대장 (invitation.html)
+   폰 화면 기준 한 줄 세로 구성 · PC에서 열면 가운데 폰 너비로
+   ========================================================= */
+.invite-page { background: var(--bg); color: var(--black); }
+
+.invite {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 0 22px calc(48px + env(safe-area-inset-bottom));
+}
+
+.invite-top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 18px 0 14px;
+  background: var(--bg);
+  font-size: var(--fs-lead);
+}
+.invite-top-label {
+  font-family: var(--font-en-title);
+  font-weight: 500;
+  font-size: var(--fs-caption);
+  letter-spacing: 0.08em;
+}
+
+.invite-poster {
+  margin-top: 6px;
+  background: var(--bg);
+}
+.invite-poster video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.invite-sec {
+  padding: 44px 0 0;
+}
+
+.invite-kicker {
+  font-family: var(--font-kr);
+  font-size: var(--fs-small);
+}
+.invite-title {
+  margin: 6px 0 22px;
+  font-size: 40px;
+  line-height: 1.05;
+}
+.invite-text {
+  font-family: var(--font-kr-regular);
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  word-break: keep-all;
+}
+.invite-text + .invite-text { margin-top: 1.2em; }
+.invite-text .bold-text { font-family: var(--font-kr); }
+
+/* 날짜 · 시간 · 장소 */
+.invite-info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 20px;
+  row-gap: 18px;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+}
+.invite-info dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-kr);
+  height: 1.6em;
+}
+.invite-info dt .nav-dot { width: 13px; height: 13px; }
+.invite-info dd { font-family: var(--font-kr-regular); }
+.invite-info dd b { font-family: var(--font-kr); font-weight: 700; }
+
+.invite-maps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+/* 버튼: 동그란 테두리 → 누르면 주황 */
+.invite-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1.5px solid var(--black);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--black);
+  font-family: var(--font-kr);
+  font-size: var(--fs-body);
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.invite-btn:hover,
+.invite-btn:active,
+.invite-btn-fill { background: var(--orange); border-color: var(--orange); color: #fff; }
+.invite-btn-fill:hover, .invite-btn-fill:active { background: var(--blue); border-color: var(--blue); }
+
+/* 방명록 */
+.invite-h2 { font-size: var(--fs-display); line-height: 1.1; }
+.invite-sub {
+  margin: 8px 0 18px;
+  font-family: var(--font-kr-regular);
+  font-size: var(--fs-small);
+}
+.invite-board.board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  min-height: 0;
+  height: auto !important;
+  margin-top: 22px;
+}
+.invite-board .guest-note {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: auto;
+  padding: 14px;
+  cursor: default;
+  touch-action: auto;
+}
+.invite-board .guest-note:hover { box-shadow: none; z-index: auto; }
+.invite-board .guest-note .note-message { font-size: 13px; }
+.invite-board .guest-note .note-from { font-size: var(--fs-small); }
+
+/* 마무리 */
+.invite-end {
+  display: grid;
+  gap: 10px;
+  padding-top: 56px;
+}
+.invite-note {
+  text-align: center;
+  font-family: var(--font-kr-regular);
+  font-size: var(--fs-caption);
+  opacity: 0.7;
+}
+.invite-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin-top: 36px;
+}
+.invite-logos img:first-child { height: 40px; }
+.invite-logos img:last-child { height: 46px; }
+
+/* 폰에서는 기본 화살표 커서 숨김 영향 없음 · PC에서 열었을 때만 커스텀 커서 */
+@media (hover: none) { .invite-page .custom-cursor { display: none; } }
+@media (max-width: 768px) { .invite-page .custom-cursor { display: none; } }
