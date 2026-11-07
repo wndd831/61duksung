@@ -1269,3 +1269,80 @@
   document.querySelectorAll('.designer-tape').forEach((t) => {
     if (t.textContent.trim().length >= 5) t.classList.add('is-long');
   });
+
+
+  /* =========================================
+     14. 작품 목록 / 상세 – js/works.js 데이터로 그림
+  ========================================= */
+
+  const hasWorks = typeof WORKS !== 'undefined' && typeof DESIGNERS !== 'undefined';
+  const designerOf = (id) => (hasWorks ? DESIGNERS.find((d) => d.id === id) : null);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const thumbHtml = (src, alt) => (src
+    ? `<img class="work-thumb" src="${esc(src)}" alt="${esc(alt)}" loading="lazy">`
+    : '<div class="work-thumb"></div>');
+
+  // 목록 (project.html)
+  if (hasWorks) {
+    document.querySelectorAll('.work-grid[data-panel]').forEach((grid) => {
+      const list = WORKS.filter((w) => w.category === grid.dataset.panel);
+      grid.innerHTML = list.map((w) => {
+        const d = designerOf(w.designer);
+        return `<a class="work-card" href="work.html?id=${encodeURIComponent(w.id)}">
+          ${thumbHtml(w.thumb, w.title)}
+          <p class="work-title">${esc(w.title)}</p>
+          <p class="work-designer">${esc(d ? d.name : '')}</p>
+        </a>`;
+      }).join('');
+    });
+  }
+
+  // 상세 (work.html)
+  const workDetail = document.getElementById('workDetail');
+  if (workDetail && hasWorks) {
+    const id = new URLSearchParams(location.search).get('id');
+    const work = WORKS.find((w) => w.id === id) || WORKS[0];
+    const d = designerOf(work.designer);
+    const set = (elId, html) => { const el = document.getElementById(elId); if (el) el.innerHTML = html; };
+
+    document.title = `${work.title} | Fold to Dot.`;
+    set('workCat', esc(CATEGORY_NAMES[work.category] || ''));
+    set('workTitle', esc(work.title));
+    set('workDesigner', esc(d ? d.name : ''));
+    set('workDesc', esc(work.desc));
+    set('workDescEn', esc(work.descEn));
+
+    const imgs = work.images && work.images.length ? work.images : [null, null, null];
+    set('workImages', imgs.map((src) => (src
+      ? `<img class="work-detail-image" src="${esc(src)}" alt="${esc(work.title)}">`
+      : '<div class="work-detail-image"></div>')).join(''));
+
+    // 왼쪽 아래 디자이너 정보
+    if (d) {
+      set('dName', esc(d.name));
+      set('dNameEn', esc(d.nameEn));
+      const contact = [];
+      if (d.email) contact.push(`<a href="mailto:${esc(d.email)}">${esc(d.email)}</a>`);
+      if (d.instagram) {
+        const handle = d.instagram.replace(/^@/, '');
+        contact.push(`<a href="https://instagram.com/${encodeURIComponent(handle)}" target="_blank" rel="noopener">@${esc(handle)}</a>`);
+      }
+      set('dContact', contact.join('<br>'));
+
+      // 같은 디자이너의 다른 작품
+      const others = WORKS.filter((w) => w.designer === d.id && w.id !== work.id);
+      const box = document.getElementById('dOthers');
+      if (others.length && box) {
+        box.hidden = false;
+        set('dOtherList', others.map((w) => `<a class="work-other" href="work.html?id=${encodeURIComponent(w.id)}">
+            ${thumbHtml(w.thumb, w.title)}
+            <span><b>${esc(w.title)}</b><small>${esc(CATEGORY_NAMES[w.category] || '')}</small></span>
+          </a>`).join(''));
+      }
+    } else {
+      document.getElementById('workDesignerBox')?.setAttribute('hidden', '');
+    }
+
+    // 상세에선 PROJECTS 메뉴 선택 표시
+    document.querySelector('.main-nav a[href="project.html"]')?.classList.add('active');
+  }

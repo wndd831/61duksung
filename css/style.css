@@ -2980,3 +2980,95 @@ body.is-loaded .home-track { animation-play-state: running; }
   font-size: clamp(9px, 6.5cqw, 15px);
 }
 .designer-tape.is-long { font-size: clamp(7px, 5.2cqw, 12px); }
+
+
+/* =========================================
+   작품 상세 – 왼쪽 아래 디자이너 정보 + 다른 프로젝트
+   ========================================= */
+.work-detail-info {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 110px);
+  padding-bottom: 32px;
+}
+.work-detail-main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+.work-detail-cat {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 6px;
+}
+
+.work-designer-box {
+  margin-top: 24px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.work-designer-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.work-designer-label .nav-dot { width: 10px; height: 10px; border-width: 1.5px; }
+.work-designer-name { font-size: 14px; font-weight: 700; }
+.work-designer-en,
+.work-designer-contact {
+  font-family: var(--font-kr-regular);
+  font-weight: 400;
+  color: #777;
+}
+.work-designer-contact a:hover { color: var(--orange); }
+
+.work-designer-others { margin-top: 14px; }
+.work-designer-label-sm {
+  font-size: 11px;
+  color: #999;
+  margin-bottom: 6px;
+}
+.work-designer-other-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.work-other {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.work-other .work-thumb {
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  flex: none;
+  object-fit: cover;
+}
+.work-other b { display: block; font-size: 12px; }
+.work-other small {
+  display: block;
+  font-family: var(--font-kr-regular);
+  font-weight: 400;
+  font-size: 11px;
+  color: #999;
+}
+.work-other:hover b { color: var(--orange); }
+
+img.work-thumb { display: block; object-fit: cover; }
+
+@media (max-width: 900px) {
+  .work-detail-info { height: auto; }
+  .work-detail-main { overflow: visible; }
+}
+
+/* 홈: 학교 로고만 오른쪽 아래 */
+.side-fab {
+  left: auto;
+  right: 40px;
+}
+@media (max-width: 768px) {
+  .side-fab { right: 16px; left: auto; }
+}
