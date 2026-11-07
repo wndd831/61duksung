@@ -3213,3 +3213,16 @@ img.work-thumb { display: block; object-fit: cover; }
   }
 }
 .about-details .about-info-sub { min-width: 5.6em; }
+
+
+/* ABOUT v4 – 날짜 덩어리 위, 졸준위 아래 (상하) */
+@media (min-width: 961px) {
+  .about-details,
+  .about-intro.is-compact .about-details,
+  .about-intro.is-stacked .about-details {
+    flex-direction: column;
+    gap: 2.2em;
+  }
+  .about-details .about-info,
+  .about-details .about-committee { font-size: var(--details-fs, 16px); }
+}

@@ -1248,7 +1248,7 @@
       const posterH = aboutPoster.offsetHeight;
 
       // 소개글 덩어리가 포스터 높이를 채우는 가장 큰 크기 (문장 안 줄바꿈은 단어 단위)
-      let fs = 26;
+      let fs = 20;                 // 최대 크기
       const lh = 1.75;
       const apply = () => {
         aboutIntro.style.setProperty('--intro-fs', `${fs}px`);
@@ -1257,15 +1257,15 @@
       };
       const blockH = () => { introBlock.style.minHeight = '0'; const h = introBlock.offsetHeight; introBlock.style.minHeight = ''; return h; };
       apply();
-      while (blockH() > posterH * 0.98 && fs > 14) { fs -= 0.5; apply(); }
+      while (blockH() > posterH * 0.8 && fs > 13) { fs -= 0.5; apply(); }
 
       // 날짜 · 졸준위: 한 줄(나란히)에 들어가는 가장 큰 크기 (최대 18px)
       if (details) {
-        let dfs = 20;
+        // 상하로 쌓은 날짜·졸준위가 포스터 높이 안에 들어가는 크기 (최대 16px)
+        let dfs = 16;
         aboutIntro.style.setProperty('--details-fs', `${dfs}px`);
         aboutIntro.classList.remove('is-compact', 'is-stacked');
-        while (details.scrollWidth > introW + 1 && dfs > 14) { dfs -= 0.5; aboutIntro.style.setProperty('--details-fs', `${dfs}px`); }
-        if (details.scrollWidth > introW + 1) aboutIntro.classList.add('is-compact');
+        while (details.offsetHeight > posterH && dfs > 12) { dfs -= 0.5; aboutIntro.style.setProperty('--details-fs', `${dfs}px`); }
       }
     };
 
