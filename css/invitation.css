@@ -229,3 +229,6 @@ html:has(body.invite-page), body.invite-page { overflow: hidden; height: 100%; o
 /* 초대장 영문 제목용 – 프리텐다드 (영문만 잘라서 가볍게) */
 @font-face { font-family: 'Pretendard'; src: url('../fonts/Pretendard-Bold-latin.woff2') format('woff2'); font-weight: 700; font-display: swap; }
 @font-face { font-family: 'Pretendard'; src: url('../fonts/Pretendard-ExtraBold-latin.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+.inv-link { cursor: pointer; }
+.inv-link:hover text, .inv-link:active text { fill: var(--orange); }
+.inv-link:hover g, .inv-link:active g { stroke: var(--orange); }

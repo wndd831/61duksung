@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!hero || !svg) return;
 
   const NS = 'http://www.w3.org/2000/svg';
+  const r2 = Math.SQRT1_2;
   const scrollBtn = document.getElementById('invScroll');
   const POP = 700, OPEN = 2100, ZOOM = 900;
   const TEXT_PX = 11;   // 다 펼친 뒤 본문 글자가 이 크기(px)로 보이게 확대
@@ -82,8 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 위 칸 바깥(주황) = 접혔을 때 보이는 겉면. 접힌 카드 좌표(아래 마름모)로 씀
   const cover = el('g', {}, P.top.g);
-  txt(cover, 0, 59.5, 'UNFOLD TO', { anchor: 'middle', font: EN, weight: 700, size: 4.9, ls: '-0.01em' });
-  txt(cover, 0, 66, 'INVITATION', { anchor: 'middle', font: EN, weight: 700, size: 4.9, ls: '-0.01em' });
+  txt(cover, 0, 59.5, 'UNFOLD TO', { anchor: 'middle', font: PT, weight: 800, size: 4.9, ls: '-0.01em' });
+  txt(cover, 0, 66, 'INVITATION', { anchor: 'middle', font: PT, weight: 800, size: 4.9, ls: '-0.01em' });
   el('line', { x1: 0, y1: 69.5, x2: 0, y2: 88.6, stroke: INK, 'stroke-width': 0.55 }, cover);
   el('polyline', { points: '-4.3,84.3 0,88.6 4.3,84.3', fill: 'none', stroke: INK, 'stroke-width': 0.55, 'stroke-linejoin': 'miter' }, cover);
 
@@ -100,15 +101,73 @@ document.addEventListener('DOMContentLoaded', () => {
     lines.forEach((ln, i) => txt(botIn, -10, y + 5.4 + i * 4.1, ln, { size: 2.9, ls: '-0.01em' }));
     y += 5.4 + lines.length * 4.1 + 3.6;
   });
+  // 장소 밑: 지도 링크
+  const mapLink = (x, label, href) => {
+    const a = el('a', { href, target: '_blank', rel: 'noopener', class: 'inv-link' }, botIn);
+    const t = txt(a, x, y + 1.6, label, { size: 2.6 });
+    t.setAttribute('text-decoration', 'underline');
+    return a;
+  };
+  const PLACE_Q = encodeURIComponent('홍익대학교 대학로 아트센터');
+  mapLink(-10, '네이버 지도', `https://map.naver.com/p/search/${PLACE_Q}`);
+  mapLink(3, '카카오맵', `https://map.kakao.com/?q=${PLACE_Q}`);
 
   // 펼쳤을 때 접힌 자리 얇은 선 + 가운데 OPEN UP!
   const creases = el('g', { stroke: 'rgba(65,68,69,0.28)', 'stroke-width': 0.8, 'vector-effect': 'non-scaling-stroke' }, cam);
   ['L', 'R', 'UL', 'UR', 'LL', 'LR'].forEach((k) => {
     el('line', { x1: 0, y1: 0, x2: V[k][0], y2: V[k][1], 'vector-effect': 'non-scaling-stroke' }, creases);
   });
-  const openUp = el('g', { transform: 'rotate(-45)' }, cam);   // 종이(마름모) 변과 나란히 45°
+  const openUp = el('g', { transform: 'rotate(-30)' }, cam);   // 30° 기울기
   txt(openUp, 0, 3.3, 'OPEN UP!', { anchor: 'middle', font: PT, weight: 800, size: 9.4, ls: '-0.03em' });
   openUp.style.transition = 'opacity .18s ease-out';
+
+  // ---------- 종이 밖 (펼친 뒤 나타남): 왼쪽 아래 변 – 전공 글자·로고 / 오른쪽 아래 변 – 링크 픽토그램 ----------
+  const LINKS = {
+    website: 'index.html',
+    guestbook: 'guestbook.html',
+    instagram: 'https://www.instagram.com/',   // ← 졸전 인스타 주소로 바꾸기
+  };
+  const extras = el('g', {}, cam);
+  extras.style.transition = 'opacity .4s ease-out';
+  const onLeft = (sPos, d) => [-100 + 100 * sPos - d * r2, 100 * sPos + d * r2];   // 왼쪽 아래 변에서 바깥으로 d
+  const onRight = (sPos, d) => [100 * sPos + d * r2, 100 - 100 * sPos + d * r2];   // 오른쪽 아래 변에서 바깥으로 d
+  {
+    const [x, yy] = onLeft(0.36, 7);
+    const g = el('g', { transform: `translate(${x} ${yy}) rotate(45)` }, extras);
+    txt(g, 0, -1.6, '덕성여자대학교 시각디자인전공', { anchor: 'middle', font: KRB, weight: 700, size: 3 });
+    txt(g, 0, 2.6, '제61회 졸업전시회', { anchor: 'middle', font: KRB, weight: 700, size: 3 });
+  }
+  {
+    const [x, yy] = onLeft(0.64, 12);
+    el('image', { href: 'images/visual-design-logo.png', x: x - 10, y: yy - 3, width: 20, height: 6.03 }, extras);
+    const [x2, y2] = onLeft(0.86, 11);
+    el('image', { href: 'images/duksung-logo.png', x: x2 - 5.5, y: y2 - 5.5, width: 11, height: 11 }, extras);
+  }
+  const icon = (sPos, href, label, drawFn, external) => {
+    const [x, yy] = onRight(sPos, 11);
+    const a = el('a', { href, class: 'inv-link', 'aria-label': label }, extras);
+    if (external) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
+    const g = el('g', { transform: `translate(${x} ${yy})`, fill: 'none', stroke: INK, 'stroke-width': 0.75, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, a);
+    el('rect', { x: -6, y: -6, width: 12, height: 12, fill: 'transparent', stroke: 'none' }, g);   // 누르는 영역
+    drawFn(g);
+    el('title', {}, a).textContent = label;
+  };
+  icon(0.16, LINKS.instagram, '인스타그램', (g) => {
+    el('rect', { x: -4, y: -4, width: 8, height: 8, rx: 2.3 }, g);
+    el('circle', { cx: 0, cy: 0, r: 1.9 }, g);
+    el('circle', { cx: 2.35, cy: -2.35, r: 0.35, fill: INK, stroke: 'none' }, g);
+  }, true);
+  icon(0.36, LINKS.website, '웹사이트', (g) => {
+    el('circle', { cx: 0, cy: 0, r: 4.2 }, g);
+    el('ellipse', { cx: 0, cy: 0, rx: 1.8, ry: 4.2 }, g);
+    el('line', { x1: -4.2, y1: 0, x2: 4.2, y2: 0 }, g);
+    el('path', { d: 'M-3.6 -2.1 H3.6 M-3.6 2.1 H3.6' }, g);
+  });
+  icon(0.56, LINKS.guestbook, '방명록', (g) => {
+    el('path', { d: 'M-4 -4 H4 V1.6 L1.6 4 H-4 Z' }, g);          // 모서리 접힌 메모지
+    el('path', { d: 'M4 1.6 H1.6 V4' }, g);
+    el('path', { d: 'M-2.4 -1.6 H2.4 M-2.4 0.6 H0.6' }, g);
+  });
 
   // ---------- 접기 계산 ----------
   const rotAxis = (p, a, ang) => {   // 원점 지나는 축 a(단위벡터) 기준 회전 (로드리게스)
@@ -117,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const cx = ay * z - az * y, cy = az * x - ax * z, cz = ax * y - ay * x;
     return [x * c + cx * s + ax * d * (1 - c), y * c + cy * s + ay * d * (1 - c), z * c + cz * s + az * d * (1 - c)];
   };
-  const r2 = Math.SQRT1_2;
 
   function pose(theta) {   // theta: 0(펼침) ~ π(접힘)
     const phi = 2 * Math.atan(Math.SQRT2 * Math.tan(Math.min(theta, Math.PI - 1e-4) / 2));
@@ -153,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Object.values(P).sort((a, b) => a.z - b.z).forEach((pc) => cam.appendChild(pc.g));
     cam.appendChild(creases);
     cam.appendChild(openUp);
+    cam.appendChild(extras);
   }
 
   // ---------- 카메라 (확대 · 이동) ----------
@@ -207,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
       applyCam();
     });
     openUp.style.opacity = 1;
+    extras.style.opacity = 1;
     state = 'done';
     hero.classList.add('is-pannable');
     scrollBtn?.classList.add('on');
@@ -218,8 +278,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let gesture = null;
   const clampView = () => {
     view.s = Math.max(scales.min, Math.min(scales.max, view.s));
-    view.x = Math.max(-100, Math.min(100, view.x));
-    view.y = Math.max(-100, Math.min(100, view.y));
+    view.x = Math.max(-105, Math.min(105, view.x));
+    view.y = Math.max(-100, Math.min(118, view.y));
     applyCam();
   };
   const startGesture = () => {
@@ -230,6 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   hero.addEventListener('pointerdown', (e) => {
     if (state !== 'done' || e.target === scrollBtn) return;
+    if (e.target.closest && e.target.closest('a')) return;   // 링크는 그냥 눌리게
     ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
     hero.setPointerCapture(e.pointerId);
     startGesture();
@@ -266,11 +327,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   creases.style.opacity = 0;
   openUp.style.opacity = 0;
+  extras.style.opacity = 0;
   draw(THETA_CLOSED);
   view.s = scales.closed; view.x = 0; view.y = 50;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    draw(0); creases.style.opacity = 1; openUp.style.opacity = 1;
+    draw(0); creases.style.opacity = 1; openUp.style.opacity = 1; extras.style.opacity = 1;
     view.s = scales.zoom; view.y = FOCUS_Y; applyCam(); centerTopBlock();
     state = 'done'; hero.classList.add('is-pannable'); scrollBtn?.classList.add('on');
   } else {

@@ -2,7 +2,7 @@
    오픈 전 잠금 (Coming Soon)
    - OPEN_AT 시간 전에는 실제 사이트(duksungvcd2026.com) 방문자에게 "커밍순" 화면만 보임
    - 시간이 되면 자동으로 열림 (보고 있던 사람도 카운트다운 끝나면 새로고침돼서 열림)
-   - 모바일 초대장(invitation.html)은 잠그지 않음
+   - 모바일 초대장(invitation.html), 방명록(guestbook.html)은 잠그지 않음
    - 우리끼리 미리 보기:  주소 뒤에 ?preview=fold  한 번 붙여 들어가면 그 브라우저는 계속 열림
                           ?preview=off  로 다시 잠금
    - 커밍순 화면 확인용:  ?soon  붙이면 어디서든 커밍순 화면이 보임
@@ -22,7 +22,9 @@
   var bypass = false;
   try { bypass = localStorage.getItem(KEY) === '1'; } catch (e) {}
 
-  if (!force && (!live || bypass || Date.now() >= OPEN_AT.getTime())) return;
+  // 방명록은 초대장에서 바로 가므로 오픈 전에도 열어둠
+  var openPage = /\/guestbook(\.html)?$/.test(location.pathname);
+  if (!force && (!live || bypass || openPage || Date.now() >= OPEN_AT.getTime())) return;
 
   var root = document.documentElement;
   root.classList.add('is-soon');
