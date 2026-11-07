@@ -294,7 +294,7 @@
         if (bottom > maxBottom) maxBottom = bottom;
       });
 
-      const targetHeight = Math.min(maxBottom + 100, MAX_BOARD_HEIGHT); // 여유 100px
+      const targetHeight = maxBottom + 100; // 여유 100px (모두의 메모가 늘어나면 계속 길어짐)
       board.style.height = `${targetHeight}px`;
     }
 
@@ -396,10 +396,42 @@
       el.addEventListener('pointercancel', onPointerUp);
     }
 
-        function renderAllNotes() {
+    /* --- 저장소 ---
+       js/firebase-config.js 에 Firebase 설정이 있으면 → 모두가 같이 보는 방명록 (실시간)
+       없으면 → 지금처럼 이 브라우저에만 저장 */
+    let notesCache = [];
+    let remote = null;
+
+    function renderAllNotes() {
       board.innerHTML = '';
-      loadNotes().forEach(renderNote);
+      notesCache.forEach(renderNote);
       updateBoardHeight();
+    }
+
+    async function connectRemote(config) {
+      const V = '10.12.2';
+      const { initializeApp } = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`);
+      const fs = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`);
+      const db = fs.getFirestore(initializeApp(config));
+      const col = fs.collection(db, 'guestbook');
+
+      // 누가 붙이면 모두의 화면에 바로 반영
+      fs.onSnapshot(fs.query(col, fs.orderBy('createdAt', 'asc')), (snap) => {
+        notesCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderAllNotes();
+      }, (err) => console.warn('[방명록] 불러오기 실패', err));
+
+      return {
+        add: (note) => fs.addDoc(col, {
+          from: note.from,
+          message: note.message,
+          left: note.left,
+          top: note.top,
+          rot: note.rot,
+          color: note.color,
+          createdAt: fs.serverTimestamp(),
+        }),
+      };
     }
 
         // 빈자리 찾기: 다른 메모와 겹치지 않게, 겹쳐도 가장자리만 살짝(글자 안 가리게)
@@ -428,28 +460,38 @@
       return { x: 10 + Math.random() * maxX, y: bottom + 30 };
     }
 
-        function addNote(from, message, color) {
-      const notes = loadNotes();
-      const spot = findSpot(notes);
+        async function addNote(from, message, color) {
+      const spot = findSpot(notesCache);
       const W = board.clientWidth || window.innerWidth;
 
       const newNote = {
         id: Date.now() + Math.random(),
         from,
         message,
-        left: (spot.x / W) * 100,
-        top: spot.y,
+        left: Math.round(((spot.x / W) * 100) * 100) / 100,
+        top: Math.round(spot.y),
         rot: Math.floor(Math.random() * 13) - 6, // -6 ~ 6도
         color: color === 'blue' ? 'blue' : 'orange',
       };
 
-      notes.push(newNote);
-      saveNotes(notes);
+      if (remote) {
+        await remote.add(newNote);         // 화면 반영은 실시간 구독(onSnapshot)이 해줌
+        return;
+      }
+      notesCache.push(newNote);
+      saveNotes(notesCache);
       renderNote(newNote);
       updateBoardHeight();
     }
 
+    // 시작: 설정이 있으면 온라인, 없거나 실패하면 이 브라우저 저장
+    notesCache = loadNotes();
     renderAllNotes();
+    if (window.FIREBASE_CONFIG && window.FIREBASE_CONFIG.projectId) {
+      connectRemote(window.FIREBASE_CONFIG)
+        .then((r) => { remote = r; })
+        .catch((err) => console.warn('[방명록] 온라인 연결 실패 – 이 브라우저에만 저장합니다', err));
+    }
 
     const guestSheet = document.getElementById('guestSheet');
 
@@ -494,10 +536,22 @@
         return;
       }
 
-      addNote(from, message, guestSheet.dataset.color);
-      guestFrom.value = '';
-      guestMessage.value = '';
-      syncCounts();
+      const errEl = document.getElementById('guestError');
+      if (errEl) errEl.hidden = true;
+      guestSubmit.disabled = true;
+      addNote(from, message, guestSheet.dataset.color)
+        .then(() => {
+          guestFrom.value = '';
+          guestMessage.value = '';
+          syncCounts();
+          closeGuest();
+        })
+        .catch((err) => {
+          console.warn('[방명록] 보내기 실패', err);
+          if (errEl) errEl.hidden = false;
+        })
+        .finally(() => { guestSubmit.disabled = false; });
+      return;
       closeGuest();
     });
   }

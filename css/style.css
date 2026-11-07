@@ -3638,3 +3638,11 @@ img.work-thumb { display: block; object-fit: cover; }
   border-color: var(--orange);
   color: #fff;
 }
+
+.guest-error {
+  position: absolute;
+  left: 30px;
+  bottom: 8px;
+  font-size: var(--fs-caption);
+  color: var(--orange);
+}
