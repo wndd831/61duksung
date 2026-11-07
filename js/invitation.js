@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const topBlock = el('g', {}, topIn);
   txt(topBlock, 0, -60.5, 'INVITATION!', { font: PT, weight: 800, size: 6.3, ls: '-0.02em' });
   [
-    '제61회 시각디자인전공 졸업전시회',
+    '덕성여자대학교 제61회 시각디자인전공 졸업전시회',
     '〈Fold to Dot 폴드 투 닷〉은 대학 생활 동안',
     '쌓아 온 배움과 경험을 바탕으로 각자의 시선과',
     '생각을 작품으로 선보이는 자리입니다.',
