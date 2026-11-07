@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 장소 밑: 지도 링크
   const mapLink = (x, label, href) => {
     const a = el('a', { href, target: '_blank', rel: 'noopener', class: 'inv-link' }, botIn);
-    const t = txt(a, x, y + 1.6, label, { size: 2.6 });
+    const t = txt(a, x, y - 3.6, label, { size: 2.6 });   // 장소 줄 간격과 똑같이
     t.setAttribute('text-decoration', 'underline');
     return a;
   };
@@ -132,38 +132,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const onLeft = (sPos, d) => [-100 + 100 * sPos - d * r2, 100 * sPos + d * r2];   // 왼쪽 아래 변에서 바깥으로 d
   const onRight = (sPos, d) => [100 * sPos + d * r2, 100 - 100 * sPos + d * r2];   // 오른쪽 아래 변에서 바깥으로 d
   {
-    const [x, yy] = onLeft(0.36, 7);
+    const [x, yy] = onLeft(0.5, 4.2);
     const g = el('g', { transform: `translate(${x} ${yy}) rotate(45)` }, extras);
-    txt(g, 0, -1.6, '덕성여자대학교 시각디자인전공', { anchor: 'middle', font: KRB, weight: 700, size: 3 });
-    txt(g, 0, 2.6, '제61회 졸업전시회', { anchor: 'middle', font: KRB, weight: 700, size: 3 });
+    txt(g, 0, -0.9, '덕성여자대학교 시각디자인전공', { anchor: 'middle', font: KRB, weight: 700, size: 1.7 });
+    txt(g, 0, 1.5, '제61회 졸업전시회', { anchor: 'middle', font: KRB, weight: 700, size: 1.7 });
   }
   {
-    const [x, yy] = onLeft(0.64, 12);
-    el('image', { href: 'images/visual-design-logo.png', x: x - 10, y: yy - 3, width: 20, height: 6.03 }, extras);
-    const [x2, y2] = onLeft(0.86, 11);
-    el('image', { href: 'images/duksung-logo.png', x: x2 - 5.5, y: y2 - 5.5, width: 11, height: 11 }, extras);
+    const [x, yy] = onLeft(0.68, 7);
+    el('image', { href: 'images/visual-design-logo.png', x: x - 5.5, y: yy - 1.66, width: 11, height: 3.32 }, extras);
+    const [x2, y2] = onLeft(0.8, 6.5);
+    el('image', { href: 'images/duksung-logo.png', x: x2 - 3.2, y: y2 - 3.2, width: 6.4, height: 6.4 }, extras);
   }
   const icon = (sPos, href, label, drawFn, external) => {
-    const [x, yy] = onRight(sPos, 11);
+    const [x, yy] = onRight(sPos, 6.5);
     const a = el('a', { href, class: 'inv-link', 'aria-label': label }, extras);
     if (external) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
-    const g = el('g', { transform: `translate(${x} ${yy})`, fill: 'none', stroke: INK, 'stroke-width': 0.75, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, a);
+    const g = el('g', { transform: `translate(${x} ${yy}) scale(0.55)`, fill: 'none', stroke: INK, 'stroke-width': 0.9, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, a);
     el('rect', { x: -6, y: -6, width: 12, height: 12, fill: 'transparent', stroke: 'none' }, g);   // 누르는 영역
     drawFn(g);
     el('title', {}, a).textContent = label;
   };
-  icon(0.16, LINKS.instagram, '인스타그램', (g) => {
+  icon(0.2, LINKS.instagram, '인스타그램', (g) => {
     el('rect', { x: -4, y: -4, width: 8, height: 8, rx: 2.3 }, g);
     el('circle', { cx: 0, cy: 0, r: 1.9 }, g);
     el('circle', { cx: 2.35, cy: -2.35, r: 0.35, fill: INK, stroke: 'none' }, g);
   }, true);
-  icon(0.36, LINKS.website, '웹사이트', (g) => {
+  icon(0.3, LINKS.website, '웹사이트', (g) => {
     el('circle', { cx: 0, cy: 0, r: 4.2 }, g);
     el('ellipse', { cx: 0, cy: 0, rx: 1.8, ry: 4.2 }, g);
     el('line', { x1: -4.2, y1: 0, x2: 4.2, y2: 0 }, g);
     el('path', { d: 'M-3.6 -2.1 H3.6 M-3.6 2.1 H3.6' }, g);
   });
-  icon(0.56, LINKS.guestbook, '방명록', (g) => {
+  icon(0.4, LINKS.guestbook, '방명록', (g) => {
     el('path', { d: 'M-4 -4 H4 V1.6 L1.6 4 H-4 Z' }, g);          // 모서리 접힌 메모지
     el('path', { d: 'M4 1.6 H1.6 V4' }, g);
     el('path', { d: 'M-2.4 -1.6 H2.4 M-2.4 0.6 H0.6' }, g);
