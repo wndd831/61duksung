@@ -132,15 +132,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const onLeft = (sPos, d) => [-100 + 100 * sPos - d * r2, 100 * sPos + d * r2];   // 왼쪽 아래 변에서 바깥으로 d
   const onRight = (sPos, d) => [100 * sPos + d * r2, 100 - 100 * sPos + d * r2];   // 오른쪽 아래 변에서 바깥으로 d
   {
-    const [x, yy] = onLeft(0.3, 4.2);
+    const [x, yy] = onLeft(0.63, 4.2);
     const g = el('g', { transform: `translate(${x} ${yy}) rotate(45)` }, extras);
     txt(g, 0, -0.9, '덕성여자대학교 시각디자인전공', { anchor: 'middle', font: KRB, weight: 700, size: 1.7 });
     txt(g, 0, 1.5, '제61회 졸업전시회', { anchor: 'middle', font: KRB, weight: 700, size: 1.7 });
   }
   {
-    const [x, yy] = onLeft(0.58, 5.5);
+    const [x, yy] = onLeft(0.8, 5.5);
     el('image', { href: 'images/visual-design-logo.png', x: x - 5.5, y: yy - 1.66, width: 11, height: 3.32 }, extras);
-    const [x2, y2] = onLeft(0.82, 5.5);
+    const [x2, y2] = onLeft(0.92, 5.5);
     el('image', { href: 'images/duksung-logo.png', x: x2 - 3.2, y: y2 - 3.2, width: 6.4, height: 6.4 }, extras);
   }
   const icon = (sPos, href, label, drawFn, external) => {
@@ -152,18 +152,18 @@ document.addEventListener('DOMContentLoaded', () => {
     drawFn(g);
     el('title', {}, a).textContent = label;
   };
-  icon(0.18, LINKS.instagram, '인스타그램', (g) => {
+  icon(0.08, LINKS.instagram, '인스타그램', (g) => {
     el('rect', { x: -4, y: -4, width: 8, height: 8, rx: 2.3 }, g);
     el('circle', { cx: 0, cy: 0, r: 1.9 }, g);
     el('circle', { cx: 2.35, cy: -2.35, r: 0.35, fill: INK, stroke: 'none' }, g);
   }, true);
-  icon(0.5, LINKS.website, '웹사이트', (g) => {
+  icon(0.165, LINKS.website, '웹사이트', (g) => {
     el('circle', { cx: 0, cy: 0, r: 4.2 }, g);
     el('ellipse', { cx: 0, cy: 0, rx: 1.8, ry: 4.2 }, g);
     el('line', { x1: -4.2, y1: 0, x2: 4.2, y2: 0 }, g);
     el('path', { d: 'M-3.6 -2.1 H3.6 M-3.6 2.1 H3.6' }, g);
   });
-  icon(0.82, LINKS.guestbook, '방명록', (g) => {
+  icon(0.25, LINKS.guestbook, '방명록', (g) => {
     el('path', { d: 'M-4 -4 H4 V1.6 L1.6 4 H-4 Z' }, g);          // 모서리 접힌 메모지
     el('path', { d: 'M4 1.6 H1.6 V4' }, g);
     el('path', { d: 'M-2.4 -1.6 H2.4 M-2.4 0.6 H0.6' }, g);
