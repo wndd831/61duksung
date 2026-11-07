@@ -3783,3 +3783,7 @@ html.is-touch .custom-cursor { display: none !important; }
   .work-detail-images { order: 2; width: 100%; padding: 0 20px; flex: none; }
   .work-designer-box { order: 3; width: 100%; padding: 30px 20px 40px; margin-top: 0; }
 }
+
+/* 방명록 종이(작성창 · 붙은 메모) 모두 정사각형 */
+.guest-sheet { aspect-ratio: 1 / 1; height: auto; }
+.guest-note { aspect-ratio: 1 / 1; height: auto; }
