@@ -1,3 +1,23 @@
+/* 실제 사이트에서는 주소에 .html 안 보이게 (duksungvcd2026.com/about 처럼) */
+(function () {
+  if (!/(^|\.)duksungvcd2026\.com$|\.github\.io$/.test(location.hostname)) return;
+  const clean = (h) => h.replace(/(^|\/)index\.html(?=[?#]|$)/, '$1./').replace(/\.html(?=[?#]|$)/, '');
+  if (/\.html$/.test(location.pathname)) {
+    history.replaceState(null, '', clean(location.pathname) + location.search + location.hash);
+  }
+  const local = (h) => h && !/^[a-z]+:|^\/\//i.test(h) && /\.html(?=[?#]|$)/.test(h);
+  const fixAll = () => document.querySelectorAll('a[href]').forEach((a) => {
+    const h = a.getAttribute('href');
+    if (local(h)) a.setAttribute('href', clean(h));
+  });
+  document.addEventListener('DOMContentLoaded', fixAll);
+  // 나중에 그려지는 링크(작품 목록 등)도 누를 때 정리
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest && e.target.closest('a[href]');
+    if (a && local(a.getAttribute('href'))) a.setAttribute('href', clean(a.getAttribute('href')));
+  }, true);
+})();
+
 /* 터치로 쓰는 기기면 커스텀 커서 숨김 */
 (function () {
   const mark = () => document.documentElement.classList.add('is-touch');
