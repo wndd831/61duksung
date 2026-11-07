@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     scales.closed = Math.min(W * 0.66, H * 0.42) / 100;    // 접힌 카드 폭
     scales.fit = Math.min(W * 0.9, H * 0.7) / 200;         // 펼치는 동안: 종이 전체가 화면 안에
-    scales.zoom = Math.max(TEXT_PX / 2.05, W * 1.45 / 200);   // 다 펼친 뒤: 본문이 읽히게 확대
+    scales.zoom = Math.max(TEXT_PX / 2.05, Math.min(W * 1.45, H * 1.15) / 200);   // 다 펼친 뒤: 본문이 읽히게 확대
     scales.min = scales.fit; scales.max = scales.zoom * 2;
   }
   function applyCam() {

@@ -219,3 +219,9 @@ html.inv-locked, html.inv-locked body { overflow: hidden; height: 100%; }
 .invite-hello { padding-top: 64px; }
 .invite-kicker.title-en { font-size: var(--fs-caption); letter-spacing: 0.1em; margin-bottom: 18px; }
 .invite-poster { margin-top: 48px; }
+
+/* 초대장은 종이 한 장만: 스크롤 없음 */
+html:has(body.invite-page), body.invite-page { overflow: hidden; height: 100%; overscroll-behavior: none; }
+.invite-page .invite { padding-bottom: 0; }
+.invite-page .invite { max-width: none; padding: 0; }
+.invite-page .inv-hero { margin: 0; }
