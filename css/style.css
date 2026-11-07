@@ -3721,3 +3721,65 @@ img.work-thumb { display: block; object-fit: cover; }
   .custom-cursor { display: none !important; }
 }
 html.is-touch .custom-cursor { display: none !important; }
+
+/* =========================================================
+   11/07 수정 모음
+   ========================================================= */
+
+/* 햄버거: 로고와 세로 가운데 맞춤 */
+.menu-toggle { top: calc(50% - 12px); }
+
+/* PC 화면을 줄여서 로고-메뉴 사이가 ABOUT 글자 폭 정도로 좁아지면 햄버거로 (768px까지 쓰던 규칙을 920px까지) */
+@media (max-width: 920px) {
+  .menu-toggle { display: flex; }
+  .main-nav {
+    position: fixed;
+    top: 0; left: 0; right: auto;
+    width: 100%;
+    height: 100vh;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+  .main-nav.open { transform: translateY(0); }
+  .main-nav ul { flex-direction: column; gap: 32px; }
+  .main-nav a { font-size: 20px; }
+  .nav-dot { width: 18px; height: 18px; }
+}
+@media (max-width: 768px) {
+  .menu-toggle { right: 20px; }
+}
+
+/* FOLD TO ___ 빈칸 밑줄 길게 */
+.nav-blank { width: 4.2em; }
+
+/* 폰: 방명록 메모 절반 크기 */
+@media (max-width: 768px) {
+  .board-section .guest-note { width: 95px; padding: 8px 9px; }
+  .board-section .guest-note .note-message { font-size: 10px; line-height: 1.4; }
+  .board-section .guest-note .note-from { font-size: 11px; }
+  .board-section .guest-note .note-line { margin: 5px 0; }
+}
+
+/* 광장 보기 버튼 위로 (PC · 폰) */
+.stage-switch { bottom: 13vh; }
+@media (max-width: 768px) { .stage-switch { bottom: max(24px, 9vh); } }
+
+/* 프로젝트: 지도교수 ↔ 이름 간격 두 글자 정도 */
+.project-info-row { gap: 2em; }
+.project-info-row .info-label { width: auto; }
+
+/* 로딩 점선 조금 짧게 */
+.load-dash { width: 110px; }
+
+/* 폰: 작품 상세 – 설명 → 작품 이미지 → 프로필(맨 아래) */
+@media (max-width: 900px) {
+  .work-detail-info { display: contents; }
+  .work-detail-main { order: 1; width: 100%; padding: 30px 20px 10px; }
+  .work-detail-images { order: 2; width: 100%; padding: 0 20px; flex: none; }
+  .work-designer-box { order: 3; width: 100%; padding: 30px 20px 40px; margin-top: 0; }
+}

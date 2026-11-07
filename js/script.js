@@ -489,7 +489,7 @@
     }
 
         // 빈자리 찾기: 다른 메모와 겹치지 않게, 겹쳐도 가장자리만 살짝(글자 안 가리게)
-    const NOTE = 190;          // 메모 크기(px)
+    const NOTE = window.innerWidth <= 768 ? 95 : 190;   // 메모 크기(px) – 폰은 절반
     const OVERLAP_OK = 16;     // 이 정도까지는 겹쳐도 됨
     function findSpot(notes) {
       const W = boardW();
