@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const POP = 700, OPEN = 2100, ZOOM = 900;
   const TEXT_PX = 11;   // 다 펼친 뒤 본문 글자가 이 크기(px)로 보이게 확대
   const OUT = 'var(--orange)', IN = 'var(--blue)', INK = 'var(--black)';
-  const KR = 'var(--font-kr-regular)', KRB = 'var(--font-kr)', EN = 'var(--font-en-title)';
+  const KR = 'var(--font-kr-regular)', KRB = 'var(--font-kr)', EN = 'var(--font-en-title)', PT = "'Pretendard', sans-serif";
 
   const el = (tag, attrs = {}, parent) => {
     const n = document.createElementNS(NS, tag);
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const t = el('text', { x, y, fill: INK, 'text-anchor': o.anchor || 'start' }, parent);
     t.style.fontFamily = o.font || KR;
     t.style.fontSize = `${o.size || 2.2}px`;
-    if (o.weight) t.style.fontWeight = o.weight;
+    t.style.fontWeight = o.weight || 400;
     if (o.ls) t.style.letterSpacing = o.ls;
     t.textContent = str;
     return t;
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // INVITATION! + 소개글: 서로 좌측 정렬, 두 줄 묶음은 가운데
   const topIn = el('g', {}, P.top.g);
   const topBlock = el('g', {}, topIn);
-  txt(topBlock, 0, -61, 'INVITATION!', { font: EN, weight: 800, size: 7.6, ls: '-0.02em' });
+  txt(topBlock, 0, -60.5, 'INVITATION!', { font: PT, weight: 800, size: 6.3, ls: '-0.02em' });
   [
     '제61회 시각디자인전공 졸업전시회',
     '〈Fold to Dot 폴드 투 닷〉은 대학 생활 동안',
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   let y = 24.5;
   info.forEach(([label, lines]) => {
-    txt(botIn, -10, y, label, { font: EN, weight: 700, size: 3.5 });
+    txt(botIn, -10, y, label, { font: PT, weight: 700, size: 3.5 });
     lines.forEach((ln, i) => txt(botIn, -10, y + 5.4 + i * 4.1, ln, { size: 2.9, ls: '-0.01em' }));
     y += 5.4 + lines.length * 4.1 + 3.6;
   });
@@ -106,8 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
   ['L', 'R', 'UL', 'UR', 'LL', 'LR'].forEach((k) => {
     el('line', { x1: 0, y1: 0, x2: V[k][0], y2: V[k][1], 'vector-effect': 'non-scaling-stroke' }, creases);
   });
-  const openUp = el('g', {}, cam);
-  txt(openUp, 0, 3.3, 'OPEN UP!', { anchor: 'middle', font: EN, weight: 900, size: 9.4, ls: '-0.03em' });
+  const openUp = el('g', { transform: 'rotate(-45)' }, cam);   // 종이(마름모) 변과 나란히 45°
+  txt(openUp, 0, 3.3, 'OPEN UP!', { anchor: 'middle', font: PT, weight: 800, size: 9.4, ls: '-0.03em' });
   openUp.style.transition = 'opacity .18s ease-out';
 
   // ---------- 접기 계산 ----------
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function measure() {
     W = hero.clientWidth; H = hero.clientHeight;
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    scales.closed = Math.min(W * 0.66, H * 0.42) / 100;    // 접힌 카드 폭
+    scales.closed = Math.min(W * 0.85, H * 0.55) / 100;    // 접힌 카드 폭 = 화면 가로의 85%
     scales.fit = Math.min(W * 0.9, H * 0.7) / 200;         // 펼치는 동안: 종이 전체가 화면 안에
     scales.zoom = Math.max(TEXT_PX / 2.05, Math.min(W * 1.45, H * 1.15) / 200);   // 다 펼친 뒤: 본문이 읽히게 확대
     scales.min = scales.fit; scales.max = scales.zoom * 2;
