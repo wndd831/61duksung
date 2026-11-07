@@ -49,11 +49,11 @@ html {
 
 :root {
   /* ── 글자 크기 기준 (사이트 전체) ──
-     Display 29 · Lead 20 · Body 16 · Small 13 · Caption 11 */
+     Display 29 · Lead 20 · Body 16 · Small 14 · Caption 11 */
   --fs-display: 29px;
   --fs-lead: 20px;
   --fs-body: 16px;
-  --fs-small: 13px;
+  --fs-small: 14px;
   --fs-caption: 11px;
   --font-kr: 'PyeojinGothic', sans-serif;               /* Bold (기본) */
   --font-kr-regular: 'PyeojinGothic Regular', sans-serif; /* 400 */
@@ -3295,3 +3295,21 @@ img.work-thumb { display: block; object-fit: cover; }
 
 /* 사진 높이 안에 맞게 – 디자이너 정보 줄 간격 */
 .work-designer-box { line-height: 1.5; }
+
+
+/* 글자 크기 기준 조정
+   - 날짜·졸준위: Body
+   - 작품 상세 소개글: 한글·영어 모두 Small
+   - 프로젝트 커리큘럼 소개: Body (한 단계 위) */
+.about-details .about-info,
+.about-details .about-committee { font-size: var(--fs-body); }
+@media (min-width: 961px) {
+  .about-details,
+  .about-intro.is-compact .about-details,
+  .about-intro.is-stacked .about-details { gap: 72px; }   /* 날짜 ↔ 졸준위 간격 */
+}
+.work-detail-desc,
+.work-detail-desc-en { font-size: var(--fs-small); }
+.project-info-row,
+.project-info-row .info-label,
+.project-info-desc { font-size: var(--fs-body); }
