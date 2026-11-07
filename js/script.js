@@ -1323,10 +1323,8 @@
       set('dNameEn', esc(d.nameEn));
       const contact = [];
       if (d.email) contact.push(`<a href="mailto:${esc(d.email)}">${esc(d.email)}</a>`);
-      if (d.instagram) {
-        const handle = d.instagram.replace(/^@/, '');
-        contact.push(`<a href="https://instagram.com/${encodeURIComponent(handle)}" target="_blank" rel="noopener">@${esc(handle)}</a>`);
-      }
+      if (d.phone) contact.push(`<a href="tel:${esc(d.phone.replace(/[^0-9+]/g, ''))}">${esc(d.phone)}</a>`);
+      set('dPhoto', d.photo ? `<img src="${esc(d.photo)}" alt="${esc(d.name)}">` : '');
       set('dContact', contact.join('<br>'));
 
       // 같은 디자이너의 다른 작품

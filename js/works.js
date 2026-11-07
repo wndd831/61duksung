@@ -4,7 +4,8 @@
    ▸ DESIGNERS: 디자이너 한 명당 한 줄
        id      : 아무 영문 id (작품에서 이 id로 연결)
        name    : 이름          nameEn : 영문 이름
-       email / instagram : 없으면 빈칸('')
+       email / phone : 없으면 빈칸('')
+       photo   : 프로필 사진 경로 (없으면 회색 칸)
    ▸ WORKS: 작품 하나당 한 줄
        category : 'comm'(커뮤니케이션) / 'story'(스토리텔링일러스트) / 'video'(영상콘텐츠)
        designer : 위 DESIGNERS의 id  → 같은 id 작품이 2개면 상세페이지에 '다른 프로젝트'로 뜸
@@ -13,9 +14,9 @@
    ========================================================= */
 
 const DESIGNERS = [
-  { id: 'd1', name: '홍길동', nameEn: 'Hong Gildong', email: 'hello@example.com', instagram: '@gildong' },
-  { id: 'd2', name: '김덕성', nameEn: 'Kim Duksung', email: '', instagram: '' },
-  { id: 'd3', name: '이시디', nameEn: 'Lee Sidi', email: '', instagram: '' },
+  { id: 'd1', name: '홍길동', nameEn: 'Hong Gildong', email: 'hello@example.com', phone: '010-0000-0000', photo: '' },
+  { id: 'd2', name: '김덕성', nameEn: 'Kim Duksung', email: '', phone: '', photo: '' },
+  { id: 'd3', name: '이시디', nameEn: 'Lee Sidi', email: '', phone: '', photo: '' },
 ];
 
 const WORKS = [
