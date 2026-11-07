@@ -3672,19 +3672,19 @@ img.work-thumb { display: block; object-fit: cover; }
   font-family: var(--font-kr-regular);
 }
 .soon-gate b { font-family: var(--font-kr); font-weight: 700; }
-.soon-kr { font-size: 9px; line-height: 1.45; }
-.soon-mark { width: 60px; height: 60px; margin: 14px 0 15px; transform: rotate(-5deg); }
+.soon-kr { font-size: 14px; line-height: 1.45; }
+.soon-mark { width: 96px; height: 96px; margin: 22px 0 24px; transform: rotate(-5deg); }
 .soon-mark svg { width: 100%; height: 100%; display: block; }
 .soon-title {
   font-family: var(--font-en-title);
   font-weight: 700;
-  font-size: 18px;
+  font-size: 32px;
   line-height: 1;
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
 .soon-open {
-  margin-top: 4px;
+  margin-top: 6px;
   font-size: var(--soon-mid);    /* 가로 길이를 COMING SOON에 맞춰 자동 계산 */
   line-height: 1.1;
   color: var(--orange);
@@ -3692,14 +3692,14 @@ img.work-thumb { display: block; object-fit: cover; }
 }
 .soon-count {
   display: flex; gap: 0.9em;
-  margin-top: 6px;
+  margin-top: 10px;
   font-size: var(--soon-mid);
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
 }
 .soon-invite {
   display: inline-flex; align-items: center; gap: 0.9em;
-  margin-top: 20px;
+  margin-top: 32px;
   color: var(--black);
   text-decoration: none;
   font-family: var(--font-kr);
@@ -3708,10 +3708,10 @@ img.work-thumb { display: block; object-fit: cover; }
 .soon-invite .nav-dot { width: 0.7em; height: 0.7em; border-width: 1.5px; }
 .soon-invite:hover .nav-dot { background: var(--orange); }
 @media (max-width: 768px) {
-  .soon-title { font-size: 18px; }
-  .soon-kr { font-size: 9px; }
-  .soon-mark { width: 60px; height: 60px; margin: 14px 0 15px; }
-  .soon-invite { margin-top: 20px; }
+  .soon-title { font-size: 28px; }
+  .soon-kr { font-size: 12px; }
+  .soon-mark { width: 84px; height: 84px; margin: 20px 0 22px; }
+  .soon-invite { margin-top: 28px; }
 }
 
 /* =========================================================
