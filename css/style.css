@@ -3615,3 +3615,26 @@ img.work-thumb { display: block; object-fit: cover; }
   top: 85%;
 }
 .guest-sheet .guest-send:hover { background: var(--black); color: #fff; }
+
+/* 방명록 메모: 마우스 올려도 그림자/들림 없음 */
+.guest-note,
+.guest-note:hover,
+.guest-note.dragging {
+  box-shadow: none;
+}
+.guest-note:hover { transform: rotate(var(--rot, 0deg)); }
+
+/* + 버튼: 테두리 있는 동그라미 (메뉴 동그라미와 같은 선) */
+.add-btn {
+  border: 1.5px solid var(--black);
+  box-shadow: none;
+  background: var(--bg);
+  color: var(--black);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.add-btn:hover {
+  transform: none;
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
