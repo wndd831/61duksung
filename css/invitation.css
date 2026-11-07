@@ -183,24 +183,27 @@ html.inv-locked, html.inv-locked body { overflow: hidden; height: 100%; }
 .inv-tap {
   position: absolute;
   left: 0; right: 0;
-  bottom: calc(44px + env(safe-area-inset-bottom));
+  top: calc(var(--d-bottom) + 34px);
   text-align: center;
-  color: #fff;
+  color: var(--black);
   font-family: var(--font-kr);
   font-size: var(--fs-body);
-  animation: invBlink 1.6s ease-in-out infinite;
+  opacity: 0;
   transition: opacity 0.2s ease;
 }
-.inv-tap.hide { opacity: 0; animation: none; }
-@keyframes invBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+.inv-tap.show { opacity: 1; animation: invBlink 1.6s ease-in-out 0.3s infinite; }
+.inv-tap.hide { opacity: 0 !important; animation: none; }
+@keyframes invBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-/* 접힌 뒤 탁 나타나는 글자 */
+/* 펼쳐진 종이 안쪽에 탁 나타나는 글자 */
 .inv-pop {
   position: absolute;
-  left: 0; right: 0;
+  left: 22px; right: 22px;
   text-align: center;
+  color: var(--black);
   opacity: 0;
   transform: scale(1.12);
+  pointer-events: none;
 }
 .inv-pop.on {
   opacity: 1;
@@ -208,15 +211,16 @@ html.inv-locked, html.inv-locked body { overflow: hidden; height: 100%; }
   transition: opacity 0.12s ease-out, transform 0.22s cubic-bezier(0.2, 1.4, 0.4, 1);
 }
 .inv-hero-kr {
-  top: calc(var(--d-top) - 74px);
+  top: 18%;
   font-family: var(--font-kr);
-  font-size: var(--fs-small);
+  font-size: var(--fs-body);
   line-height: 1.5;
 }
-.inv-hero-bottom { top: calc(var(--d-bottom) + 30px); }
-.inv-hero-title { font-size: 44px; line-height: 1; }
+.inv-hero-bottom { top: 50%; transform: translateY(-50%) scale(1.12); }
+.inv-hero-bottom.on { transform: translateY(-50%); }
+.inv-hero-title { font-size: 48px; line-height: 1; }
 .inv-hero-date {
-  margin-top: 16px;
+  margin-top: 22px;
   font-family: var(--font-en-title);
   font-weight: 700;
   font-size: var(--fs-lead);

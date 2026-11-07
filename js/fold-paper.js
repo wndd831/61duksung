@@ -27,6 +27,10 @@
     var shapes = [];
     for (var i = 0; i < 4; i++) {
       var el = document.createElementNS(NS, 'polygon');
+      // 면과 면 사이 얇은 틈이 안 보이게 같은 색 테두리를 살짝
+      el.setAttribute('stroke-width', '0.6');
+      el.setAttribute('stroke-linejoin', 'round');
+      el.setAttribute('vector-effect', 'non-scaling-stroke');
       g.appendChild(el);
       shapes.push(el);
     }
@@ -34,6 +38,8 @@
   }
 
   // paper: make() 결과 / o: { x, y, size, p:[a,b,c] }  (x,y = 왼쪽 위)
+  function paint(el, color) { el.setAttribute('fill', color); el.setAttribute('stroke', color); }
+
   function draw(paper, o) {
     var s = o.size, X = o.x, Y = o.y;
     var p = o.p.map(ease);
@@ -50,13 +56,13 @@
     if (p[0] > 0) body.push([1 - K, 1]);
     body.push(p[2] > 0 ? [L, 1] : [0, 1]);
     paper.body.setAttribute('points', pts(body));
-    paper.body.setAttribute('fill', front);
+    paint(paper.body, front);
 
     // 오른쪽 아래 모서리
     if (p[0] > 0) {
       var A = [1, 1 - K], B = [1 - K, 1];
       paper.br.setAttribute('points', pts([A, foldPoint([1, 1], A, B, p[0]), B]));
-      paper.br.setAttribute('fill', p[0] > 0.5 ? back : front);
+      paint(paper.br, p[0] > 0.5 ? back : front);
       paper.br.style.display = '';
     } else paper.br.style.display = 'none';
 
@@ -64,7 +70,7 @@
     if (p[1] > 0) {
       var C = [1 - K, 0], D = [1, K];
       paper.tr.setAttribute('points', pts([C, foldPoint([1, 0], C, D, p[1]), D]));
-      paper.tr.setAttribute('fill', p[1] > 0.5 ? back : front);
+      paint(paper.tr, p[1] > 0.5 ? back : front);
       paper.tr.style.display = '';
     } else paper.tr.style.display = 'none';
 
@@ -72,7 +78,7 @@
     if (p[2] > 0) {
       var x0 = L + (0 - L) * Math.cos(Math.PI * p[2]);
       paper.left.setAttribute('points', pts([[x0, 0], [L, 0], [L, 1], [x0, 1]]));
-      paper.left.setAttribute('fill', p[2] > 0.5 ? back : front);
+      paint(paper.left, p[2] > 0.5 ? back : front);
       paper.left.style.display = '';
     } else paper.left.style.display = 'none';
   }
