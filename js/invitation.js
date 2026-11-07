@@ -58,8 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // 위 칸 안쪽(파랑) 글자 – 펼친 상태 좌표로 씀
+  // INVITATION! + 소개글: 서로 좌측 정렬, 두 줄 묶음은 가운데
   const topIn = el('g', {}, P.top.g);
-  txt(topIn, 0, -61, 'INVITATION!', { anchor: 'middle', font: EN, weight: 800, size: 7.6, ls: '-0.02em' });
+  const topBlock = el('g', {}, topIn);
+  txt(topBlock, 0, -61, 'INVITATION!', { font: EN, weight: 800, size: 7.6, ls: '-0.02em' });
   [
     '제61회 시각디자인전공 졸업전시회',
     '〈Fold to Dot 폴드 투 닷〉은 대학 생활 동안',
@@ -69,7 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
     '머무르지 않고 새로운 방향을 향해 나아갑니다.',
     '머물던 자리에서 한 걸음 나아가는 순간,',
     '그 시작을 함께할 여러분을 초대합니다.',
-  ].forEach((line, i) => txt(topIn, -20.5, -53.5 + i * 3.55, line, { size: 2.05, ls: '-0.03em' }));
+  ].forEach((line, i) => txt(topBlock, 0.4, -53.5 + i * 3.55, line, { size: 2.05, ls: '-0.03em' }));
+  function centerTopBlock() {
+    const shown = topIn.style.display;
+    topIn.style.display = '';
+    const b = topBlock.getBBox();
+    topIn.style.display = shown;
+    if (b.width) topBlock.setAttribute('transform', `translate(${-(b.x + b.width / 2)} 0)`);
+  }
 
   // 위 칸 바깥(주황) = 접혔을 때 보이는 겉면. 접힌 카드 좌표(아래 마름모)로 씀
   const cover = el('g', {}, P.top.g);
@@ -97,8 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
   ['L', 'R', 'UL', 'UR', 'LL', 'LR'].forEach((k) => {
     el('line', { x1: 0, y1: 0, x2: V[k][0], y2: V[k][1], 'vector-effect': 'non-scaling-stroke' }, creases);
   });
-  const openUp = el('g', { transform: 'translate(2 1) rotate(-9) skewX(-14)' }, cam);
-  txt(openUp, 0, 3, 'OPEN UP!', { anchor: 'middle', font: EN, weight: 900, size: 9.4, ls: '-0.03em' });
+  const openUp = el('g', {}, cam);
+  txt(openUp, 0, 3.3, 'OPEN UP!', { anchor: 'middle', font: EN, weight: 900, size: 9.4, ls: '-0.03em' });
   openUp.style.transition = 'opacity .18s ease-out';
 
   // ---------- 접기 계산 ----------
@@ -179,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function open() {
     if (state !== 'ready') return;
     state = 'opening';
+    centerTopBlock();          // 글자 폭은 화면에 실제 크기로 보일 때 재야 정확
     const s0 = view.s;
     await anim(OPEN, (t) => {
       const e = ease(t);
@@ -253,6 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- 시작 ----------
   measure();
+
   creases.style.opacity = 0;
   openUp.style.opacity = 0;
   draw(THETA_CLOSED);
@@ -260,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     draw(0); creases.style.opacity = 1; openUp.style.opacity = 1;
-    view.s = scales.zoom; view.y = FOCUS_Y; applyCam();
+    view.s = scales.zoom; view.y = FOCUS_Y; applyCam(); centerTopBlock();
     state = 'done'; hero.classList.add('is-pannable'); scrollBtn?.classList.add('on');
   } else {
     lock(true);
