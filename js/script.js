@@ -267,6 +267,26 @@
   }
 
     /* =========================================
+     공용: Firebase 연결 (방명록 + 광장)
+     js/firebase-config.js 에 설정이 있을 때만 연결, 한 번만 불러옴
+  ========================================= */
+  const firebaseKit = (() => {
+    let p = null;
+    return () => {
+      const config = window.FIREBASE_CONFIG;
+      if (!config || !config.projectId) return null;
+      if (!p) {
+        const V = '10.12.2';
+        p = Promise.all([
+          import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`),
+          import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`),
+        ]).then(([appMod, fs]) => ({ fs, db: fs.getFirestore(appMod.initializeApp(config)) }));
+      }
+      return p;
+    };
+  })();
+
+  /* =========================================
      5. GUEST BOOK BOARD
   ========================================= */
 
@@ -408,11 +428,8 @@
       updateBoardHeight();
     }
 
-    async function connectRemote(config) {
-      const V = '10.12.2';
-      const { initializeApp } = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`);
-      const fs = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`);
-      const db = fs.getFirestore(initializeApp(config));
+    async function connectRemote() {
+      const { fs, db } = await firebaseKit();
       const col = fs.collection(db, 'guestbook');
 
       // 누가 붙이면 모두의 화면에 바로 반영
@@ -487,8 +504,8 @@
     // 시작: 설정이 있으면 온라인, 없거나 실패하면 이 브라우저 저장
     notesCache = loadNotes();
     renderAllNotes();
-    if (window.FIREBASE_CONFIG && window.FIREBASE_CONFIG.projectId) {
-      connectRemote(window.FIREBASE_CONFIG)
+    if (firebaseKit()) {
+      connectRemote()
         .then((r) => { remote = r; })
         .catch((err) => console.warn('[방명록] 온라인 연결 실패 – 이 브라우저에만 저장합니다', err));
     }
@@ -1066,16 +1083,21 @@
     ========================================= */
     const plazaStore = {
       KEY: 'foldPlaza',
+      remote: null,     // Firebase 연결되면 모두가 같이 보는 광장
+      cache: [],
       async list() {
+        if (this.remote) return this.cache;
         try { return JSON.parse(localStorage.getItem(this.KEY)) || []; } catch { return []; }
       },
       async add(entry) {
+        if (this.remote) { await this.remote.add(entry); return entry; }
         const all = await this.list();
         all.push(entry);
         try { localStorage.setItem(this.KEY, JSON.stringify(all)); } catch { /* 저장 공간 없음 */ }
         return entry;
       },
     };
+    let lastPlazaId = null;
 
     const plazaBoard = document.getElementById('plazaBoard');
     const plazaEmpty = document.getElementById('plazaEmpty');
@@ -1141,7 +1163,7 @@
       plazaEl?.setAttribute('aria-hidden', on ? 'false' : 'true');
       if (stageSwitch) stageSwitch.querySelector('span').textContent = on ? '종이 접으러 가기' : '광장 보기';
       tapeCursor?.classList.remove('is-hovering');
-      if (on) renderPlaza(newId);
+      if (on) { lastPlazaId = newId || lastPlazaId; renderPlaza(newId); }
     }
     stageSwitch?.addEventListener('click', () => showPlaza(!foldStage.classList.contains('is-plaza')));
 
@@ -1200,12 +1222,48 @@
         rot: Math.round(Math.random() * 24 - 12),
         createdAt: Date.now(),
       };
-      await plazaStore.add(entry);
+      try {
+        await plazaStore.add(entry);
+      } catch (err) {
+        console.warn('[광장] 보내기 실패', err);
+        toast('잠시 후 다시 보내주세요');
+        return;
+      }
       plazaSend.disabled = true;
       plazaSend.textContent = '광장에 보냈어요';
       closeModal();
       showPlaza(true, entry.id);
     });
+
+    // 광장 온라인 연결 (설정 있을 때만) – 누가 보내면 모두의 광장에 실시간 반영
+    const plazaKit = firebaseKit();
+    if (plazaKit) {
+      plazaKit.then(({ fs, db }) => {
+        const col = fs.collection(db, 'plaza');
+        plazaStore.remote = {
+          add: (e) => fs.addDoc(col, {
+            cid: e.id,
+            layers: JSON.stringify(e.layers),   // Firestore는 2중 배열을 못 담아서 글자로 저장
+            word: e.word,
+            name: e.name,
+            bg: e.bg,
+            x: Math.round(e.x * 100) / 100,
+            y: Math.round(e.y * 100) / 100,
+            rot: e.rot,
+            createdAt: fs.serverTimestamp(),
+          }),
+        };
+        fs.onSnapshot(fs.query(col, fs.orderBy('createdAt', 'asc')), (snap) => {
+          plazaStore.cache = snap.docs.map((d) => {
+            const v = d.data();
+            let L = [];
+            try { L = JSON.parse(v.layers); } catch { /* 깨진 데이터는 건너뜀 */ }
+            return { id: v.cid || d.id, layers: L, word: v.word, name: v.name, bg: v.bg, x: v.x, y: v.y, rot: v.rot };
+          }).filter((e) => Array.isArray(e.layers) && e.layers.length);
+          if (foldStage.classList.contains('is-plaza')) renderPlaza(lastPlazaId);
+        }, (err) => console.warn('[광장] 불러오기 실패', err));
+      }).catch((err) => console.warn('[광장] 온라인 연결 실패 – 이 브라우저에만 저장합니다', err));
+    }
 
     fitView();
     render();
