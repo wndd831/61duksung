@@ -274,7 +274,6 @@
   const addBtn = document.getElementById('addBtn');
   const guestModal = document.getElementById('guestModal');
   const guestModalClose = document.getElementById('guestModalClose');
-  const guestTo = document.getElementById('guestTo');
   const guestFrom = document.getElementById('guestFrom');
   const guestMessage = document.getElementById('guestMessage');
   const guestSubmit = document.getElementById('guestSubmit');
@@ -321,21 +320,19 @@
       el.style.setProperty('--rot', `${note.rot}deg`);
       el.style.transform = `rotate(${note.rot}deg)`;
 
-      const toEl = document.createElement('div');
-      toEl.className = 'note-to';
-      toEl.textContent = `To. ${note.to}`;
+      // 작성창과 같은 모양: 보내는 사람 / 점선 / 메시지
+      const fromEl = document.createElement('div');
+      fromEl.className = 'note-from';
+      fromEl.textContent = note.from;
+
+      const lineEl = document.createElement('div');
+      lineEl.className = 'note-line';
 
       const msgEl = document.createElement('div');
       msgEl.className = 'note-message';
       msgEl.textContent = note.message;
 
-      const fromEl = document.createElement('div');
-      fromEl.className = 'note-from';
-      fromEl.textContent = `From. ${note.from}`;
-
-      el.appendChild(toEl);
-      el.appendChild(msgEl);
-      el.appendChild(fromEl);
+      el.append(fromEl, lineEl, msgEl);
       board.appendChild(el);
 
       makeDraggable(el, note);
@@ -407,18 +404,17 @@
       updateBoardHeight();
     }
 
-        function addNote(to, from, message) {
+        function addNote(from, message, color) {
       const notes = loadNotes();
 
       const newNote = {
         id: Date.now() + Math.random(),
-        to,
         from,
         message,
         left: 5 + Math.random() * 80, // 5% ~ 85%
         top: 40 + Math.random() * (board.clientHeight - 200 || 400),
         rot: Math.floor(Math.random() * 17) - 8, // -8 ~ 8도
-        color: Math.random() < 0.5 ? 'blue' : 'orange', // 파랑/주황 랜덤
+        color: color === 'blue' ? 'blue' : 'orange',     // 작성창에서 고른 색
       };
 
       notes.push(newNote);
@@ -429,36 +425,53 @@
 
     renderAllNotes();
 
-    addBtn?.addEventListener('click', () => {
+    const guestSheet = document.getElementById('guestSheet');
+
+    const setSheetColor = (color) => {
+      if (!guestSheet) return;
+      guestSheet.dataset.color = color;
+      guestSheet.querySelectorAll('.guest-color').forEach((b) => {
+        const on = b.dataset.color === color;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    };
+    guestSheet?.querySelectorAll('.guest-color').forEach((b) => {
+      b.addEventListener('click', () => setSheetColor(b.dataset.color));
+    });
+
+    const openGuest = () => {
       guestModal?.classList.add('open');
+      setTimeout(() => guestFrom?.focus(), 50);
+    };
+    const closeGuest = () => guestModal?.classList.remove('open');
+
+    addBtn?.addEventListener('click', openGuest);
+    guestModalClose?.addEventListener('click', closeGuest);
+    guestModal?.addEventListener('click', (e) => { if (e.target === guestModal) closeGuest(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && guestModal?.classList.contains('open')) closeGuest();
     });
 
-    guestModalClose?.addEventListener('click', () => {
-      guestModal?.classList.remove('open');
-    });
-
-    guestModal?.addEventListener('click', (e) => {
-      if (e.target === guestModal) {
-        guestModal.classList.remove('open');
-      }
-    });
-
-    guestSubmit?.addEventListener('click', () => {
-      const to = guestTo.value.trim();
+    guestSheet?.addEventListener('submit', (e) => {
+      e.preventDefault();
       const from = guestFrom.value.trim();
       const message = guestMessage.value.trim();
 
-      if (!to || !from || !message) {
-        alert('To, From, 메시지를 모두 입력해줘!');
+      // 빈 칸이 있으면 그 칸을 살짝 흔들어 알려줌
+      const empty = [guestFrom, guestMessage].find((f) => !f.value.trim());
+      if (empty) {
+        empty.classList.remove('is-empty');
+        void empty.offsetWidth;
+        empty.classList.add('is-empty');
+        empty.focus();
         return;
       }
 
-      addNote(to, from, message);
-
-      guestTo.value = '';
+      addNote(from, message, guestSheet.dataset.color);
       guestFrom.value = '';
       guestMessage.value = '';
-      guestModal.classList.remove('open');
+      closeGuest();
     });
   }
 

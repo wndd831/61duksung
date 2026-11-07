@@ -3346,3 +3346,115 @@ img.work-thumb { display: block; object-fit: cover; }
 @media (max-width: 768px) {
   .side-logo-sub { width: 46px; }
 }
+
+
+/* =========================================
+   방명록 작성창 – 색종이 한 장
+   ========================================= */
+.guest-sheet {
+  --sheet: var(--orange);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  max-width: calc(100vw - 40px);
+  aspect-ratio: 5 / 6;
+  padding: 26px 24px 22px;
+  background: var(--sheet);
+  color: var(--bg);
+  transform: translateY(10px) scale(0.97);
+  transition: transform 0.3s cubic-bezier(0.2, 1.2, 0.4, 1), background-color 0.25s ease;
+}
+.guest-sheet[data-color="blue"] { --sheet: var(--blue); }
+.guest-modal.open .guest-sheet { transform: none; }
+
+/* 색 고르기 */
+.guest-colors {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.guest-color {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--bg);
+  transition: box-shadow 0.2s ease;
+}
+.guest-color[data-color="orange"] { background: var(--orange); }
+.guest-color[data-color="blue"]   { background: var(--blue); }
+.guest-color.is-active { box-shadow: 0 0 0 3px var(--sheet), 0 0 0 4.5px var(--bg); }
+
+/* 입력칸 – 테두리 없이 종이 위에 바로 */
+.guest-field {
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--bg);
+  font-family: var(--font-kr);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.35;
+  letter-spacing: var(--tracking);
+  outline: none;
+  resize: none;
+}
+.guest-field::placeholder {
+  color: var(--bg);
+  opacity: 0.45;
+}
+.guest-field-msg {
+  flex: 1;
+  min-height: 0;
+}
+
+.guest-line {
+  margin: 14px 0 12px;
+  border: none;
+  border-top: 1.5px dashed var(--black);
+}
+
+.guest-send {
+  align-self: center;
+  margin-top: 10px;
+  padding: 4px 14px;
+  color: var(--bg);
+  font-family: var(--font-kr);
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: var(--tracking);
+  transition: color 0.2s ease;
+}
+.guest-send:hover { color: var(--black); }
+
+/* 빈 칸 알림 */
+.guest-field.is-empty { animation: guestShake 0.35s ease; }
+@keyframes guestShake {
+  0%, 100% { transform: none; }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* 붙는 메모도 같은 모양 */
+.guest-note .note-from {
+  font-family: var(--font-kr);
+  font-weight: 700;
+  font-size: var(--fs-body);
+  color: var(--bg);
+}
+.guest-note .note-line {
+  margin: 8px 0;
+  border-top: 1px dashed var(--black);
+}
+.guest-note .note-message {
+  font-size: var(--fs-small);
+  color: var(--bg);
+  word-break: keep-all;
+}
+
+@media (max-width: 768px) {
+  .guest-field, .guest-send { font-size: 20px; }
+}
+.guest-field-msg { word-break: keep-all; overflow-wrap: break-word; }
+.guest-note .note-from { text-align: left; margin: 0; }

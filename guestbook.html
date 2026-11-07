@@ -44,14 +44,17 @@
 
 <!-- 방명록 작성 모달 -->
 <div class="guest-modal" id="guestModal">
-  <div class="guest-modal-box">
-  <button class="guest-modal-close" id="guestModalClose">&times;</button>
-  <h3>방명록 남기기</h3>
-  <input type="text" id="guestTo" placeholder="To" maxlength="12">
-  <input type="text" id="guestFrom" placeholder="From" maxlength="12">
-  <textarea id="guestMessage" placeholder="메시지를 남겨주세요" maxlength="80"></textarea>
-  <button class="guest-submit" id="guestSubmit">붙이기</button>
-</div>
+  <!-- 작성창: 색 고르기 / 보내는 사람 / 점선 / 메시지 / 전송 -->
+  <form class="guest-sheet" id="guestSheet" data-color="orange" role="dialog" aria-modal="true" aria-label="방명록 작성" novalidate>
+    <div class="guest-colors" role="radiogroup" aria-label="색종이 색">
+      <button type="button" class="guest-color is-active" data-color="orange" aria-label="주황" aria-pressed="true"></button>
+      <button type="button" class="guest-color" data-color="blue" aria-label="파랑" aria-pressed="false"></button>
+    </div>
+    <input type="text" id="guestFrom" class="guest-field guest-field-from" placeholder="보내는 사람" maxlength="12" autocomplete="off">
+    <hr class="guest-line">
+    <textarea id="guestMessage" class="guest-field guest-field-msg" placeholder="메세지" maxlength="80"></textarea>
+    <button type="submit" class="guest-send" id="guestSubmit">전송</button>
+  </form>
 </div>
 
 <script src="js/script.js"></script>
