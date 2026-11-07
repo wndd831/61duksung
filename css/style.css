@@ -3323,3 +3323,16 @@ img.work-thumb { display: block; object-fit: cover; }
 .project-info-row,
 .project-info-row .info-label,
 .project-info-desc { font-size: var(--fs-small); }
+
+/* about: 날짜·시간·장소 사이 간격 (졸준위와의 간격 72px보다는 좁게) */
+@media (min-width: 961px) {
+  .about-details .about-info dt { margin-top: 36px; }
+  .about-details .about-info dt:first-child { margin-top: 0; }
+}
+
+/* 홈: 종이마다 기울기 다르게 + 전체를 조금 위로 */
+.home-steps { transform: translateY(-7vh); }
+.home-step:nth-child(4n+1) { transform: rotate(-7deg); }
+.home-step:nth-child(4n+2) { transform: rotate(5deg); }
+.home-step:nth-child(4n+3) { transform: rotate(-2deg); }
+.home-step:nth-child(4n)   { transform: rotate(9deg); }
