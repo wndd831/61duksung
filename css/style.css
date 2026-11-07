@@ -49,9 +49,9 @@ html {
 
 :root {
   /* ── 글자 크기 기준 (사이트 전체) ──
-     Display 29 · Lead 20 · Body 16 · Small 14 · Caption 11 */
+     Display 29 · Lead 18 · Body 16 · Small 14 · Caption 11 */
   --fs-display: 29px;
-  --fs-lead: 20px;
+  --fs-lead: 18px;
   --fs-body: 16px;
   --fs-small: 14px;
   --fs-caption: 11px;
@@ -3313,3 +3313,13 @@ img.work-thumb { display: block; object-fit: cover; }
 .project-info-row,
 .project-info-row .info-label,
 .project-info-desc { font-size: var(--fs-body); }
+
+
+/* 소개글 · 날짜 · 졸준위 = 모두 Lead / 커리큘럼 제목 = Lead, 커리큘럼 소개 = Small */
+.about-details .about-info,
+.about-details .about-committee { font-size: var(--fs-lead); }
+.project-tab,
+.project-item.active .project-tab { font-size: var(--fs-lead); }
+.project-info-row,
+.project-info-row .info-label,
+.project-info-desc { font-size: var(--fs-small); }
