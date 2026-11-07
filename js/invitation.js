@@ -121,53 +121,66 @@ document.addEventListener('DOMContentLoaded', () => {
   txt(openUp, 0, 3.3, 'OPEN UP!', { anchor: 'middle', font: PT, weight: 800, size: 9.4, ls: '-0.03em' });
   openUp.style.transition = 'opacity .18s ease-out';
 
-  // ---------- 종이 밖 (펼친 뒤 나타남): 왼쪽 아래 변 – 전공 글자·로고 / 오른쪽 아래 변 – 링크 픽토그램 ----------
+  // ---------- 종이 아래 (펼친 뒤 나타남, 끌어 내리면 보임) ----------
+  // 위에서부터: 초대장 공유하기 → 인스타그램 · 웹사이트 · 방명록 → 전공 글자 + 학과 로고 + 학교 로고
   const LINKS = {
     website: 'index.html',
     guestbook: 'guestbook.html',
-    instagram: 'https://www.instagram.com/',   // ← 졸전 인스타 주소로 바꾸기
+    instagram: 'https://www.instagram.com/vcd_duksung/',
   };
+  const GRAY = '#8a8d8e';
   const extras = el('g', {}, cam);
   extras.style.transition = 'opacity .4s ease-out';
-  const onLeft = (sPos, d) => [-100 + 100 * sPos - d * r2, 100 * sPos + d * r2];   // 왼쪽 아래 변에서 바깥으로 d
-  const onRight = (sPos, d) => [100 * sPos + d * r2, 100 - 100 * sPos + d * r2];   // 오른쪽 아래 변에서 바깥으로 d
-  {
-    const [x, yy] = onLeft(0.63, 4.2);
-    const g = el('g', { transform: `translate(${x} ${yy}) rotate(45)` }, extras);
-    txt(g, 0, -0.9, '덕성여자대학교 시각디자인전공', { anchor: 'middle', font: KRB, weight: 700, size: 1.7 });
-    txt(g, 0, 1.5, '제61회 졸업전시회', { anchor: 'middle', font: KRB, weight: 700, size: 1.7 });
-  }
-  {
-    const [x, yy] = onLeft(0.8, 5.5);
-    el('image', { href: 'images/visual-design-logo.png', x: x - 5.5, y: yy - 1.66, width: 11, height: 3.32 }, extras);
-    const [x2, y2] = onLeft(0.92, 5.5);
-    el('image', { href: 'images/duksung-logo.png', x: x2 - 3.2, y: y2 - 3.2, width: 6.4, height: 6.4 }, extras);
-  }
-  const icon = (sPos, href, label, drawFn, external) => {
-    const [x, yy] = onRight(sPos, 5);
-    const a = el('a', { href, class: 'inv-link', 'aria-label': label }, extras);
-    if (external) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
-    const g = el('g', { transform: `translate(${x} ${yy}) scale(0.55)`, fill: 'none', stroke: INK, 'stroke-width': 0.9, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, a);
-    el('rect', { x: -6, y: -6, width: 12, height: 12, fill: 'transparent', stroke: 'none' }, g);   // 누르는 영역
-    drawFn(g);
-    el('title', {}, a).textContent = label;
-  };
-  icon(0.08, LINKS.instagram, '인스타그램', (g) => {
-    el('rect', { x: -4, y: -4, width: 8, height: 8, rx: 2.3 }, g);
-    el('circle', { cx: 0, cy: 0, r: 1.9 }, g);
-    el('circle', { cx: 2.35, cy: -2.35, r: 0.35, fill: INK, stroke: 'none' }, g);
-  }, true);
-  icon(0.165, LINKS.website, '웹사이트', (g) => {
-    el('circle', { cx: 0, cy: 0, r: 4.2 }, g);
-    el('ellipse', { cx: 0, cy: 0, rx: 1.8, ry: 4.2 }, g);
-    el('line', { x1: -4.2, y1: 0, x2: 4.2, y2: 0 }, g);
-    el('path', { d: 'M-3.6 -2.1 H3.6 M-3.6 2.1 H3.6' }, g);
+  const Y0 = 112;   // 종이 맨 아래 꼭짓점(100)보다 조금 아래
+
+  // 초대장 공유하기 버튼
+  const share = el('a', { href: '#', class: 'inv-link inv-share', role: 'button' }, extras);
+  el('rect', { x: -14, y: Y0 - 3.4, width: 28, height: 6.8, rx: 3.4, fill: 'none', stroke: INK, 'stroke-width': 0.4 }, share);
+  txt(share, 0, Y0 + 1, '초대장 공유하기', { anchor: 'middle', font: KRB, weight: 700, size: 2.6 });
+  share.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const url = 'https://duksungvcd2026.com/invitation';
+    const data = { title: 'Fold to Dot. 초대장', text: '덕성여자대학교 시각디자인전공 제61회 졸업전시회에 초대합니다', url };
+    try {
+      if (navigator.share) { await navigator.share(data); return; }
+      await navigator.clipboard.writeText(url);
+      share.querySelector('text').textContent = '링크가 복사됐어요';
+      setTimeout(() => { share.querySelector('text').textContent = '초대장 공유하기'; }, 1800);
+    } catch (err) {}
   });
-  icon(0.25, LINKS.guestbook, '방명록', (g) => {
-    el('path', { d: 'M-4 -4 H4 V1.6 L1.6 4 H-4 Z' }, g);          // 모서리 접힌 메모지
-    el('path', { d: 'M4 1.6 H1.6 V4' }, g);
-    el('path', { d: 'M-2.4 -1.6 H2.4 M-2.4 0.6 H0.6' }, g);
+
+  // 링크 (글자)
+  const links = [['인스타그램', LINKS.instagram, true], ['웹사이트', LINKS.website], ['방명록', LINKS.guestbook]];
+  const gap = 15;
+  const linkTexts = links.map(([label, href, ext], i) => {
+    const a = el('a', { href, class: 'inv-link' }, extras);
+    if (ext) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
+    const t = txt(a, (i - 1) * gap, Y0 + 10, label, { size: 2.6 });
+    t.setAttribute('text-decoration', 'underline');
+    return t;
   });
+
+  // 전공 글자 + 로고 (회색, 나란히)
+  const foot = el('g', {}, extras);
+  const ft = txt(foot, 0, Y0 + 19.6, '덕성여자대학교 시각디자인전공 제61회 졸업전시회', { size: 2, font: KR });
+  ft.setAttribute('fill', GRAY);
+  const logoV = el('image', { href: 'images/visual-design-logo.png', y: Y0 + 17.5, width: 8.6, height: 2.6, opacity: 0.6 }, foot);
+  const logoS = el('image', { href: 'images/duksung-logo.png', y: Y0 + 16.4, width: 4.8, height: 4.8, opacity: 0.6 }, foot);
+  function layoutFoot() {      // 글자 폭을 재서 [글자][학과로고][학교로고]를 가운데 정렬
+    const shown = extras.style.opacity;
+    const w = ft.getComputedTextLength ? ft.getComputedTextLength() : 44;
+    const total = w + 2.2 + 8.6 + 1.8 + 4.8;
+    const x0 = -total / 2;
+    ft.setAttribute('x', x0);
+    logoV.setAttribute('x', x0 + w + 2.2);
+    logoS.setAttribute('x', x0 + w + 2.2 + 8.6 + 1.8);
+    // 링크 글자 사이 간격을 똑같이
+    const ws = linkTexts.map((t) => t.getComputedTextLength());
+    const G = 5, sum = ws.reduce((a, b) => a + b, 0) + G * (ws.length - 1);
+    let lx = -sum / 2;
+    linkTexts.forEach((t, i) => { t.setAttribute('x', lx); lx += ws[i] + G; });
+    extras.style.opacity = shown;
+  }
 
   // ---------- 접기 계산 ----------
   const rotAxis = (p, a, ang) => {   // 원점 지나는 축 a(단위벡터) 기준 회전 (로드리게스)
@@ -247,7 +260,8 @@ document.addEventListener('DOMContentLoaded', () => {
   async function open() {
     if (state !== 'ready') return;
     state = 'opening';
-    centerTopBlock();          // 글자 폭은 화면에 실제 크기로 보일 때 재야 정확
+    centerTopBlock();
+    layoutFoot();          // 글자 폭은 화면에 실제 크기로 보일 때 재야 정확
     const s0 = view.s;
     await anim(OPEN, (t) => {
       const e = ease(t);
@@ -279,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const clampView = () => {
     view.s = Math.max(scales.min, Math.min(scales.max, view.s));
     view.x = Math.max(-105, Math.min(105, view.x));
-    view.y = Math.max(-100, Math.min(118, view.y));
+    view.y = Math.max(-100, Math.min(128, view.y));
     applyCam();
   };
   const startGesture = () => {
@@ -333,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     draw(0); creases.style.opacity = 1; openUp.style.opacity = 1; extras.style.opacity = 1;
-    view.s = scales.zoom; view.y = FOCUS_Y; applyCam(); centerTopBlock();
+    view.s = scales.zoom; view.y = FOCUS_Y; applyCam(); centerTopBlock(); layoutFoot();
     state = 'done'; hero.classList.add('is-pannable'); scrollBtn?.classList.add('on');
   } else {
     lock(true);
