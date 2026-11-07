@@ -3668,9 +3668,8 @@ img.work-thumb { display: block; object-fit: cover; }
   font-family: var(--font-kr);   /* COMING SOON 빼고 전부 펴진고딕 */
   letter-spacing: var(--tracking);
 }
-.soon-med {                       /* 미디엄 굵기 (펴진고딕 Regular에 살짝 두께) */
+.soon-med {                       /* 400 (펴진고딕 Regular) */
   font-family: var(--font-kr-regular);
-  -webkit-text-stroke: 0.022em currentColor;
 }
 .soon-gate b { font-family: var(--font-kr); font-weight: 700; }
 .soon-kr { font-size: var(--fs-lead); line-height: 1.45; }
