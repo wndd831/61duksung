@@ -42,9 +42,11 @@
         <div class="about-poster" id="aboutPoster">
           <!-- 처음: 포스터 이미지 / 옆으로 밀리면: 무빙 포스터(mp4) -->
           <img class="about-poster-img" src="images/poster.png" alt="Fold to Dot. 전시 포스터">
-          <video class="about-poster-video" id="aboutPosterVideo" src="images/poster.mp4" muted loop playsinline preload="auto" aria-label="Fold to Dot. 무빙 포스터"></video>
+          <video class="about-poster-video" id="aboutPosterVideo" src="images/poster.mp4" muted playsinline preload="auto" aria-label="Fold to Dot. 무빙 포스터"></video>
         </div>
         <div class="about-intro scroll-intro-inner" id="aboutIntro" data-reveal="manual">
+         <div class="about-col" id="aboutCol">
+          <div class="about-intro-block" id="aboutIntroBlock">
     <h1 class="reveal-text">덕성여자대학교 시각디자인전공 제61회 졸업전시 <br> <span class="title-en">Fold to Dot.</span></h1>
     <p class="scroll-text reveal-text">
       대학에서 머물던 각자의 점은 다양한 경험과 시간을 거치며 하나의 형태로 접힙니다.<br>
@@ -53,9 +55,9 @@
       <span class="bold-text">Fold to Dot</span>은 지금까지의 경험을 바탕으로 각자의 다음 점을 찾아 나서는 졸업전시입니다.<br>
       서로 다른 방향으로 이어질 각자의 새로운 출발을 함께하는 이곳에 여러분을 초대합니다.
     </p>
-          <!-- 전시 정보: 라벨 위, 내용 아래 -->
-          <!-- 전시 정보 | 졸업전시준비위원회 나란히 -->
-          <div class="about-details">
+          </div>
+          <!-- 스크롤을 더 내리면 나타남: 전시 정보 | 졸업전시준비위원회 나란히 -->
+          <div class="about-details" id="aboutDetails">
             <dl class="about-info">
               <dt><i class="nav-dot" aria-hidden="true"></i>날짜</dt>
               <dd>2026.11.12.(목) — 2026.11.16.(월)</dd>
@@ -69,13 +71,15 @@
               <p class="about-committee-title"><i class="nav-dot" aria-hidden="true"></i>졸업전시준비위원회</p>
               <!-- 직책 | 이름 칸을 맞춘 표 (윗줄·아랫줄 이름이 같은 세로선에서 시작) -->
               <div class="committee-grid">
-                <span class="r first">위원장</span><span class="n">김채윤</span><span class="r pair">부위원장</span><span class="n">이슬아</span><span class="r pair">총무</span><span class="n">황연우</span>
+                <span class="r first">위원장</span><span class="n">김채윤</span><span class="r pair">부위원장</span><span class="n">이슬아</span>
+                <span class="r first">총무</span><span class="n">황연우</span>
                 <span class="r first">디자인팀</span><span class="n">한예진 최지현 고주영</span>
                 <span class="r first">영상팀</span><span class="n">신은서 김다희</span><span class="r pair">도록팀</span><span class="n wide">이현정 유하늘</span>
                 <span class="r first">홍보팀</span><span class="n">서단</span>
               </div>
             </div>
           </div>
+         </div>
         </div>
       </div>
     </section>

@@ -1120,7 +1120,10 @@
 
 
   /* =========================================
-     11. ABOUT – 스크롤하면 포스터 왼쪽으로, 설명 등장
+     11. ABOUT – 스크롤 연출
+     ① 포스터가 왼쪽으로 + 소개글 등장 (소개글 덩어리 = 포스터 높이)
+     ② 더 내리면 오른쪽 칸이 위로 흘러가며 날짜·졸준위가 나란히 등장
+     영상: 한 번 재생 후 멈춤 / 마우스를 올리거나 누르면 처음부터 다시
   ========================================= */
 
   const aboutHero = document.getElementById('aboutHero');
@@ -1128,117 +1131,150 @@
   const aboutIntro = document.getElementById('aboutIntro');
 
   if (aboutHero && aboutPoster && aboutIntro) {
-    const ease = (x) => 1 - Math.pow(1 - x, 3);
-    const clamp01 = (x) => Math.min(1, Math.max(0, x));
-    let revealed = false;
-
+    const aboutCol = document.getElementById('aboutCol');
+    const introBlock = document.getElementById('aboutIntroBlock');
+    const details = document.getElementById('aboutDetails');
     const posterVideo = document.getElementById('aboutPosterVideo');
-    const syncVideo = (on) => {
-      if (!posterVideo) return;
-      if (on && posterVideo.paused) {
+    const ease = (x) => 1 - Math.pow(1 - x, 3);
+    const easeInOut = (x) => (x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
+    const clamp01 = (x) => Math.min(1, Math.max(0, x));
+    const isNarrow = () => window.innerWidth <= 960;
+
+    /* --- 영상 --- */
+    let videoShown = false;
+    const showVideo = (on) => {
+      if (!posterVideo || on === videoShown) return;
+      videoShown = on;
+      aboutPoster.classList.toggle('is-replayable', on);
+      if (on) {
+        posterVideo.currentTime = 0;
         posterVideo.play().catch(() => {});
-      } else if (!on && !posterVideo.paused) {
+      } else {
         posterVideo.pause();
-        posterVideo.currentTime = 0;   // 다시 나타날 땐 처음부터
+        posterVideo.currentTime = 0;
       }
     };
+    const replay = () => {
+      if (!videoShown || !posterVideo) return;
+      if (!posterVideo.paused && !posterVideo.ended && posterVideo.currentTime < 0.3) return;
+      posterVideo.currentTime = 0;
+      posterVideo.play().catch(() => {});
+    };
+    aboutPoster.addEventListener('mouseenter', replay);
+    aboutPoster.addEventListener('click', replay);
 
-    const reveal = () => {
-      if (revealed) return;
-      revealed = true;
+    /* --- 글 등장 --- */
+    let introRevealed = false;
+    const revealIntro = () => {
+      if (introRevealed) return;
+      introRevealed = true;
       aboutIntro.classList.add('in-view');
       const count = aboutIntro.querySelectorAll('.word').length;
-      // 마지막 단어가 떨어진 뒤 → 날짜·졸준위 덩어리 등장
-      setTimeout(() => aboutIntro.classList.add('details-in'), count * 60 + 600);
       setTimeout(() => aboutIntro.classList.add('settled'), count * 60 + 800);
     };
+    const setDetails = (on) => aboutIntro.classList.toggle('details-in', on);
 
+    /* --- 스크롤 --- */
     const update = () => {
-      if (window.innerWidth <= 960) {           // 좁은 화면: 영상으로 보여주고, 글은 보이면 등장
-        syncVideo(true);
-        const r = aboutIntro.getBoundingClientRect();
-        if (r.top < window.innerHeight * 0.85) reveal();
+      if (isNarrow()) {
+        aboutIntro.style.removeProperty('--col-h');
+        aboutCol?.style.removeProperty('--col-y');
+        showVideo(true);
+        if (aboutIntro.getBoundingClientRect().top < window.innerHeight * 0.85) revealIntro();
+        if (details && details.getBoundingClientRect().top < window.innerHeight * 0.85) setDetails(true);
         return;
       }
       const vw = window.innerWidth;
-      const gap = 48;
+      const gap = 56;
       const edge = 40;                                   // 로고 F 왼쪽 선
       const posterW = aboutPoster.offsetWidth;
+      const posterH = aboutPoster.offsetHeight;
       const introLeft = edge + posterW + gap;
-      const introW = Math.min(780, vw - introLeft - edge);
+      const introW = Math.min(820, vw - introLeft - edge);
       const shiftMax = edge - (vw - posterW) / 2;        // 가운데 → 왼쪽 끝까지 (음수)
 
-      // 고정 구간 안에서 얼마나 스크롤했는지 0 ~ 1
       const total = aboutHero.offsetHeight - window.innerHeight;
-      const p = clamp01(-aboutHero.getBoundingClientRect().top / (total * 0.75));
-      const move = ease(clamp01(p / 0.6));               // 앞 60% 동안 포스터 이동
-      const show = ease(clamp01((p - 0.35) / 0.45));     // 이어서 설명 등장
+      const p = clamp01(-aboutHero.getBoundingClientRect().top / total);
+      const move = ease(clamp01(p / 0.28));              // ① 포스터 이동
+      const show = ease(clamp01((p - 0.16) / 0.2));      //    소개글 등장
+      const flow = easeInOut(clamp01((p - 0.5) / 0.38)); // ② 오른쪽 칸 위로
 
       aboutPoster.style.setProperty('--poster-x', `${shiftMax * move}px`);
-
-      // 밀리기 시작하면 포스터 이미지 → 무빙 포스터로
       const videoO = clamp01((move - 0.05) / 0.4);
       aboutPoster.style.setProperty('--video-o', videoO);
-      syncVideo(videoO > 0);
+      showVideo(videoO > 0);
+
       aboutIntro.style.setProperty('--intro-left', `${introLeft}px`);
       aboutIntro.style.setProperty('--intro-top', `${aboutPoster.offsetTop}px`);
       aboutIntro.style.setProperty('--intro-w', `${introW}px`);
+      aboutIntro.style.setProperty('--col-h', `${posterH}px`);
       aboutIntro.style.setProperty('--intro-o', show);
       aboutIntro.style.setProperty('--intro-shift', `${30 * (1 - show)}px`);
       aboutIntro.style.setProperty('--intro-pe', show > 0.5 ? 'auto' : 'none');
-      if (show > 0.3) reveal();
+      if (show > 0.3) revealIntro();
+
+      // 날짜·졸준위 덩어리의 윗선이 포스터 윗선에 올 때까지 흘려보냄
+      if (aboutCol && details) {
+        aboutCol.style.paddingBottom = `${Math.max(0, posterH - details.offsetHeight)}px`;
+        aboutCol.style.setProperty('--col-y', `${-details.offsetTop * flow}px`);
+      }
+      aboutIntro.classList.toggle('is-flowing', flow > 0.001 && flow < 0.999);
+      setDetails(flow > 0.35);
     };
 
-    // 소개글 크기: 문장마다 한 줄에 들어가고, 전체가 포스터 높이 안에 들어가는 가장 큰 크기 (최대 16px)
-    const sentenceWidthAt16 = (() => {
-      const p = aboutIntro.querySelector('.scroll-text');
+    /* --- 글자 크기: 문장마다 한 줄 + 소개글 덩어리가 포스터 높이를 채우도록 --- */
+    const measureAt16 = (el, perLine) => {
       const probe = document.createElement('span');
+      const cs = getComputedStyle(el);
       probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-size:16px;';
-      probe.style.fontFamily = getComputedStyle(p).fontFamily;
-      probe.style.letterSpacing = getComputedStyle(p).letterSpacing;
+      probe.style.fontFamily = cs.fontFamily;
+      probe.style.fontWeight = cs.fontWeight;
+      probe.style.letterSpacing = cs.letterSpacing;
       document.body.appendChild(probe);
-      const widths = p.innerText.split('\n').map((s) => s.trim()).filter(Boolean).map((s) => {
-        probe.textContent = s;
-        return probe.getBoundingClientRect().width;
-      });
+      const lines = perLine ? el.innerText.split('\n').map((s) => s.trim()).filter(Boolean) : [el.innerText];
+      const w = Math.max(...lines.map((s) => { probe.textContent = s; return probe.getBoundingClientRect().width; }));
       probe.remove();
-      return Math.max(...widths);
-    });
+      return w;
+    };
 
     let widest16 = 0;
-    const fitIntroText = () => {
-      if (window.innerWidth <= 960) { aboutIntro.style.removeProperty('--intro-fs'); return; }
-      if (!widest16) widest16 = sentenceWidthAt16();
-      const introW = parseFloat(aboutIntro.style.getPropertyValue('--intro-w')) || 560;
-      let fs = Math.min(16, Math.floor((16 * introW / widest16) * 2) / 2);
-      fs = Math.max(14, fs);              // 너무 작아지면 차라리 문장 안에서 줄바꿈
-      aboutIntro.style.setProperty('--intro-fs', `${fs}px`);
-      const details = aboutIntro.querySelector('.about-details');
-      const tooTall = () => aboutIntro.offsetHeight > aboutPoster.offsetHeight;
-      const tooWide = () => details && details.scrollWidth > aboutIntro.clientWidth + 1;
-
-      // 1) 가로가 넘치면 먼저 간격만 줄여보고
-      aboutIntro.classList.remove('is-compact', 'is-stacked');
-      if (tooWide()) aboutIntro.classList.add('is-compact');
-      // 간격을 줄여도 14px에서 안 들어가는 좁은 화면이면 졸준위를 날짜 아래로
-      if (tooWide()) {
-        const keep = fs;
-        aboutIntro.style.setProperty('--intro-fs', '14px');
-        if (tooWide()) aboutIntro.classList.add('is-stacked');
-        aboutIntro.style.setProperty('--intro-fs', `${keep}px`);
+    const fitText = () => {
+      if (isNarrow()) {
+        ['--intro-fs', '--intro-lh', '--title-fs', '--details-fs'].forEach((v) => aboutIntro.style.removeProperty(v));
+        return;
       }
-      // 2) 그래도 넘치면 글자를 줄임 (가로 넘침은 14px까지만)
-      while (((tooWide() && fs > 14) || tooTall()) && fs > 12) {
-        fs -= 0.5;
+      const textEl = aboutIntro.querySelector('.scroll-text');
+      const introW = parseFloat(aboutIntro.style.getPropertyValue('--intro-w')) || 600;
+      const posterH = aboutPoster.offsetHeight;
+
+      // 소개글 덩어리가 포스터 높이를 채우는 가장 큰 크기 (문장 안 줄바꿈은 단어 단위)
+      let fs = 26;
+      const lh = 1.75;
+      const apply = () => {
         aboutIntro.style.setProperty('--intro-fs', `${fs}px`);
+        aboutIntro.style.setProperty('--title-fs', `${Math.round(fs * 1.45)}px`);
+        aboutIntro.style.setProperty('--intro-lh', lh);
+      };
+      const blockH = () => { introBlock.style.minHeight = '0'; const h = introBlock.offsetHeight; introBlock.style.minHeight = ''; return h; };
+      apply();
+      while (blockH() > posterH * 0.98 && fs > 14) { fs -= 0.5; apply(); }
+
+      // 날짜 · 졸준위: 한 줄(나란히)에 들어가는 가장 큰 크기 (최대 18px)
+      if (details) {
+        let dfs = 20;
+        aboutIntro.style.setProperty('--details-fs', `${dfs}px`);
+        aboutIntro.classList.remove('is-compact', 'is-stacked');
+        while (details.scrollWidth > introW + 1 && dfs > 14) { dfs -= 0.5; aboutIntro.style.setProperty('--details-fs', `${dfs}px`); }
+        if (details.scrollWidth > introW + 1) aboutIntro.classList.add('is-compact');
       }
     };
 
     update();
-    fitIntroText();
-    document.fonts?.ready.then(() => { widest16 = 0; fitIntroText(); });
+    fitText();
+    update();
+    document.fonts?.ready.then(() => { widest16 = 0; fitText(); update(); });
     window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', () => { update(); fitIntroText(); });
+    window.addEventListener('resize', () => { update(); fitText(); update(); });
   }
 
 

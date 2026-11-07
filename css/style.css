@@ -3119,3 +3119,97 @@ img.work-thumb { display: block; object-fit: cover; }
 }
 .work-designer-others { margin-top: 0; }
 .work-designer-other-list .work-other:not(:first-child) { display: none; }  /* 한 칸에 하나만 */
+
+
+/* =========================================
+   ABOUT v3 (PC)
+   1) 포스터 왼쪽으로 + 소개글 (포스터 높이만큼 채움)
+   2) 더 내리면 오른쪽 칸이 위로 흘러가며 날짜·졸준위가 나란히 등장
+   ========================================= */
+.about-hero { height: 330vh; }
+
+.about-sticky .about-intro.scroll-intro-inner {
+  height: var(--col-h, auto);          /* 포스터 높이만큼만 보이는 창 */
+  overflow: hidden;
+}
+.about-col {
+  transform: translateY(var(--col-y, 0px));
+  will-change: transform;
+}
+.about-intro-block {
+  min-height: var(--col-h, 0px);
+  display: flex;
+  flex-direction: column;
+}
+.about-intro h1 {
+  font-size: var(--title-fs, 26px);
+  line-height: 1.35;
+}
+.about-intro .scroll-text {
+  font-size: var(--intro-fs, 16px);
+  line-height: var(--intro-lh, 1.8);
+}
+
+/* 날짜 · 졸준위 덩어리 */
+.about-intro .about-details,
+.about-intro.details-in .about-details {
+  margin-top: 72px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.about-intro.details-in .about-details {
+  opacity: 1;
+  transform: none;
+}
+.about-details .about-info,
+.about-details .about-committee {
+  font-size: var(--details-fs, 16px);
+}
+.about-info dt .nav-dot,
+.about-committee-title .nav-dot { width: 0.85em; height: 0.85em; }
+
+/* 영상: 다시 보기 가능하다는 표시 */
+.about-poster.is-replayable { cursor: pointer; }
+
+@media (max-width: 960px) {
+  .about-hero { height: auto; }
+  .about-sticky .about-intro.scroll-intro-inner { height: auto; overflow: visible; }
+  .about-col { transform: none; }
+  .about-intro-block { min-height: 0; }
+  .about-intro h1 { font-size: 20px; }
+  .about-intro .scroll-text { font-size: 15.5px; line-height: 1.85; }
+  .about-intro .about-details { margin-top: 44px; }
+  .about-details .about-info,
+  .about-details .about-committee { font-size: 15.5px; }
+}
+
+/* 소개글: 문장마다 새 줄에서 시작 + 긴 문장은 단어 단위로 이어서 줄바꿈, 문장 사이 살짝 띄움 */
+@media (min-width: 961px) {
+  .about-intro .scroll-text br {
+    display: block;
+    content: '';
+    margin-bottom: 0.7em;
+  }
+}
+
+/* 졸준위: 직책 | 이름 두 칸 목록 – 날짜 덩어리 옆에 나란히, 큰 글씨로 */
+@media (min-width: 961px) {
+  .about-details .committee-grid { grid-template-columns: max-content max-content; column-gap: 1.1em; row-gap: 0.25em; }
+  .about-details .committee-grid .first,
+  .about-details .committee-grid .pair { grid-column: 1; margin-left: 0; }
+  .about-details .committee-grid .n,
+  .about-details .committee-grid .wide { grid-column: 2; }
+  .about-details,
+  .about-intro.is-compact .about-details { gap: 80px; }
+  .about-details .about-info dd { margin-top: 0.2em; }
+  .about-details .about-info dt { margin-top: 1em; }
+  .about-details .about-info dt:first-child { margin-top: 0; }
+
+  /* 오른쪽 칸이 흘러갈 때 위쪽 가장자리를 부드럽게 */
+  .about-intro.is-flowing {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 56px);
+            mask-image: linear-gradient(to bottom, transparent 0, #000 56px);
+  }
+}
+.about-details .about-info-sub { min-width: 5.6em; }
