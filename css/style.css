@@ -3334,3 +3334,15 @@ img.work-thumb { display: block; object-fit: cover; }
 .home-steps { transform: translateY(-7vh); }
 .home-step:nth-child(odd)  { transform: rotate(5deg); }
 .home-step:nth-child(even) { transform: rotate(-5deg); }
+
+
+/* 홈 오른쪽 아래: 학교 로고 밑에 두 번째 로고 */
+.side-fab { align-items: center; gap: 10px; }
+.side-logo-sub {
+  display: block;
+  width: 52px;     /* 학교 로고와 비슷한 폭 */
+  height: auto;
+}
+@media (max-width: 768px) {
+  .side-logo-sub { width: 46px; }
+}
