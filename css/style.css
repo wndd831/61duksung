@@ -3332,7 +3332,5 @@ img.work-thumb { display: block; object-fit: cover; }
 
 /* 홈: 종이마다 기울기 다르게 + 전체를 조금 위로 */
 .home-steps { transform: translateY(-7vh); }
-.home-step:nth-child(4n+1) { transform: rotate(-7deg); }
-.home-step:nth-child(4n+2) { transform: rotate(5deg); }
-.home-step:nth-child(4n+3) { transform: rotate(-2deg); }
-.home-step:nth-child(4n)   { transform: rotate(9deg); }
+.home-step:nth-child(odd)  { transform: rotate(20deg); }
+.home-step:nth-child(even) { transform: rotate(-20deg); }
