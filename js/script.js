@@ -364,6 +364,15 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
     }
 
+    function noteTilt(note) {
+      const key = String(note.id);
+      let h = 2166136261;
+      for (let i = 0; i < key.length; i++) { h ^= key.charCodeAt(i); h = Math.imul(h, 16777619); }
+      h >>>= 0;
+      const mag = 3 + (h % 1000) / 1000 * 9;           // 3 ~ 12도
+      return Math.round((h & 1 ? mag : -mag) * 10) / 10;
+    }
+
         function renderNote(note) {
       const el = document.createElement('div');
       // 색종이 색: 저장된 값, 없으면(예전 메모) id로 고정
@@ -373,8 +382,10 @@
         el.style.left = `${note.left}%`;
         el.style.top = `${note.top}px`;
       }
-      el.style.setProperty('--rot', `${note.rot}deg`);
-      el.style.transform = `rotate(${note.rot}deg)`;
+      // 기울기: 메모마다 확실히 다르게 (-12°~-3° 또는 3°~12°, 메모 id로 정해져서 누가 봐도 같음)
+      const rot = noteTilt(note);
+      el.style.setProperty('--rot', `${rot}deg`);
+      el.style.transform = `rotate(${rot}deg)`;
 
       // 작성창과 같은 순서: 메시지 / 점선 / 보내는 사람
       const msgEl = document.createElement('div');
@@ -524,7 +535,7 @@
         message,
         left: Math.round(((spot.x / W) * 100) * 100) / 100,
         top: Math.round(spot.y),
-        rot: Math.floor(Math.random() * 13) - 6, // -6 ~ 6도
+        rot: (Math.random() < 0.5 ? -1 : 1) * (3 + Math.floor(Math.random() * 8)), // ±3~10도 (저장용)
         color: color === 'blue' ? 'blue' : 'orange',
       };
 
