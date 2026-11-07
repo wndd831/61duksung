@@ -14,4 +14,12 @@
      appId: "1:1234567890:web:abcdef",
    };
    ========================================================= */
-window.FIREBASE_CONFIG = null;
+window.FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBlp1h7-go3oOQUTcJcrQcfP1h8rEoKsiQ",
+  authDomain: "duksungvcd2026.firebaseapp.com",
+  projectId: "duksungvcd2026",
+  storageBucket: "duksungvcd2026.firebasestorage.app",
+  messagingSenderId: "678566539741",
+  appId: "1:678566539741:web:6250ef70a4eb7734f64634",
+  measurementId: "G-XWSX5X82XX",
+};
