@@ -334,8 +334,6 @@
 
       el.append(msgEl, lineEl, fromEl);
       board.appendChild(el);
-
-      makeDraggable(el, note);
     }
 
     function makeDraggable(el, note) {
@@ -404,17 +402,45 @@
       updateBoardHeight();
     }
 
+        // 빈자리 찾기: 다른 메모와 겹치지 않게, 겹쳐도 가장자리만 살짝(글자 안 가리게)
+    const NOTE = 190;          // 메모 크기(px)
+    const OVERLAP_OK = 16;     // 이 정도까지는 겹쳐도 됨
+    function findSpot(notes) {
+      const W = board.clientWidth || window.innerWidth;
+      const rects = notes.map((n) => ({ x: (n.left / 100) * W, y: n.top }));
+      const depth = (a, b) => Math.min(
+        Math.max(0, Math.min(a.x, b.x) + NOTE - Math.max(a.x, b.x)),
+        Math.max(0, Math.min(a.y, b.y) + NOTE - Math.max(a.y, b.y)),
+      );
+      const maxX = Math.max(0, W - NOTE - 10);
+      const bottom = rects.reduce((m, r) => Math.max(m, r.y + NOTE), 0);
+      let rows = Math.max(window.innerHeight - 110 - NOTE - 60, bottom - NOTE + 40);
+      for (let round = 0; round < 6; round++) {
+        let best = null;
+        for (let i = 0; i < 120; i++) {
+          const c = { x: 10 + Math.random() * maxX, y: 30 + Math.random() * rows };
+          const worst = rects.reduce((m, r) => Math.max(m, depth(c, r)), 0);
+          if (!best || worst < best.worst) best = { ...c, worst };
+          if (worst <= OVERLAP_OK) return best;
+        }
+        rows += NOTE;           // 자리가 없으면 보드를 아래로 넓혀서 다시
+      }
+      return { x: 10 + Math.random() * maxX, y: bottom + 30 };
+    }
+
         function addNote(from, message, color) {
       const notes = loadNotes();
+      const spot = findSpot(notes);
+      const W = board.clientWidth || window.innerWidth;
 
       const newNote = {
         id: Date.now() + Math.random(),
         from,
         message,
-        left: 5 + Math.random() * 80, // 5% ~ 85%
-        top: 40 + Math.random() * (board.clientHeight - 200 || 400),
-        rot: Math.floor(Math.random() * 17) - 8, // -8 ~ 8도
-        color: color === 'blue' ? 'blue' : 'orange',     // 작성창에서 고른 색
+        left: (spot.x / W) * 100,
+        top: spot.y,
+        rot: Math.floor(Math.random() * 13) - 6, // -6 ~ 6도
+        color: color === 'blue' ? 'blue' : 'orange',
       };
 
       notes.push(newNote);
@@ -439,6 +465,8 @@
     [guestFrom, guestMessage].forEach((f) => f?.addEventListener('input', syncCounts));
 
     const openGuest = () => {
+      // + 누를 때마다 색종이 색 랜덤 (이 색 그대로 방명록에 붙음)
+      if (guestSheet) guestSheet.dataset.color = Math.random() < 0.5 ? 'blue' : 'orange';
       guestModal?.classList.add('open');
       setTimeout(() => guestMessage?.focus(), 50);
     };
@@ -466,7 +494,7 @@
         return;
       }
 
-      addNote(from, message, Math.random() < 0.5 ? 'blue' : 'orange');   // 붙는 색은 랜덤
+      addNote(from, message, guestSheet.dataset.color);
       guestFrom.value = '';
       guestMessage.value = '';
       syncCounts();
