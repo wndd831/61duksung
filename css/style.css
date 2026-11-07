@@ -3591,3 +3591,27 @@ img.work-thumb { display: block; object-fit: cover; }
 /* 붙는 메모: 점선 흰색, 드래그 없음 */
 .guest-note .note-line { border-top-color: #fff; }
 .guest-note { cursor: default; touch-action: auto; user-select: text; }
+
+/* 방명록 작성창 v5 – 종이는 흰색, 접힌 '보내기' 면이 주황/파랑 (랜덤, 이 색으로 붙음) */
+.guest-sheet {
+  --sheet: #fff;
+  --flap: var(--orange);
+  background: #fff;
+  color: var(--black);
+}
+.guest-sheet[data-color="blue"] { --sheet: #fff; --flap: var(--blue); }
+.guest-sheet .guest-field { color: var(--black); }
+.guest-sheet .guest-field::placeholder { color: var(--black); opacity: 0.3; }
+.guest-sheet .guest-line { border-top-color: var(--black); }
+.guest-sheet .guest-count { color: #999; }
+.guest-sheet .guest-count.is-full { color: var(--flap); }
+
+.guest-sheet .guest-send {
+  background: var(--flap);
+  color: #fff;
+}
+.guest-sheet .guest-send span {
+  left: 79.5%;          /* 접힌 면의 뾰족한 모서리 쪽으로 */
+  top: 85%;
+}
+.guest-sheet .guest-send:hover { background: var(--black); color: #fff; }
