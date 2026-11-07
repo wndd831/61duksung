@@ -1029,7 +1029,7 @@
       }
 
       ctx.font = `700 ${W * 0.025}px PyeojinGothic`;
-      ctx.fillText('덕성여자대학교 시각디자인전공 졸업전시 Fold to Dot', W / 2, H * 0.94 - W * 0.0125);
+      ctx.fillText('덕성여자대학교 시각디자인전공 졸업전시회 Fold to Dot', W / 2, H * 0.94 - W * 0.0125);
       return canvas;
     }
 
@@ -1052,7 +1052,7 @@
       a.remove();
     };
 
-    const SHARE_TEXT = 'Fold to Dot. 덕성여자대학교 시각디자인전공 제61회 졸업전시';
+    const SHARE_TEXT = 'Fold to Dot. 덕성여자대학교 시각디자인전공 제61회 졸업전시회';
 
     async function shareImage(blob, fileName) {
       try {
@@ -1531,7 +1531,7 @@
     const d = designerOf(work.designer);
     const set = (elId, html) => { const el = document.getElementById(elId); if (el) el.innerHTML = html; };
 
-    document.title = `${work.title} | Fold to Dot.`;
+    document.title = `${work.title} | 덕성여자대학교 시각디자인전공 제61회 졸업전시회`;
     set('workCat', esc(CATEGORY_NAMES[work.category] || ''));
     set('workTitle', esc(work.title));
     set('workDesigner', esc(d ? d.name : ''));
