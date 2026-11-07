@@ -19,17 +19,51 @@
   <div class="custom-cursor"></div>
 
   <main class="invite">
-    <!-- 첫 화면: 접힌 종이(D)가 짠 나타남 → 누르면 쫙 펼쳐지며 화면을 채우고, 안쪽에 전시 정보 (오프라인 초대장과 같은 구조) -->
-    <section class="inv-hero" id="invHero" aria-label="Fold to Dot. 초대장 표지">
-      <svg class="inv-paper" id="invPaper" aria-hidden="true"></svg>
-      <p class="inv-pop inv-hero-kr" data-step="0">덕성여자대학교 시각디자인전공<br>제61회 졸업전시회</p>
-      <div class="inv-pop inv-hero-bottom" data-step="1">
-        <h1 class="inv-hero-title title-en">Fold to Dot.</h1>
-        <p class="inv-hero-date">2026.11.12. — 11.16.</p>
-        <p class="inv-hero-place">홍익대 대학로 아트센터 B2, 제3전시실</p>
+    <!-- 첫 화면: 오프라인 초대장처럼 접힌 정사각형 카드가 짠 → 누르면 쫙 펼쳐지며 안쪽 정보 -->
+    <section class="inv-hero" id="invHero" aria-label="Fold to Dot. 초대장">
+      <div class="inv-stage" id="invStage">
+        <svg class="inv-sheet-svg" id="invSheet" aria-hidden="true"></svg>
+
+        <!-- 접혀 있을 때 보이는 겉면 -->
+        <div class="inv-cover" id="invCover">
+          <p class="inv-cover-title title-en">Fold to<br>Dot.</p>
+          <p class="inv-cover-kr">덕성여자대학교 시각디자인전공<br>제61회 졸업전시회</p>
+          <i class="inv-cover-line" aria-hidden="true"></i>
+          <p class="inv-cover-date">2026. 11. 12.</p>
+        </div>
+
+        <!-- 펼치면 보이는 안쪽 -->
+        <div class="inv-inside" id="invInside">
+          <div class="inv-q inv-q-tl" data-step="0">
+            <p class="inv-in-kr">덕성여자대학교 시각디자인전공<br>제61회 졸업전시회</p>
+            <h1 class="inv-in-title title-en">Fold to<br>Dot.</h1>
+            <p class="inv-in-date">2026.11.12. — 11.16.</p>
+          </div>
+          <div class="inv-q inv-q-tr" data-step="1">
+            <p class="inv-in-label"><i class="nav-dot" aria-hidden="true"></i>Opening</p>
+            <p>11.12.(목) 17:00</p>
+          </div>
+          <div class="inv-q inv-q-mr" data-step="2">
+            <p class="inv-in-label"><i class="nav-dot" aria-hidden="true"></i>12일</p>
+            <p>17:30 ~ 18:30</p>
+          </div>
+          <div class="inv-q inv-q-br" data-step="3">
+            <p class="inv-in-label"><i class="nav-dot" aria-hidden="true"></i>13일 — 16일</p>
+            <p>9:00 ~ 18:00</p>
+          </div>
+          <div class="inv-q inv-q-bl" data-step="4">
+            <p class="inv-in-label"><i class="nav-dot" aria-hidden="true"></i>장소</p>
+            <p>서울특별시 종로구 대학로 57<br>홍익대 대학로 아트센터<br>B2, 제3전시실</p>
+          </div>
+          <svg class="inv-links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="44" y1="38" x2="66" y2="22"/>
+            <line x1="80" y1="30" x2="75" y2="40"/>
+            <line x1="76" y1="52" x2="70" y2="74"/>
+          </svg>
+        </div>
       </div>
       <p class="inv-tap" id="invTap">눌러서 펼쳐보세요</p>
-      <p class="inv-pop inv-scroll title-en" data-step="2">Scroll</p>
+      <p class="inv-scroll title-en" id="invScroll">Scroll</p>
     </section>
 
     <section class="invite-sec invite-hello">

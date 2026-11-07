@@ -165,7 +165,7 @@
 @media (hover: none) { .invite-page .custom-cursor { display: none; } }
 @media (max-width: 768px) { .invite-page .custom-cursor { display: none; } }
 
-/* ---------- 첫 화면: 접히는 종이 표지 ---------- */
+/* ---------- 첫 화면: 접힌 초대장 → 펼치기 ---------- */
 html.inv-locked, html.inv-locked body { overflow: hidden; height: 100%; }
 
 .inv-hero {
@@ -178,12 +178,84 @@ html.inv-locked, html.inv-locked body { overflow: hidden; height: 100%; }
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
-.inv-paper { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* 펼친 종이 크기(--L)의 상자. 접힌 카드는 이 상자의 1/4 */
+.inv-stage {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: var(--L, 340px);
+  height: var(--L, 340px);
+  margin: calc(var(--L, 340px) / -2) 0 0 calc(var(--L, 340px) / -2);
+}
+.inv-sheet-svg { position: absolute; inset: -60%; width: 220%; height: 220%; overflow: visible; }
+
+/* 겉면 (접힌 카드 위) */
+.inv-cover {
+  position: absolute;
+  left: 0; top: 0;
+  width: 50%; height: 50%;
+  padding: 7%;
+  color: var(--black);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+.inv-cover-title { font-size: calc(var(--L) * 0.085); line-height: 1; }
+.inv-cover-kr {
+  margin-top: 8%;
+  font-family: var(--font-kr);
+  font-size: calc(var(--L) * 0.026);
+  line-height: 1.45;
+}
+.inv-cover-line {
+  position: absolute;
+  left: 7%; right: 34%; bottom: 17%;
+  border-top: 1.5px solid var(--black);
+}
+.inv-cover-date {
+  position: absolute;
+  right: 7%; bottom: 14%;
+  font-family: var(--font-en-title);
+  font-weight: 700;
+  font-size: calc(var(--L) * 0.03);
+}
+
+/* 안쪽 (펼친 종이 위 정보) */
+.inv-inside { position: absolute; inset: 0; color: var(--black); pointer-events: none; }
+.inv-q {
+  position: absolute;
+  font-family: var(--font-kr-regular);
+  font-size: calc(var(--L) * 0.034);
+  line-height: 1.45;
+  opacity: 0;
+  transform: scale(1.12);
+}
+.inv-q.on {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.12s ease-out, transform 0.22s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+.inv-in-label {
+  display: flex; align-items: center; gap: 0.4em;
+  font-family: var(--font-en-title); font-weight: 700;
+}
+.inv-in-label .nav-dot { width: 0.75em; height: 0.75em; border-width: 1.5px; }
+.inv-q-tl { left: 6%; top: 6%; width: 42%; }
+.inv-in-kr { font-family: var(--font-kr); font-size: calc(var(--L) * 0.026); }
+.inv-in-title { margin: 6% 0 5%; font-size: calc(var(--L) * 0.085); line-height: 1; }
+.inv-in-date { font-family: var(--font-en-title); font-weight: 700; font-size: calc(var(--L) * 0.032); }
+.inv-q-tr { right: 6%; top: 8%; text-align: right; }
+.inv-q-mr { right: 6%; top: 40%; text-align: right; }
+.inv-q-br { right: 10%; top: 78%; text-align: right; }
+.inv-q-tr .inv-in-label, .inv-q-mr .inv-in-label, .inv-q-br .inv-in-label { justify-content: flex-end; }
+.inv-q-bl { left: 6%; top: 62%; }
+.inv-links { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.3s ease 0.6s; }
+.inv-inside.on .inv-links { opacity: 1; }
+.inv-links line { stroke: var(--black); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
 
 .inv-tap {
   position: absolute;
   left: 0; right: 0;
-  top: calc(var(--d-bottom) + 34px);
+  top: calc(46% + var(--L, 340px) * 0.25 + 40px);
   text-align: center;
   color: var(--black);
   font-family: var(--font-kr);
@@ -195,46 +267,17 @@ html.inv-locked, html.inv-locked body { overflow: hidden; height: 100%; }
 .inv-tap.hide { opacity: 0 !important; animation: none; }
 @keyframes invBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-/* 펼쳐진 종이 안쪽에 탁 나타나는 글자 */
-.inv-pop {
-  position: absolute;
-  left: 22px; right: 22px;
-  text-align: center;
-  color: var(--black);
-  opacity: 0;
-  transform: scale(1.12);
-  pointer-events: none;
-}
-.inv-pop.on {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.12s ease-out, transform 0.22s cubic-bezier(0.2, 1.4, 0.4, 1);
-}
-.inv-hero-kr {
-  top: 18%;
-  font-family: var(--font-kr);
-  font-size: var(--fs-body);
-  line-height: 1.5;
-}
-.inv-hero-bottom { top: 50%; transform: translateY(-50%) scale(1.12); }
-.inv-hero-bottom.on { transform: translateY(-50%); }
-.inv-hero-title { font-size: 48px; line-height: 1; }
-.inv-hero-date {
-  margin-top: 22px;
-  font-family: var(--font-en-title);
-  font-weight: 700;
-  font-size: var(--fs-lead);
-}
-.inv-hero-place {
-  margin-top: 6px;
-  font-family: var(--font-kr-regular);
-  font-size: var(--fs-small);
-}
 .inv-scroll {
-  bottom: calc(26px + env(safe-area-inset-bottom));
+  position: absolute;
+  left: 0; right: 0;
+  bottom: calc(22px + env(safe-area-inset-bottom));
+  text-align: center;
   font-size: var(--fs-caption);
   letter-spacing: 0.1em;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
+.inv-scroll.on { opacity: 1; }
 .inv-scroll.on::after {
   content: '';
   display: block;
@@ -249,3 +292,5 @@ html.inv-locked, html.inv-locked body { overflow: hidden; height: 100%; }
 .invite-hello { padding-top: 64px; }
 .invite-kicker.title-en { font-size: var(--fs-caption); letter-spacing: 0.1em; margin-bottom: 18px; }
 .invite-poster { margin-top: 48px; }
+.inv-cover { transform-origin: 50% 50%; }
+.inv-creases line { stroke: rgba(65, 68, 69, 0.18); stroke-width: 1; }
