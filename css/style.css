@@ -48,6 +48,13 @@ html {
 }
 
 :root {
+  /* ── 글자 크기 기준 (사이트 전체) ──
+     Display 29 · Lead 20 · Body 16 · Small 13 · Caption 11 */
+  --fs-display: 29px;
+  --fs-lead: 20px;
+  --fs-body: 16px;
+  --fs-small: 13px;
+  --fs-caption: 11px;
   --font-kr: 'PyeojinGothic', sans-serif;               /* Bold (기본) */
   --font-kr-regular: 'PyeojinGothic Regular', sans-serif; /* 400 */
   --orange: #ef7425;  /* CMYK M65 Y97 (FOGRA39 변환값) – 주황은 전부 이거 */
@@ -3220,3 +3227,71 @@ img.work-thumb { display: block; object-fit: cover; }
   .about-details .about-info,
   .about-details .about-committee { font-size: var(--details-fs, 16px); }
 }
+
+
+/* =========================================
+   글자 크기 기준 적용 (맨 위 :root 의 --fs-* 값만 바꾸면 사이트 전체가 같이 바뀜)
+   ========================================= */
+@media (max-width: 768px) {
+  :root {
+    --fs-display: 22px;
+    --fs-lead: 16px;
+    --fs-body: 15px;
+    --fs-small: 13px;
+    --fs-caption: 11px;
+  }
+}
+
+/* Display – 페이지 큰 제목 */
+.about-intro h1,
+.work-detail-title,
+.plaza-title { font-size: var(--fs-display); }
+
+/* Lead – 읽히는 본문 */
+.about-intro .scroll-text,
+.about-details .about-info,
+.about-details .about-committee,
+.fold-stage .fold-hint,
+.fold-modal-title { font-size: var(--fs-lead); }
+
+/* Body – 메뉴 · 탭 · 버튼 · 설명 */
+.main-nav a,
+.project-tab,
+.project-item.active .project-tab,
+.fold-btn,
+.plaza-send,
+.stage-switch,
+.fold-save-buttons .fold-save-label,
+.work-detail-designer,
+.work-detail-desc,
+.work-designer-name,
+.guest-modal-box h3,
+.guest-modal-box textarea,
+.guest-modal-box input,
+.guest-submit { font-size: var(--fs-body); }
+
+/* Small – 캡션 · 보조 설명 */
+.project-info-row,
+.project-info-row .info-label,
+.project-info-desc,
+.work-title,
+.work-designer,
+.work-detail-desc-en,
+.work-designer-en,
+.work-designer-contact,
+.work-other b,
+.fold-modal-sub,
+.plaza-sub,
+.plaza-empty,
+.guest-note .note-to,
+.guest-note .note-message,
+.guest-note .note-from { font-size: var(--fs-small); }
+
+/* Caption – 아주 작은 라벨 */
+.work-detail-cat,
+.work-designer-label-sm,
+.work-other small,
+.fold-modal-toast { font-size: var(--fs-caption); }
+
+/* 사진 높이 안에 맞게 – 디자이너 정보 줄 간격 */
+.work-designer-box { line-height: 1.5; }

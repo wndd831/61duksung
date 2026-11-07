@@ -1216,7 +1216,8 @@
       // 날짜·졸준위 덩어리의 윗선이 포스터 윗선에 올 때까지 흘려보냄
       if (aboutCol && details) {
         aboutCol.style.paddingBottom = `${Math.max(0, posterH - details.offsetHeight)}px`;
-        aboutCol.style.setProperty('--col-y', `${-details.offsetTop * flow}px`);
+        const extra = Math.max(0, details.offsetHeight - posterH);
+        aboutCol.style.setProperty('--col-y', `${-(details.offsetTop + extra) * flow}px`);
       }
       aboutIntro.classList.toggle('is-flowing', flow > 0.001 && flow < 0.999);
       setDetails(flow > 0.35);
@@ -1241,33 +1242,31 @@
     const fitText = () => {
       if (isNarrow()) {
         ['--intro-fs', '--intro-lh', '--title-fs', '--details-fs'].forEach((v) => aboutIntro.style.removeProperty(v));
+        aboutIntro.querySelector('.scroll-text').style.fontSize = '';
         return;
       }
       const introW = parseFloat(aboutIntro.style.getPropertyValue('--intro-w')) || 600;
       const posterH = aboutPoster.offsetHeight;
 
-      // 소개글 덩어리가 포스터 높이를 채우는 가장 큰 크기 (문장 안 줄바꿈은 단어 단위)
-      // 한 줄이 넘어가지 않는 가장 큰 크기 (최대 20px)
+      // 소개글: 기준 크기(Lead). 화면이 좁아 한 줄이 넘치면 그때만 줄임
       const textEl = aboutIntro.querySelector('.scroll-text');
       const widestLine16 = measureAt16(textEl, true);
-      let fs = Math.max(13, Math.min(20, Math.floor((16 * introW / widestLine16) * 2) / 2));
+      const lead = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs-lead')) || 20;
+      let fs = Math.max(13, Math.min(lead, Math.floor((16 * introW / widestLine16) * 2) / 2));
       const lh = 1.75;
       const apply = () => {
         aboutIntro.style.setProperty('--intro-fs', `${fs}px`);
-        aboutIntro.style.setProperty('--title-fs', `${Math.round(fs * 1.45)}px`);
+        aboutIntro.querySelector('.scroll-text').style.fontSize = `${fs}px`;   // 좁은 PC에서만 기준보다 작아짐
         aboutIntro.style.setProperty('--intro-lh', lh);
       };
       const blockH = () => { introBlock.style.minHeight = '0'; const h = introBlock.offsetHeight; introBlock.style.minHeight = ''; return h; };
       apply();
       while (blockH() > posterH * 0.8 && fs > 13) { fs -= 0.5; apply(); }
 
-      // 날짜 · 졸준위: 한 줄(나란히)에 들어가는 가장 큰 크기 (최대 18px)
       if (details) {
-        // 상하로 쌓은 날짜·졸준위가 포스터 높이 안에 들어가는 크기 (최대 16px)
-        let dfs = 16;
-        aboutIntro.style.setProperty('--details-fs', `${dfs}px`);
+        // 날짜·졸준위는 기준 크기(Lead) 그대로 – 포스터보다 길면 더 흘려서 끝까지 보여줌
+        aboutIntro.style.removeProperty('--details-fs');
         aboutIntro.classList.remove('is-compact', 'is-stacked');
-        while (details.offsetHeight > posterH && dfs > 12) { dfs -= 0.5; aboutIntro.style.setProperty('--details-fs', `${dfs}px`); }
       }
     };
 
