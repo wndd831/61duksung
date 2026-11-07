@@ -1,3 +1,10 @@
+/* 터치로 쓰는 기기면 커스텀 커서 숨김 */
+(function () {
+  const mark = () => document.documentElement.classList.add('is-touch');
+  if (window.matchMedia('(hover: none), (pointer: coarse)').matches) mark();
+  window.addEventListener('touchstart', mark, { once: true, passive: true });
+})();
+
 
   /* =========================================
      0. 페이지는 항상 맨 위에서 시작

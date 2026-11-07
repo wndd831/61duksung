@@ -3694,3 +3694,11 @@ img.work-thumb { display: block; object-fit: cover; }
   .soon-title { font-size: 40px; }
   .soon-mark { width: 96px; height: 96px; }
 }
+
+/* =========================================================
+   폰·태블릿(터치)에서는 커스텀 커서 안 보이게
+   ========================================================= */
+@media (hover: none), (pointer: coarse) {
+  .custom-cursor { display: none !important; }
+}
+html.is-touch .custom-cursor { display: none !important; }
