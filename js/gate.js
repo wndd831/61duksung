@@ -30,12 +30,6 @@
   st.textContent = 'html.is-soon body > *:not(#soonGate):not(.custom-cursor){display:none!important}html.is-soon,html.is-soon body{overflow:hidden!important}';
   document.head.appendChild(st);
 
-  var D = '<svg viewBox="59.85 42 216 216" aria-hidden="true">'
-    + '<polygon fill="var(--orange)" points="116.4,45 185.7,45 255,114.3 255,185.7 185.7,255 116.4,255"/>'
-    + '<polygon fill="var(--blue)" points="80.7,45 116.4,45 116.4,255 80.7,255"/>'
-    + '<polygon fill="var(--blue)" points="185.7,45 255,114.3 185.7,114.3"/>'
-    + '<polygon fill="var(--blue)" points="255,185.7 185.7,185.7 185.7,255"/></svg>';
-
   function pad(n) { return (n < 10 ? '0' : '') + n; }
 
   function mount() {
@@ -44,7 +38,7 @@
     g.className = 'soon-gate';
     g.innerHTML =
       '<div class="soon-inner">'
-      + '<div class="soon-mark">' + D + '</div>'
+      + '<div class="soon-mark"><svg id="soonPaper" viewBox="-0.06 -0.06 1.12 1.12" aria-label="종이가 D 모양으로 접히는 과정"></svg></div>'
       + '<p class="soon-kr">덕성여자대학교 시각디자인전공 제61회 졸업전시</p>'
       + '<h1 class="soon-title title-en">Fold to Dot.</h1>'
       + '<p class="soon-open"><i class="nav-dot" aria-hidden="true"></i>2026.11.12. THU 17:00 OPEN</p>'
@@ -67,6 +61,28 @@
     }
     tick();
     setInterval(tick, 1000);
+
+    // 한 자리에서 차근차근: 펼침 → 오른쪽 아래 → 오른쪽 위 → 왼쪽 띠 → 잠깐 멈춤 → 다시 펼쳐진 종이로
+    var svg = document.getElementById('soonPaper');
+    if (!window.FoldPaper || !svg) return;
+    var paper = FoldPaper.make(svg);
+    var HOLD = 600, FOLD = 750, GAP = 350, END = 1500, FADE = 300;
+    var seq = [HOLD, FOLD, GAP, FOLD, GAP, FOLD, END, FADE, FADE];
+    var total = seq.reduce(function (a, b) { return a + b; }, 0);
+    var t0 = performance.now();
+    function frame(now) {
+      var t = (now - t0) % total;
+      var at = 0, p = [0, 0, 0], op = 1;
+      var f1 = HOLD, f2 = f1 + FOLD + GAP, f3 = f2 + FOLD + GAP, fe = f3 + FOLD + END;
+      p[0] = (t - f1) / FOLD; p[1] = (t - f2) / FOLD; p[2] = (t - f3) / FOLD;
+      p = p.map(function (v) { return Math.max(0, Math.min(1, v)); });
+      if (t >= fe && t < fe + FADE) op = 1 - (t - fe) / FADE;          // 사라지고
+      else if (t >= fe + FADE) { p = [0, 0, 0]; op = (t - fe - FADE) / FADE; } // 펼친 종이로 다시
+      svg.style.opacity = op;
+      FoldPaper.draw(paper, { x: 0, y: 0, size: 1, p: p });
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);

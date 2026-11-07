@@ -3663,9 +3663,8 @@ img.work-thumb { display: block; object-fit: cover; }
   text-align: center;
 }
 .soon-inner { display: flex; flex-direction: column; align-items: center; }
-.soon-mark { width: 120px; height: 120px; margin-bottom: 34px; animation: soonFloat 3.2s ease-in-out infinite; }
+.soon-mark { width: 120px; height: 120px; margin-bottom: 34px; }
 .soon-mark svg { width: 100%; height: 100%; display: block; }
-@keyframes soonFloat { 0%,100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg) translateY(-6px); } }
 .soon-kr { font-family: var(--font-kr); font-size: var(--fs-small); }
 .soon-title { margin: 8px 0 26px; font-size: 56px; line-height: 1; }
 .soon-open {
