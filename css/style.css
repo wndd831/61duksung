@@ -3490,3 +3490,65 @@ img.work-thumb { display: block; object-fit: cover; }
   font-variant-numeric: tabular-nums;
 }
 .guest-count.is-full { color: var(--orange); }
+
+
+/* =========================================
+   방명록 작성창 v3 – 오른쪽 아래가 접힌 흰 종이, 접힌 면 = 전송
+   접힘선: 밑변 70% ↔ 오른쪽 변 50%  /  접힌 끝: (52%, 80%)  → 길쭉한 직각삼각형
+   ========================================= */
+.guest-sheet {
+  --sheet: #fff;
+  width: 380px;
+  aspect-ratio: 5 / 6;
+  padding: 34px 30px 26px;
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 70% 100%, 0 100%);
+  transform: translateY(10px) rotate(-3deg) scale(0.97);
+}
+.guest-modal.open .guest-sheet { transform: rotate(-3deg); }
+
+.guest-sheet .guest-field {
+  font-family: var(--font-kr);
+  font-weight: 700;
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+}
+.guest-sheet .guest-field::placeholder { font-family: inherit; }
+
+/* 메시지: 위쪽 (접힌 모서리 위까지만) */
+.guest-sheet .guest-row-msg {
+  flex: none;
+  height: 44%;
+}
+
+/* 보내는 사람: 아래쪽, 접힌 면 왼쪽까지만 */
+.guest-bottom {
+  margin-top: auto;
+  width: 50%;
+}
+.guest-sheet .guest-line { margin: 0 0 10px; }
+
+/* 접힌 면 = 전송 버튼 */
+.guest-sheet .guest-send {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  background: var(--blue);
+  clip-path: polygon(70% 100%, 100% 50%, 52% 80%);
+  color: #fff;
+  font-size: var(--fs-lead);
+  transition: background-color 0.2s ease;
+}
+.guest-sheet .guest-send span {
+  position: absolute;
+  left: 74%;
+  top: 76.5%;
+  transform: translate(-50%, -50%) rotate(-3deg);
+  white-space: nowrap;
+}
+.guest-sheet .guest-send:hover { background: var(--orange); color: #fff; }
+
+/* 붙는 메모: 메시지 위, 보내는 사람 아래 */
+.guest-note .note-message { flex: 1; }
+.guest-note .note-line { margin: 8px 0 6px; }
+.guest-sheet .guest-send { top: 0; left: 0; width: 100%; height: 100%; }

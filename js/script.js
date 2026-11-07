@@ -320,19 +320,19 @@
       el.style.setProperty('--rot', `${note.rot}deg`);
       el.style.transform = `rotate(${note.rot}deg)`;
 
-      // 작성창과 같은 모양: 보내는 사람 / 점선 / 메시지
-      const fromEl = document.createElement('div');
-      fromEl.className = 'note-from';
-      fromEl.textContent = note.from;
-
-      const lineEl = document.createElement('div');
-      lineEl.className = 'note-line';
-
+      // 작성창과 같은 순서: 메시지 / 점선 / 보내는 사람
       const msgEl = document.createElement('div');
       msgEl.className = 'note-message';
       msgEl.textContent = note.message;
 
-      el.append(fromEl, lineEl, msgEl);
+      const lineEl = document.createElement('div');
+      lineEl.className = 'note-line';
+
+      const fromEl = document.createElement('div');
+      fromEl.className = 'note-from';
+      fromEl.textContent = note.from;
+
+      el.append(msgEl, lineEl, fromEl);
       board.appendChild(el);
 
       makeDraggable(el, note);
@@ -440,7 +440,7 @@
 
     const openGuest = () => {
       guestModal?.classList.add('open');
-      setTimeout(() => guestFrom?.focus(), 50);
+      setTimeout(() => guestMessage?.focus(), 50);
     };
     const closeGuest = () => guestModal?.classList.remove('open');
 
@@ -457,7 +457,7 @@
       const message = guestMessage.value.trim();
 
       // 빈 칸이 있으면 그 칸을 살짝 흔들어 알려줌
-      const empty = [guestFrom, guestMessage].find((f) => !f.value.trim());
+      const empty = [guestMessage, guestFrom].find((f) => !f.value.trim());
       if (empty) {
         empty.classList.remove('is-empty');
         void empty.offsetWidth;

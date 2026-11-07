@@ -46,16 +46,21 @@
 <div class="guest-modal" id="guestModal">
   <!-- 작성창: 색 고르기 / 보내는 사람 / 점선 / 메시지 / 전송 -->
   <form class="guest-sheet" id="guestSheet" role="dialog" aria-modal="true" aria-label="방명록 작성" novalidate>
-    <div class="guest-row">
-      <input type="text" id="guestFrom" class="guest-field guest-field-from" placeholder="보내는 사람" maxlength="10" autocomplete="off">
-      <span class="guest-count" data-for="guestFrom">0/10</span>
-    </div>
-    <hr class="guest-line">
+    <!-- 위: 응원 메시지 -->
     <div class="guest-row guest-row-msg">
-      <textarea id="guestMessage" class="guest-field guest-field-msg" placeholder="메세지" maxlength="50"></textarea>
+      <textarea id="guestMessage" class="guest-field guest-field-msg" placeholder="응원 한마디를 남겨주세요" maxlength="50"></textarea>
       <span class="guest-count" data-for="guestMessage">0/50</span>
     </div>
-    <button type="submit" class="guest-send" id="guestSubmit">전송</button>
+    <!-- 아래: 점선 + 보내는 사람 -->
+    <div class="guest-bottom">
+      <hr class="guest-line">
+      <div class="guest-row">
+        <input type="text" id="guestFrom" class="guest-field guest-field-from" placeholder="보내는 사람" maxlength="10" autocomplete="off">
+        <span class="guest-count" data-for="guestFrom">0/10</span>
+      </div>
+    </div>
+    <!-- 오른쪽 아래 접힌 모서리 = 전송 버튼 -->
+    <button type="submit" class="guest-send" id="guestSubmit"><span>전송</span></button>
   </form>
 </div>
 
