@@ -37,18 +37,36 @@
     g.id = 'soonGate';
     g.className = 'soon-gate';
     g.innerHTML =
-      '<div class="soon-inner">'
+      '<div class="soon-inner" id="soonInner">'
+      + '<p class="soon-kr"><span class="soon-med">덕성여자대학교 시각디자인전공 제61회 졸업전시</span><br><b>FOLD TO DOT.</b></p>'
       + '<div class="soon-mark"><svg id="soonPaper" viewBox="-0.06 -0.06 1.12 1.12" aria-label="종이가 D 모양으로 접히는 과정"></svg></div>'
-      + '<p class="soon-kr">덕성여자대학교 시각디자인전공 제61회 졸업전시</p>'
-      + '<h1 class="soon-title title-en">Fold to Dot.</h1>'
-      + '<p class="soon-open"><i class="nav-dot" aria-hidden="true"></i>2026.11.12. THU 17:00 OPEN</p>'
-      + '<p class="soon-count" id="soonCount" aria-live="polite"></p>'
-      + '<p class="soon-label title-en">Coming Soon</p>'
-      + '<a class="soon-invite" href="invitation.html">모바일 초대장 보기</a>'
+      + '<h1 class="soon-title" id="soonTitle">COMING SOON</h1>'
+      + '<p class="soon-open" id="soonOpen">2026. 11. 12. THU 17:00 OPEN</p>'
+      + '<p class="soon-count" aria-live="polite"><b id="soonDay"></b><span class="soon-med" id="soonCount"></span></p>'
+      + '<a class="soon-invite" href="invitation.html"><i class="nav-dot" aria-hidden="true"></i>모바일 초대장 바로가기<i class="nav-dot" aria-hidden="true"></i></a>'
       + '</div>';
     document.body.appendChild(g);
 
     var el = document.getElementById('soonCount');
+    var dayEl = document.getElementById('soonDay');
+
+    // 날짜 줄 가로 길이를 COMING SOON 가로 길이에 딱 맞춤 → 그 크기를 D-day·초대장 버튼에도 같이 씀
+    var title = document.getElementById('soonTitle');
+    var open = document.getElementById('soonOpen');
+    var inner = document.getElementById('soonInner');
+    function fit() {
+      inner.style.setProperty('--soon-mid', '20px');
+      var w = title.getBoundingClientRect().width;
+      var w0 = open.getBoundingClientRect().width;
+      if (!w || !w0) return;
+      var f = 20 * w / w0;
+      inner.style.setProperty('--soon-mid', f.toFixed(2) + 'px');
+      var w1 = open.getBoundingClientRect().width;   // 한 번 더 미세 조정
+      if (w1) inner.style.setProperty('--soon-mid', (f * w / w1).toFixed(2) + 'px');
+    }
+    fit();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    window.addEventListener('resize', fit);
     function tick() {
       var left = OPEN_AT.getTime() - Date.now();
       if (left <= 0 && !force) { location.reload(); return; }
@@ -57,7 +75,8 @@
       var d = Math.floor(s / 86400); s -= d * 86400;
       var h = Math.floor(s / 3600); s -= h * 3600;
       var m = Math.floor(s / 60); s -= m * 60;
-      el.textContent = 'D-' + d + '  ' + pad(h) + ':' + pad(m) + ':' + pad(s);
+      dayEl.textContent = 'D-' + d;
+      el.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
     }
     tick();
     setInterval(tick, 1000);
