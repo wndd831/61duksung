@@ -427,18 +427,16 @@
 
     const guestSheet = document.getElementById('guestSheet');
 
-    const setSheetColor = (color) => {
-      if (!guestSheet) return;
-      guestSheet.dataset.color = color;
-      guestSheet.querySelectorAll('.guest-color').forEach((b) => {
-        const on = b.dataset.color === color;
-        b.classList.toggle('is-active', on);
-        b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      });
-    };
-    guestSheet?.querySelectorAll('.guest-color').forEach((b) => {
-      b.addEventListener('click', () => setSheetColor(b.dataset.color));
+    // 글자 수 표시 (0/10, 0/50)
+    const counters = guestSheet ? [...guestSheet.querySelectorAll('.guest-count')] : [];
+    const syncCounts = () => counters.forEach((c) => {
+      const f = document.getElementById(c.dataset.for);
+      if (!f) return;
+      const max = f.maxLength;
+      c.textContent = `${f.value.length}/${max}`;
+      c.classList.toggle('is-full', f.value.length >= max);
     });
+    [guestFrom, guestMessage].forEach((f) => f?.addEventListener('input', syncCounts));
 
     const openGuest = () => {
       guestModal?.classList.add('open');
@@ -468,9 +466,10 @@
         return;
       }
 
-      addNote(from, message, guestSheet.dataset.color);
+      addNote(from, message, Math.random() < 0.5 ? 'blue' : 'orange');   // 붙는 색은 랜덤
       guestFrom.value = '';
       guestMessage.value = '';
+      syncCounts();
       closeGuest();
     });
   }

@@ -3458,3 +3458,35 @@ img.work-thumb { display: block; object-fit: cover; }
 }
 .guest-field-msg { word-break: keep-all; overflow-wrap: break-word; }
 .guest-note .note-from { text-align: left; margin: 0; }
+
+
+/* 방명록 작성창 v2 – 흰 종이, 글자 수 표시 */
+.guest-sheet {
+  --sheet: #fff;
+  color: var(--black);
+  padding-top: 30px;
+}
+.guest-sheet .guest-field { color: var(--black); }
+.guest-sheet .guest-field::placeholder { color: var(--black); opacity: 0.3; }
+.guest-sheet .guest-send { color: var(--black); }
+.guest-sheet .guest-send:hover { color: var(--orange); }
+
+.guest-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.guest-row .guest-field { flex: 1; min-width: 0; }
+.guest-row-msg { flex: 1; min-height: 0; }
+.guest-row-msg .guest-field-msg { height: 100%; }
+
+.guest-count {
+  flex: none;
+  padding-top: 0.6em;
+  font-family: var(--font-kr-regular);
+  font-weight: 400;
+  font-size: var(--fs-caption);
+  color: #999;
+  font-variant-numeric: tabular-nums;
+}
+.guest-count.is-full { color: var(--orange); }

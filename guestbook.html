@@ -45,14 +45,16 @@
 <!-- 방명록 작성 모달 -->
 <div class="guest-modal" id="guestModal">
   <!-- 작성창: 색 고르기 / 보내는 사람 / 점선 / 메시지 / 전송 -->
-  <form class="guest-sheet" id="guestSheet" data-color="orange" role="dialog" aria-modal="true" aria-label="방명록 작성" novalidate>
-    <div class="guest-colors" role="radiogroup" aria-label="색종이 색">
-      <button type="button" class="guest-color is-active" data-color="orange" aria-label="주황" aria-pressed="true"></button>
-      <button type="button" class="guest-color" data-color="blue" aria-label="파랑" aria-pressed="false"></button>
+  <form class="guest-sheet" id="guestSheet" role="dialog" aria-modal="true" aria-label="방명록 작성" novalidate>
+    <div class="guest-row">
+      <input type="text" id="guestFrom" class="guest-field guest-field-from" placeholder="보내는 사람" maxlength="10" autocomplete="off">
+      <span class="guest-count" data-for="guestFrom">0/10</span>
     </div>
-    <input type="text" id="guestFrom" class="guest-field guest-field-from" placeholder="보내는 사람" maxlength="12" autocomplete="off">
     <hr class="guest-line">
-    <textarea id="guestMessage" class="guest-field guest-field-msg" placeholder="메세지" maxlength="80"></textarea>
+    <div class="guest-row guest-row-msg">
+      <textarea id="guestMessage" class="guest-field guest-field-msg" placeholder="메세지" maxlength="50"></textarea>
+      <span class="guest-count" data-for="guestMessage">0/50</span>
+    </div>
     <button type="submit" class="guest-send" id="guestSubmit">전송</button>
   </form>
 </div>
