@@ -57,7 +57,7 @@ html {
   --fs-caption: 11px;
   --font-kr: 'PyeojinGothic', sans-serif;               /* Bold (기본) */
   --font-kr-regular: 'PyeojinGothic Regular', sans-serif; /* 400 */
-  --orange: #ef7425;  /* CMYK M65 Y97 (FOGRA39 변환값) – 주황은 전부 이거 */
+  --orange: #f47925;  /* 주황은 전부 이거 */
   --bg: #f7fcfe;      /* CMYK C2 */
   --black: #414445;   /* CMYK C10 K90 (FOGRA39 변환값) – 검정은 전부 이거 */
   --font-en-title: 'Paperlogy', 'PyeojinGothic', sans-serif;

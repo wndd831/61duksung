@@ -905,7 +905,7 @@
       const ctx = canvas.getContext('2d');           // 배경을 칠하지 않으니 투명
 
       const css = getComputedStyle(document.documentElement);
-      const front = css.getPropertyValue('--orange').trim() || '#ef7425';
+      const front = css.getPropertyValue('--orange').trim() || '#f47925';
       const back = css.getPropertyValue('--blue').trim() || '#4dc3f1';
 
       ctx.lineJoin = 'round';
