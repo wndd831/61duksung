@@ -3856,3 +3856,13 @@ html.is-touch .custom-cursor { display: none !important; }
 
 /* 녹화용 커서 숨김 (?nocursor) */
 html.no-cursor .custom-cursor { display: none !important; }
+
+/* 방명록 작성창(정사각형): 접힌 '보내기' 면을 실제로 접은 모양으로 – 접힌 끝 각도 90°
+   접힘선 밑변 80% ↔ 오른쪽 변 70%, 오른쪽 아래 꼭짓점을 접힘선에 대고 뒤집은 자리 = (72.31%, 81.54%) */
+.guest-sheet { clip-path: polygon(0 0, 100% 0, 100% 70%, 80% 100%, 0 100%); }
+.guest-sheet .guest-send { clip-path: polygon(80% 100%, 100% 70%, 72.31% 81.54%); }
+.guest-sheet .guest-send span {
+  left: 84%;
+  top: 84%;
+  transform: translate(-50%, -50%) rotate(-22.6deg);   /* 접힌 면의 긴 변 방향 */
+}
