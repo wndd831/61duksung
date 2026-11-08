@@ -3853,3 +3853,6 @@ html.is-touch .custom-cursor { display: none !important; }
 /* 작품 상세 이미지: 4:3으로 잘라서, 이미지 사이 간격 없이 붙임 */
 .work-detail-images { gap: 0; }
 .work-detail-image { aspect-ratio: 4 / 3; object-fit: cover; }
+
+/* 녹화용 커서 숨김 (?nocursor) */
+html.no-cursor .custom-cursor { display: none !important; }

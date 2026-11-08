@@ -1,3 +1,15 @@
+/* 녹화용: 주소 뒤에 ?nocursor 를 붙이면 동그라미 커서 숨김 (같은 탭에서 다른 페이지로 가도 유지, ?cursor 로 다시 켜기) */
+(function () {
+  const q = new URLSearchParams(location.search);
+  try {
+    if (q.has('nocursor')) sessionStorage.setItem('ftdNoCursor', '1');
+    if (q.has('cursor')) sessionStorage.removeItem('ftdNoCursor');
+    if (sessionStorage.getItem('ftdNoCursor') === '1') document.documentElement.classList.add('no-cursor');
+  } catch (e) {
+    if (q.has('nocursor')) document.documentElement.classList.add('no-cursor');
+  }
+})();
+
 /* 실제 사이트에서는 주소에 .html 안 보이게 (duksungvcd2026.com/about 처럼) */
 (function () {
   if (!/(^|\.)duksungvcd2026\.com$|\.github\.io$/.test(location.hostname)) return;
