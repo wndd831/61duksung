@@ -3824,3 +3824,6 @@ html.is-touch .custom-cursor { display: none !important; }
   transform: translate(-50%, -50%);
 }
 .add-btn::after { transform: translate(-50%, -50%) rotate(90deg); }
+/* + 버튼: 동그라미 테두리와 + 모두 3px */
+.add-btn { border-width: 3px; }
+.add-btn::before, .add-btn::after { height: 3px; }
