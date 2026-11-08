@@ -3789,3 +3789,38 @@ html.is-touch .custom-cursor { display: none !important; }
 .guest-note { aspect-ratio: 1 / 1; height: auto; }
 .guest-note { --note-w: 190px; }
 @media (max-width: 768px) { .guest-note { --note-w: 95px; } }
+
+/* ---- 11/08 수정 ---- */
+/* about: 12일 / 13일—16일 같은 날짜와 시간 사이 간격 넓게 */
+.about-details .about-info-sub { min-width: 7em; margin-right: 0.4em; }
+
+/* 로딩 점선: 12px 단위로 딱 떨어지게(9칸 = 108px) → 오른쪽 끝 칸이 잘려 점처럼 보이지 않게 */
+.load-dash { width: 108px; }
+@keyframes dashRun {
+  0%   { clip-path: inset(0 100% 0 0); animation-timing-function: steps(9, end); }
+  75%  { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+/* FOLD TO ___ 밑줄 절반 */
+.nav-blank { width: 2.1em; }
+
+/* 방명록 + 버튼: 선으로 그린 + 를 동그라미 정가운데에, 두께는 테두리와 같은 1.5px */
+.add-btn {
+  display: block;
+  padding: 0;
+  font-size: 0;
+  line-height: 0;
+}
+.add-btn::before,
+.add-btn::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 22px;
+  height: 1.5px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
+.add-btn::after { transform: translate(-50%, -50%) rotate(90deg); }
