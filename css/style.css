@@ -3849,3 +3849,7 @@ html.is-touch .custom-cursor { display: none !important; }
   stroke: var(--black);
   stroke-width: 1.4;
 }
+
+/* 작품 상세 이미지: 4:3으로 잘라서, 이미지 사이 간격 없이 붙임 */
+.work-detail-images { gap: 0; }
+.work-detail-image { aspect-ratio: 4 / 3; object-fit: cover; }
