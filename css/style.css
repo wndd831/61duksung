@@ -3847,5 +3847,5 @@ html.is-touch .custom-cursor { display: none !important; }
 .home-step .fold-mark circle {
   fill: #fff;
   stroke: var(--black);
-  stroke-width: 2.2;
+  stroke-width: 1.4;
 }
