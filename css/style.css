@@ -3827,3 +3827,12 @@ html.is-touch .custom-cursor { display: none !important; }
 /* + 버튼: 동그라미 테두리와 + 모두 3px */
 .add-btn { border-width: 3px; }
 .add-btn::before, .add-btn::after { height: 3px; }
+.add-btn { border-width: 2.5px; }
+.add-btn::before, .add-btn::after { height: 2.5px; }
+
+/* FOLD TO ___ 밑줄: 점선 한 칸 길이를 모두 같게(3px 선 + 3px 빈칸), 전체 길이만 짧게 = 5칸 */
+.nav-blank {
+  width: 27px;
+  border-bottom: 0;
+  background: repeating-linear-gradient(90deg, currentColor 0 3px, transparent 3px 6px) left bottom / 100% 1.5px no-repeat;
+}
