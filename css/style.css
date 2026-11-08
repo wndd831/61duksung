@@ -3787,3 +3787,5 @@ html.is-touch .custom-cursor { display: none !important; }
 /* 방명록 종이(작성창 · 붙은 메모) 모두 정사각형 */
 .guest-sheet { aspect-ratio: 1 / 1; height: auto; }
 .guest-note { aspect-ratio: 1 / 1; height: auto; }
+.guest-note { --note-w: 190px; }
+@media (max-width: 768px) { .guest-note { --note-w: 95px; } }

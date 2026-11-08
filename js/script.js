@@ -379,7 +379,8 @@
       const color = note.color || (Math.floor(note.id) % 2 ? 'blue' : 'orange');
       el.className = color === 'blue' ? 'guest-note note-blue' : 'guest-note';
       if (!LIST_MODE) {
-        el.style.left = `${note.left}%`;
+        // 화면 폭이 좁아도(폰) 메모가 오른쪽으로 잘리지 않게 안쪽으로 당김
+        el.style.left = `clamp(10px, ${note.left}%, calc(100% - var(--note-w, 190px) - 18px))`;
         el.style.top = `${note.top}px`;
       }
       // 기울기: 메모마다 확실히 다르게 (-12°~-3° 또는 3°~12°, 메모 id로 정해져서 누가 봐도 같음)
