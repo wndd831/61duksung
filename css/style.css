@@ -3862,7 +3862,7 @@ html.no-cursor .custom-cursor { display: none !important; }
 .guest-sheet { clip-path: polygon(0 0, 100% 0, 100% 70%, 80% 100%, 0 100%); }
 .guest-sheet .guest-send { clip-path: polygon(80% 100%, 100% 70%, 72.31% 81.54%); }
 .guest-sheet .guest-send span {
-  left: 84%;
-  top: 84%;
-  transform: translate(-50%, -50%) rotate(-22.6deg);   /* 접힌 면의 긴 변 방향 */
+  left: 85.5%;
+  top: 80.5%;
+  transform: translate(-50%, -50%) rotate(-22.6deg);   /* 접힌 면의 긴 변 방향, 위쪽 긴 변에 가깝게 */
 }
