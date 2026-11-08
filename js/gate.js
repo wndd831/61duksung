@@ -8,7 +8,7 @@
    - 커밍순 화면 확인용:  ?soon  붙이면 어디서든 커밍순 화면이 보임
    ========================================================= */
 (function () {
-  var GATE_ON = false;   // ← 커밍순 잠금 스위치. false = 지금은 누구나 사이트 다 보임 / true = 오픈 전 커밍순
+  var GATE_ON = true;    // ← 커밍순 잠금 스위치. false = 지금은 누구나 사이트 다 보임 / true = 오픈 전 커밍순
   var OPEN_AT = new Date('2026-11-12T17:00:00+09:00'); // ← 오픈 날짜·시간 (한국 시간)
 
   var params = new URLSearchParams(location.search);
