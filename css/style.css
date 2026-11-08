@@ -3836,3 +3836,16 @@ html.is-touch .custom-cursor { display: none !important; }
   border-bottom: 0;
   background: repeating-linear-gradient(90deg, currentColor 0 3px, transparent 3px 6px) left bottom / 100% 1.5px no-repeat;
 }
+
+/* 홈 종이접기: 접힌 자리 표시 (흰 점 + 점선) */
+.home-step .fold-mark line {
+  stroke: var(--black);
+  stroke-width: 1.6;
+  stroke-dasharray: 5 4;
+  stroke-linecap: round;
+}
+.home-step .fold-mark circle {
+  fill: #fff;
+  stroke: var(--black);
+  stroke-width: 2.2;
+}
