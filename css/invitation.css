@@ -233,7 +233,7 @@ html:has(body.invite-page), body.invite-page { overflow: hidden; height: 100%; o
 .inv-link:hover text, .inv-link:active text { fill: var(--orange); }
 .inv-link:hover g, .inv-link:active g { stroke: var(--orange); }
 
-/* 초대장 공유하기 버튼: 올리거나 누르면 버튼이 주황으로 채워지고 테두리는 없어짐, 글자는 흰색 */
+/* 초대장 공유하기 버튼: 올리거나 누르면 버튼이 주황으로 채워지고 테두리(같은 두께)도 주황, 글자는 흰색 */
 .inv-share rect { transition: fill .15s ease, stroke .15s ease; }
-.inv-share:hover rect, .inv-share:active rect { fill: var(--orange); stroke: transparent; }
+.inv-share:hover rect, .inv-share:active rect { fill: var(--orange); stroke: var(--orange); }
 .inv-share:hover text, .inv-share:active text { fill: #fff; }
