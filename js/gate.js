@@ -43,7 +43,7 @@
       '<div class="soon-inner" id="soonInner">'
       + '<p class="soon-kr"><span class="soon-med">덕성여자대학교 시각디자인전공 제61회 졸업전시회</span><br><b>FOLD TO DOT.</b></p>'
       + '<div class="soon-mark"><svg id="soonPaper" viewBox="-0.06 -0.06 1.12 1.12" aria-label="종이가 D 모양으로 접히는 과정"></svg></div>'
-      + '<h1 class="soon-title" id="soonTitle">COMING SOON</h1>'
+      + '<h1 class="soon-title" id="soonTitle">COMIN<span class="soon-g">G</span> SOON</h1>'
       + '<p class="soon-open" id="soonOpen">2026. 11. 12. THU 17:00 OPEN</p>'
       + '<p class="soon-count" aria-live="polite"><b id="soonDay"></b><span class="soon-med" id="soonCount"></span></p>'
       + '<a class="soon-invite" href="invitation.html"><i class="nav-dot" aria-hidden="true"></i>모바일 초대장 바로가기<i class="nav-dot" aria-hidden="true"></i></a>'

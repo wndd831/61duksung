@@ -3866,3 +3866,7 @@ html.no-cursor .custom-cursor { display: none !important; }
   top: 81.5%;
   transform: translate(-50%, -50%) rotate(-22.6deg);   /* 접힌 면의 긴 변 방향, 위쪽 긴 변에 가깝게 */
 }
+
+/* 커밍순: COMING의 G만 프리텐다드 */
+@font-face { font-family: 'Pretendard'; src: url('../fonts/Pretendard-Bold-latin.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+.soon-title .soon-g { font-family: 'Pretendard', var(--font-en-title); font-weight: 700; font-size: 1.07em; line-height: 0; }  /* 다른 글자와 대문자 높이 맞춤 */
