@@ -14,13 +14,13 @@
    ========================================================= */
 
 const DESIGNERS = [
-  { id: 'd1', name: '홍길동', nameEn: 'Hong Gildong', email: 'hello@example.com', phone: '010-0000-0000', photo: '' },
+  { id: 'd1', name: '김나겸', nameEn: 'Kim Nagyeom', email: 'hello@example.com', phone: '010-0000-0000', photo: '' },
   { id: 'd2', name: '김덕성', nameEn: 'Kim Duksung', email: '', phone: '', photo: '' },
   { id: 'd3', name: '이시디', nameEn: 'Lee Sidi', email: '', phone: '', photo: '' },
 ];
 
 const WORKS = [
-  { id: 'w1', category: 'comm',  designer: 'd1', title: '작품명 1', desc: '작품설명작품설명작품설명작품설명작품설명작품설명', descEn: 'English description English description', thumb: '', images: [] },
+  { id: 'w1', category: 'comm',  designer: 'd1', title: '회피니스', desc: '작품설명작품설명작품설명작품설명작품설명작품설명', descEn: 'English description English description', thumb: '', images: [] },
   { id: 'w2', category: 'comm',  designer: 'd2', title: '작품명 2', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
   { id: 'w3', category: 'comm',  designer: 'd3', title: '작품명 3', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
   { id: 'w4', category: 'comm',  designer: 'd2', title: '작품명 4', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
