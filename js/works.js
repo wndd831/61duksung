@@ -15,7 +15,7 @@
    ========================================================= */
 
 const DESIGNERS = [
-  { id: 'd1', name: '김나겸', nameEn: 'Kim Nagyeom', email: 'hello@example.com', phone: '010-0000-0000', photo: '' },
+  { id: 'd1', name: '김나겸', nameEn: 'Kim Nagyeom', email: 'nagyeom9704@gmail.com', phone: '010-9754-2282', photo: '' },
   { id: 'd2', name: '김덕성', nameEn: 'Kim Duksung', email: '', phone: '', photo: '' },
   { id: 'd3', name: '이시디', nameEn: 'Lee Sidi', email: '', phone: '', photo: '' },
 ];
