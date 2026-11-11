@@ -508,7 +508,7 @@
       const F = NOTE * 1.29;                        // 20도 기울어진 정사각형이 차지하는 폭
       const pad = (F - NOTE) / 2 + 6;               // 기울어진 모서리가 화면 밖으로 안 나가게
       const maxX = Math.max(pad, W - NOTE - pad);
-      const OK = NOTE * 0.08;
+      const OK = NOTE * 0.26;                     // 모서리끼리는 겹쳐도 됨 (글씨는 안 가리게)
       const placed = [];
       let rows = Math.max(viewH() - 110 - F, F);
       return notes.map((n) => {
