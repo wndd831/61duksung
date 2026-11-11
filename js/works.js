@@ -17,8 +17,8 @@
 
 const DESIGNERS = [
   { id: '김나겸', name: '김나겸', nameEn: 'Kim Nagyeom', email: 'nagyeom9704@gmail.com', phone: '010-9754-2282', photo: 'images/profile/kim-nagyeom.jpg' },
-  { id: '김영혜', name: '김영혜', nameEn: 'Kim Younghye', email: 'ggoget@naver.com', phone: 'Insta @haley_illust', photo: 'images/profile/kim-younghye.jpg' },
-  { id: 'd3', name: '이시디', nameEn: 'Lee Sidi', email: '', phone: '', photo: '' },
+  { id: '김영혜', name: '김영혜', nameEn: 'Kim Younghye', email: 'ggoget@naver.com', phone: '@haley_illust', photo: 'images/profile/kim-younghye.jpg' },
+  { id: '이한비', name: '이한비', nameEn: 'Lee Hanbi', email: 'rum0070d@gmail.com', phone: 'behance.net/rum0070d', photo: 'images/profile/lee-hanbi.jpg' },
 ];
 
 const WORKS = [
