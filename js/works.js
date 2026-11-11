@@ -21,7 +21,7 @@ const DESIGNERS = [
 ];
 
 const WORKS = [
-  { id: 'w1', category: 'comm',  designer: 'd1', title: '회피니스', titleEn: 'H PPINESS', desc: '‘회피니스(H回ppiness)’는 회피성향 현대인의 일상 복귀를
+  { id: 'w1', category: 'comm',  designer: 'd1', title: '회피니스', titleEn: 'H回PPINESS', desc: '‘회피니스(H回ppiness)’는 회피성향 현대인의 일상 복귀를
 돕는 행동·정서 교정 웰니스 브랜드입니다. 언어유희 그래픽을
 적용한 일상 소품으로 회피 메커니즘의 직관적 이해와 자기수
 용을 돕습니다. 경고성 메시지와 의도적 불편함을 담은 시각적
