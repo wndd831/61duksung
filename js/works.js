@@ -8,6 +8,7 @@
        photo   : 프로필 사진 경로 (없으면 회색 칸)
    ▸ WORKS: 작품 하나당 한 줄
        category : 'comm'(커뮤니케이션) / 'story'(스토리텔링일러스트) / 'video'(영상콘텐츠)
+       title / titleEn : 작품명 / 영문 작품명 (titleEn 없으면 빈칸('') → 안 보임)
        designer : 위 DESIGNERS의 id  → 같은 id 작품이 2개면 상세페이지에 '다른 프로젝트'로 뜸
        thumb    : 썸네일 이미지 경로 (없으면 회색 칸)
        images   : 상세페이지 이미지 경로들 (없으면 회색 칸 3개)

@@ -3874,3 +3874,8 @@ html.no-cursor .custom-cursor { display: none !important; }
 /* 방명록 메모: 글이 길면 잘리지 않고 종이가 아래로 길어짐 (기본은 정사각형) */
 .guest-note { overflow: visible; aspect-ratio: auto; min-height: var(--note-w, 190px); height: auto; }
 .guest-note .note-message { overflow: visible; flex: 1 0 auto; overflow-wrap: anywhere; }
+
+/* 영문 작품명: 한글 제목 바로 밑, 한 단계 작은 회색 글씨 */
+.work-title-en { font-size: var(--fs-caption, 11px); color: #888; margin-top: 1px; line-height: 1.35; }
+.work-detail-title-en { font-size: var(--fs-lead, 17px); color: #888; font-weight: 500; line-height: 1.35; margin: -10px 0 14px; }
+.work-other .work-other-en { display: block; font-style: normal; font-size: var(--fs-caption, 11px); color: #888; line-height: 1.35; }

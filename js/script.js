@@ -1604,6 +1604,7 @@
         return `<a class="work-card" href="work.html?id=${encodeURIComponent(w.id)}">
           ${thumbHtml(w.thumb, w.title)}
           <p class="work-title">${esc(w.title)}</p>
+          ${w.titleEn ? `<p class="work-title-en">${esc(w.titleEn)}</p>` : ''}
           <p class="work-designer">${esc(d ? d.name : '')}</p>
         </a>`;
       }).join('');
@@ -1621,6 +1622,8 @@
     document.title = `${work.title} | 덕성여자대학교 시각디자인전공 제61회 졸업전시회`;
     set('workCat', esc(CATEGORY_NAMES[work.category] || ''));
     set('workTitle', esc(work.title));
+    const tEn = document.getElementById('workTitleEn');
+    if (tEn) { tEn.textContent = work.titleEn || ''; tEn.hidden = !work.titleEn; }
     set('workDesigner', esc(d ? d.name : ''));
     set('workDesc', esc(work.desc));
     set('workDescEn', esc(work.descEn));
@@ -1647,7 +1650,7 @@
         box.hidden = false;
         set('dOtherList', others.map((w) => `<a class="work-other" href="work.html?id=${encodeURIComponent(w.id)}">
             ${thumbHtml(w.thumb, w.title)}
-            <span><b>${esc(w.title)}</b><small>${esc(CATEGORY_NAMES[w.category] || '')}</small></span>
+            <span><b>${esc(w.title)}</b>${w.titleEn ? `<em class="work-other-en">${esc(w.titleEn)}</em>` : ''}<small>${esc(CATEGORY_NAMES[w.category] || '')}</small></span>
           </a>`).join(''));
       }
     } else {
