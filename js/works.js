@@ -16,13 +16,13 @@
    ========================================================= */
 
 const DESIGNERS = [
-  { id: 'd1', name: '김나겸', nameEn: 'Kim Nagyeom', email: 'nagyeom9704@gmail.com', phone: '010-9754-2282', photo: 'images/profile/kim-nagyeom.jpg' },
+  { id: '김나겸', name: '김나겸', nameEn: 'Kim Nagyeom', email: 'nagyeom9704@gmail.com', phone: '010-9754-2282', photo: 'images/profile/kim-nagyeom.jpg' },
   { id: 'd2', name: '김덕성', nameEn: 'Kim Duksung', email: '', phone: '', photo: '' },
   { id: 'd3', name: '이시디', nameEn: 'Lee Sidi', email: '', phone: '', photo: '' },
 ];
 
 const WORKS = [
-  { id: 'w1', category: 'comm',  designer: 'd1', title: '회피니스', titleEn: 'H回PPINESS', desc: `‘회피니스(H回ppiness)’는 회피성향 현대인의 일상 복귀를
+  { id: '회피니스', category: 'comm',  designer: '김나겸', title: '회피니스', titleEn: 'H回PPINESS', desc: `‘회피니스(H回ppiness)’는 회피성향 현대인의 일상 복귀를
 돕는 행동·정서 교정 웰니스 브랜드입니다. 언어유희 그래픽을
 적용한 일상 소품으로 회피 메커니즘의 직관적 이해와 자기수
 용을 돕습니다. 경고성 메시지와 의도적 불편함을 담은 시각적
