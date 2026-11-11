@@ -3870,3 +3870,7 @@ html.no-cursor .custom-cursor { display: none !important; }
 /* 커밍순: COMING의 G만 프리텐다드 */
 @font-face { font-family: 'Pretendard'; src: url('../fonts/Pretendard-Bold-latin.woff2') format('woff2'); font-weight: 700; font-display: swap; }
 .soon-title .soon-g { font-family: 'Pretendard', var(--font-en-title); font-weight: 700; font-size: 1.11em; line-height: 0; }  /* G만 살짝 크게 */
+
+/* 방명록 메모: 글이 길면 잘리지 않고 종이가 아래로 길어짐 (기본은 정사각형) */
+.guest-note { overflow: visible; aspect-ratio: auto; min-height: var(--note-w, 190px); height: auto; }
+.guest-note .note-message { overflow: visible; flex: 1 0 auto; overflow-wrap: anywhere; }
