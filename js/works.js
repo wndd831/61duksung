@@ -17,14 +17,14 @@
 
 const DESIGNERS = [
   { id: '김나겸', name: '김나겸', nameEn: 'Kim Nagyeom', email: 'nagyeom9704@gmail.com', phone: '010-9754-2282', photo: 'images/profile/kim-nagyeom.jpg' },
-  { id: 'd2', name: '김덕성', nameEn: 'Kim Duksung', email: '', phone: '', photo: '' },
+  { id: '김영혜', name: '김영혜', nameEn: 'Kim Younghye', email: 'ggoget@naver.com', phone: 'Insta @haley_illust', photo: 'images/profile/kim-younghye.jpg' },
   { id: 'd3', name: '이시디', nameEn: 'Lee Sidi', email: '', phone: '', photo: '' },
 ];
 
 const WORKS = [
   { id: '회피니스', category: 'comm',  designer: '김나겸', title: '회피니스', titleEn: 'H回PPINESS', desc: `‘회피니스(H回ppiness)’는 회피성향 현대인의 일상 복귀를
 돕는 행동·정서 교정 웰니스 브랜드입니다. 언어유희 그래픽을 적용한 일상 소품으로 회피 메커니즘의 직관적 이해와 자기수용을 돕습니다. 경고성 메시지와 의도적 불편함을 담은 시각적 장치를 반복 노출하여, 이용자가 회피 상황을 자각하고 스스로 본래 자리로 돌아오도록 유도합니다.`, descEn: `H ppiness is an emotional wellness brand helping avoidant individuals return to routine. Featuring wordplay graphics on daily items, it promotes self-acceptance and a clear grasp of avoidance mechanisms. By repeating visual devices with warnings and intentional discomfort, it encourages users to acknowledge triggers and voluntarily return.`, thumb: 'images/works/kim-nagyeom-thumb.jpg', images: [] },
-  { id: 'w2', category: 'comm',  designer: 'd2', title: '작품명 2', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
+  { id: '꼬마 마녀 릴리의 용기', category: 'story',  designer: '김영혜', title: '꼬마 마녀 릴리의 용기', titleEn: 'The Courage of Little Witch Lily', desc: '「꼬마 마녀 릴리의 용기」는 겁이 많은 꼬마 마녀 릴리가 마을의 마법을 되찾기 위해 무지개 골짜기로 떠나는 여정을 담은 동화 책이다. 거센 바람과 어두운 동굴 속 두려움을 마주한 릴리는 끝내 한 걸음씩 앞으로 나아가며 작은 성장을 이룬다. 이 작품 은 용기란 두려움이 없는 것이 아니라, 두려움 속에서도 스스로 를 믿고 나아가는 마음임을 따뜻하게 전하고자 하였다.', descEn: 'The Courage of Little Witch Lily follows Lily, a timid little witch who sets out for Rainbow Valley to bring magic back to her village. Facing fierce winds and a dark cave ahead, Lily keeps moving forward, one small step at a time. The story gently shows that courage is not the absence of fear, but trusting yourself enough to move ahead despite it.', thumb: '', images: [] },
   { id: 'w3', category: 'comm',  designer: 'd3', title: '작품명 3', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
   { id: 'w4', category: 'comm',  designer: 'd2', title: '작품명 4', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
   { id: 'w5', category: 'comm',  designer: 'd3', title: '작품명 5', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
