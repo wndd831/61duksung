@@ -382,7 +382,7 @@
       for (let i = 0; i < key.length; i++) { h ^= key.charCodeAt(i); h = Math.imul(h, 16777619); }
       h >>>= 0;
       // 기울기 6가지 중 하나: +20 · +30 · +40 · -20 · -30 · -40도 (메모마다 고정)
-      const TILTS = [10, -15, 20, -10, 15, -20];
+      const TILTS = [5, -10, 10, -5];
       h ^= h >>> 16; h = Math.imul(h, 2246822507); h ^= h >>> 13; h = Math.imul(h, 3266489909); h ^= h >>> 16;
       return TILTS[(h >>> 0) % TILTS.length];
     }
@@ -400,7 +400,7 @@
         el.style.left = `clamp(10px, ${note.left}%, calc(100% - var(--note-w, 190px) - 18px))`;
         el.style.top = `${note.top}px`;
       }
-      // 기울기: 메모마다 ±20/30/40도 중 하나 (메모 id로 정해져서 누가 봐도 같음)
+      // 기울기: 메모마다 ±5/10도 중 하나 (메모 id로 정해져서 누가 봐도 같음)
       const rot = noteTilt(note);
       el.style.setProperty('--rot', `${rot}deg`);
       el.style.transform = `rotate(${rot}deg)`;
@@ -420,6 +420,7 @@
       el.append(msgEl, lineEl, fromEl);
       if (LIST_MODE) board.prepend(el); // 초대장: 최신 메모가 맨 위
       else board.appendChild(el);
+      return el;
     }
 
     function makeDraggable(el, note) {
@@ -503,28 +504,33 @@
         return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
       };
     }
-    function layoutNotes(notes) {
+    // 메모 실제 높이(긴 글은 길어짐)와 기울기까지 따져서 자리 잡기
+    // 모서리끼리는 살짝 겹쳐도 되지만 글씨는 안 가리게
+    function layoutNotes(notes, heights) {
       const W = boardW();
-      const F = NOTE * 1.29;                        // 20도 기울어진 정사각형이 차지하는 폭
-      const pad = (F - NOTE) / 2 + 6;               // 기울어진 모서리가 화면 밖으로 안 나가게
-      const maxX = Math.max(pad, W - NOTE - pad);
-      const OK = NOTE * 0.26;                     // 모서리끼리는 겹쳐도 됨 (글씨는 안 가리게)
+      const C = Math.cos(10 * Math.PI / 180), S = Math.sin(10 * Math.PI / 180);
+      const OK = NOTE * 0.1;
       const placed = [];
-      let rows = Math.max(viewH() - 110 - F, F);
-      return notes.map((n) => {
+      let rows = Math.max(viewH() - 110 - NOTE * 1.2, NOTE * 1.2);
+      return notes.map((n, i) => {
+        const h = heights[i] || NOTE;
+        const ew = NOTE * C + h * S, eh = NOTE * S + h * C;   // 기울어진 메모가 차지하는 폭·높이
+        const padX = (ew - NOTE) / 2 + 6, padY = (eh - h) / 2 + 16;
+        const maxX = Math.max(padX, W - NOTE - padX);
         const rnd = seededRandom(n.id);
         let best = null;
-        for (let round = 0; round < 10 && !(best && best.worst <= OK); round++) {
-          for (let i = 0; i < 80; i++) {
-            const c = { x: pad + rnd() * (maxX - pad), y: pad + 10 + rnd() * rows };
+        for (let round = 0; round < 12 && !(best && best.worst <= OK); round++) {
+          for (let k = 0; k < 80; k++) {
+            const x = padX + rnd() * (maxX - padX), y = padY + rnd() * rows;
+            const cx = x + NOTE / 2, cy = y + h / 2;
             const worst = placed.reduce((m, q) => Math.max(m, Math.min(
-              Math.max(0, F - Math.abs(c.x - q.x)),
-              Math.max(0, F - Math.abs(c.y - q.y)),
+              Math.max(0, (ew + q.ew) / 2 - Math.abs(cx - q.cx)),
+              Math.max(0, (eh + q.eh) / 2 - Math.abs(cy - q.cy)),
             )), 0);
-            if (!best || worst < best.worst) best = { ...c, worst };
+            if (!best || worst < best.worst) best = { x, y, cx, cy, ew, eh, worst };
             if (worst <= OK) break;
           }
-          if (best.worst > OK) rows += F * 0.5;     // 자리가 없으면 아래로 넓혀서 다시
+          if (best.worst > OK) rows += NOTE * 0.6;   // 자리가 없으면 아래로 넓혀서 다시
         }
         placed.push(best);
         return { x: Math.round(best.x), y: Math.round(best.y) };
@@ -533,8 +539,11 @@
 
     function renderAllNotes() {
       board.innerHTML = '';
-      const spots = LIST_MODE ? [] : layoutNotes(notesCache);
-      notesCache.forEach((n, i) => renderNote(n, spots[i]));
+      const els = notesCache.map((n) => renderNote(n, LIST_MODE ? null : { x: 0, y: 0 }));
+      if (!LIST_MODE) {
+        const spots = layoutNotes(notesCache, els.map((el) => el.offsetHeight));
+        els.forEach((el, i) => { el.style.left = `${spots[i].x}px`; el.style.top = `${spots[i].y}px`; });
+      }
       updateBoardHeight();
     }
 
