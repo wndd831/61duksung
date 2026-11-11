@@ -15,13 +15,13 @@
    ========================================================= */
 
 const DESIGNERS = [
-  { id: 'd1', name: '김나겸', nameEn: 'Kim Nagyeom', email: 'nagyeom9704@gmail.com', phone: '010-9754-2282', photo: '' },
+  { id: 'd1', name: '김나겸', nameEn: 'Kim Nagyeom', email: 'nagyeom9704@gmail.com', phone: '010-9754-2282', photo: '김나겸.jpg' },
   { id: 'd2', name: '김덕성', nameEn: 'Kim Duksung', email: '', phone: '', photo: '' },
   { id: 'd3', name: '이시디', nameEn: 'Lee Sidi', email: '', phone: '', photo: '' },
 ];
 
 const WORKS = [
-  { id: 'w1', category: 'comm',  designer: 'd1', title: '회피니스', desc: '작품설명작품설명작품설명작품설명작품설명작품설명', descEn: 'English description English description', thumb: '김나겸_회피니스_섬네일 - 김나겸.jpg', images: [] },
+  { id: 'w1', category: 'comm',  designer: 'd1', title: '회피니스', titleEn: 'H PPINESS' desc: '작품설명작품설명작품설명작품설명작품설명작품설명', descEn: 'English description English description', thumb: '김나겸_회피니스_섬네일 - 김나겸.jpg', images: [] },
   { id: 'w2', category: 'comm',  designer: 'd2', title: '작품명 2', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
   { id: 'w3', category: 'comm',  designer: 'd3', title: '작품명 3', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
   { id: 'w4', category: 'comm',  designer: 'd2', title: '작품명 4', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
