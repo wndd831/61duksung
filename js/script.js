@@ -382,7 +382,7 @@
       for (let i = 0; i < key.length; i++) { h ^= key.charCodeAt(i); h = Math.imul(h, 16777619); }
       h >>>= 0;
       // 기울기 6가지 중 하나: +20 · +30 · +40 · -20 · -30 · -40도 (메모마다 고정)
-      const TILTS = [20, -30, 40, -20, 30, -40];
+      const TILTS = [10, -15, 20, -10, 15, -20];
       h ^= h >>> 16; h = Math.imul(h, 2246822507); h ^= h >>> 13; h = Math.imul(h, 3266489909); h ^= h >>> 16;
       return TILTS[(h >>> 0) % TILTS.length];
     }
@@ -505,7 +505,7 @@
     }
     function layoutNotes(notes) {
       const W = boardW();
-      const F = NOTE * 1.36;                        // 40도 기울어진 정사각형이 차지하는 폭
+      const F = NOTE * 1.29;                        // 20도 기울어진 정사각형이 차지하는 폭
       const pad = (F - NOTE) / 2 + 6;               // 기울어진 모서리가 화면 밖으로 안 나가게
       const maxX = Math.max(pad, W - NOTE - pad);
       const OK = NOTE * 0.08;
