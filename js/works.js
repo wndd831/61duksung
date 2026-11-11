@@ -21,7 +21,19 @@ const DESIGNERS = [
 ];
 
 const WORKS = [
-  { id: 'w1', category: 'comm',  designer: 'd1', title: '회피니스', titleEn: 'H PPINESS', desc: '작품설명작품설명작품설명작품설명작품설명작품설명', descEn: 'English description English description', thumb: 'images/works/kim-nagyeom-thumb.jpg', images: [] },
+  { id: 'w1', category: 'comm',  designer: 'd1', title: '회피니스', titleEn: 'H PPINESS', desc: '‘회피니스(H回ppiness)’는 회피성향 현대인의 일상 복귀를
+돕는 행동·정서 교정 웰니스 브랜드입니다. 언어유희 그래픽을
+적용한 일상 소품으로 회피 메커니즘의 직관적 이해와 자기수
+용을 돕습니다. 경고성 메시지와 의도적 불편함을 담은 시각적
+장치를 반복 노출하여, 이용자가 회피 상황을 자각하고 스스로
+본래 자리로 돌아오도록 유도합니다.', descEn: 'H ppiness is an emotional wellness brand helping
+avoidant individuals return to routine. Featuring
+wordplay graphics on daily items, it promotes
+self-acceptance and a clear grasp of avoidance
+mechanisms. By repeating visual devices with
+warnings and intentional discomfort, it encourages
+users to acknowledge triggers and voluntarily
+return.', thumb: 'images/works/kim-nagyeom-thumb.jpg', images: [] },
   { id: 'w2', category: 'comm',  designer: 'd2', title: '작품명 2', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
   { id: 'w3', category: 'comm',  designer: 'd3', title: '작품명 3', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
   { id: 'w4', category: 'comm',  designer: 'd2', title: '작품명 4', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
