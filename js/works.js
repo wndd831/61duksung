@@ -9,6 +9,7 @@
    ▸ WORKS: 작품 하나당 한 줄
        category : 'comm'(커뮤니케이션) / 'story'(스토리텔링일러스트) / 'video'(영상콘텐츠)
        title / titleEn : 작품명 / 영문 작품명 (titleEn 없으면 빈칸('') → 안 보임)
+       desc / descEn : 줄바꿈 있는 긴 글은 작은따옴표 대신 ` ` (숫자 1 왼쪽 키)로 감싸면 엔터 그대로 써도 됨
        designer : 위 DESIGNERS의 id  → 같은 id 작품이 2개면 상세페이지에 '다른 프로젝트'로 뜸
        thumb    : 썸네일 이미지 경로 (없으면 회색 칸)
        images   : 상세페이지 이미지 경로들 (없으면 회색 칸 3개)
@@ -21,19 +22,19 @@ const DESIGNERS = [
 ];
 
 const WORKS = [
-  { id: 'w1', category: 'comm',  designer: 'd1', title: '회피니스', titleEn: 'H回PPINESS', desc: '‘회피니스(H回ppiness)’는 회피성향 현대인의 일상 복귀를
+  { id: 'w1', category: 'comm',  designer: 'd1', title: '회피니스', titleEn: 'H回PPINESS', desc: `‘회피니스(H回ppiness)’는 회피성향 현대인의 일상 복귀를
 돕는 행동·정서 교정 웰니스 브랜드입니다. 언어유희 그래픽을
 적용한 일상 소품으로 회피 메커니즘의 직관적 이해와 자기수
 용을 돕습니다. 경고성 메시지와 의도적 불편함을 담은 시각적
 장치를 반복 노출하여, 이용자가 회피 상황을 자각하고 스스로
-본래 자리로 돌아오도록 유도합니다.', descEn: 'H ppiness is an emotional wellness brand helping
+본래 자리로 돌아오도록 유도합니다.`, descEn: `H ppiness is an emotional wellness brand helping
 avoidant individuals return to routine. Featuring
 wordplay graphics on daily items, it promotes
 self-acceptance and a clear grasp of avoidance
 mechanisms. By repeating visual devices with
 warnings and intentional discomfort, it encourages
 users to acknowledge triggers and voluntarily
-return.', thumb: 'images/works/kim-nagyeom-thumb.jpg', images: [] },
+return.`, thumb: 'images/works/kim-nagyeom-thumb.jpg', images: [] },
   { id: 'w2', category: 'comm',  designer: 'd2', title: '작품명 2', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
   { id: 'w3', category: 'comm',  designer: 'd3', title: '작품명 3', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },
   { id: 'w4', category: 'comm',  designer: 'd2', title: '작품명 4', desc: '작품설명작품설명작품설명', descEn: 'English description', thumb: '', images: [] },

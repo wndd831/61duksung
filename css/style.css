@@ -3879,3 +3879,6 @@ html.no-cursor .custom-cursor { display: none !important; }
 .work-title-en { font-size: var(--fs-caption, 11px); color: #888; margin-top: 1px; line-height: 1.35; }
 .work-detail-title-en { font-size: var(--fs-lead, 17px); color: #888; font-weight: 500; line-height: 1.35; margin: -10px 0 14px; }
 .work-other .work-other-en { display: block; font-style: normal; font-size: var(--fs-caption, 11px); color: #888; line-height: 1.35; }
+
+/* 작품 설명 줄바꿈 그대로 보이게 */
+.work-detail-desc, .work-detail-desc-en { white-space: pre-line; }
