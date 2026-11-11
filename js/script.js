@@ -381,21 +381,26 @@
       let h = 2166136261;
       for (let i = 0; i < key.length; i++) { h ^= key.charCodeAt(i); h = Math.imul(h, 16777619); }
       h >>>= 0;
-      const mag = 3 + (h % 1000) / 1000 * 9;           // 3 ~ 12도
-      return Math.round((h & 1 ? mag : -mag) * 10) / 10;
+      // 기울기 6가지 중 하나: +20 · +30 · +40 · -20 · -30 · -40도 (메모마다 고정)
+      const TILTS = [20, -30, 40, -20, 30, -40];
+      h ^= h >>> 16; h = Math.imul(h, 2246822507); h ^= h >>> 13; h = Math.imul(h, 3266489909); h ^= h >>> 16;
+      return TILTS[(h >>> 0) % TILTS.length];
     }
 
-        function renderNote(note) {
+        function renderNote(note, pos) {
       const el = document.createElement('div');
       // 색종이 색: 저장된 값, 없으면(예전 메모) id로 고정
       const color = note.color || (Math.floor(note.id) % 2 ? 'blue' : 'orange');
       el.className = color === 'blue' ? 'guest-note note-blue' : 'guest-note';
-      if (!LIST_MODE) {
-        // 화면 폭이 좁아도(폰) 메모가 오른쪽으로 잘리지 않게 안쪽으로 당김
+      if (!LIST_MODE && pos) {
+        // 화면에 보이는 자리는 layoutNotes()가 기울기까지 고려해서 겹치지 않게 다시 계산한 값
+        el.style.left = `${pos.x}px`;
+        el.style.top = `${pos.y}px`;
+      } else if (!LIST_MODE) {
         el.style.left = `clamp(10px, ${note.left}%, calc(100% - var(--note-w, 190px) - 18px))`;
         el.style.top = `${note.top}px`;
       }
-      // 기울기: 메모마다 확실히 다르게 (-12°~-3° 또는 3°~12°, 메모 id로 정해져서 누가 봐도 같음)
+      // 기울기: 메모마다 ±20/30/40도 중 하나 (메모 id로 정해져서 누가 봐도 같음)
       const rot = noteTilt(note);
       el.style.setProperty('--rot', `${rot}deg`);
       el.style.transform = `rotate(${rot}deg)`;
@@ -483,9 +488,53 @@
     let notesCache = [];
     let remote = null;
 
+    // 화면 배치: 붙은 순서대로, 메모마다 고정된 난수(id 기준)로 빈자리를 찾음.
+    // 기울어진 메모가 차지하는 넓이(약 1.4배)를 고려해서 서로 안 겹치고 화면 밖으로 안 나가게.
+    // 이미 붙은 메모도 매번 이 방식으로 다시 놓여서, 화면 크기가 달라도 자연스럽게 배치됨.
+    function seededRandom(key) {
+      let h = 2166136261;
+      for (const ch of String(key)) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); }
+      let a = h >>> 0;
+      return () => {
+        a = (a + 0x6D2B79F5) >>> 0;
+        let t = a;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function layoutNotes(notes) {
+      const W = boardW();
+      const F = NOTE * 1.36;                        // 40도 기울어진 정사각형이 차지하는 폭
+      const pad = (F - NOTE) / 2 + 6;               // 기울어진 모서리가 화면 밖으로 안 나가게
+      const maxX = Math.max(pad, W - NOTE - pad);
+      const OK = NOTE * 0.08;
+      const placed = [];
+      let rows = Math.max(viewH() - 110 - F, F);
+      return notes.map((n) => {
+        const rnd = seededRandom(n.id);
+        let best = null;
+        for (let round = 0; round < 10 && !(best && best.worst <= OK); round++) {
+          for (let i = 0; i < 80; i++) {
+            const c = { x: pad + rnd() * (maxX - pad), y: pad + 10 + rnd() * rows };
+            const worst = placed.reduce((m, q) => Math.max(m, Math.min(
+              Math.max(0, F - Math.abs(c.x - q.x)),
+              Math.max(0, F - Math.abs(c.y - q.y)),
+            )), 0);
+            if (!best || worst < best.worst) best = { ...c, worst };
+            if (worst <= OK) break;
+          }
+          if (best.worst > OK) rows += F * 0.5;     // 자리가 없으면 아래로 넓혀서 다시
+        }
+        placed.push(best);
+        return { x: Math.round(best.x), y: Math.round(best.y) };
+      });
+    }
+
     function renderAllNotes() {
       board.innerHTML = '';
-      notesCache.forEach(renderNote);
+      const spots = LIST_MODE ? [] : layoutNotes(notesCache);
+      notesCache.forEach((n, i) => renderNote(n, spots[i]));
       updateBoardHeight();
     }
 
@@ -558,13 +607,18 @@
       }
       notesCache.push(newNote);
       saveNotes(notesCache);
-      renderNote(newNote);
-      updateBoardHeight();
+      renderAllNotes();
     }
 
     // 시작: 설정이 있으면 온라인, 없거나 실패하면 이 브라우저 저장
     notesCache = loadNotes();
     renderAllNotes();
+    // 화면 폭이 바뀌면 다시 배치
+    let lastW = boardW(), relayoutT = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(relayoutT);
+      relayoutT = setTimeout(() => { if (Math.abs(boardW() - lastW) > 40) { lastW = boardW(); renderAllNotes(); } }, 250);
+    });
     if (firebaseKit()) {
       connectRemote()
         .then((r) => { remote = r; })
