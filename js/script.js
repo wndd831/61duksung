@@ -1591,8 +1591,10 @@
   const hasWorks = typeof WORKS !== 'undefined' && typeof DESIGNERS !== 'undefined';
   const designerOf = (id) => (hasWorks ? DESIGNERS.find((d) => d.id === id) : null);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const thumbHtml = (src, alt) => (src
-    ? `<img class="work-thumb" src="${esc(src)}" alt="${esc(alt)}" loading="lazy">`
+  // thumbFit: 'left' = 사진 왼쪽 선에 맞춰 자르기 / 'contain' = 안 자르고 가로에 맞춤(위아래 흰 여백)
+  const FIT_STYLE = { left: 'object-position:left center', right: 'object-position:right center', top: 'object-position:center top', bottom: 'object-position:center bottom', contain: 'object-fit:contain' };
+  const thumbHtml = (src, alt, fit) => (src
+    ? `<img class="work-thumb" src="${esc(src)}" alt="${esc(alt)}" loading="lazy"${FIT_STYLE[fit] ? ` style="${FIT_STYLE[fit]}"` : ''}>`
     : '<div class="work-thumb"></div>');
 
   // 목록 (project.html)
@@ -1602,7 +1604,7 @@
       grid.innerHTML = list.map((w) => {
         const d = designerOf(w.designer);
         return `<a class="work-card" href="work.html?id=${encodeURIComponent(w.id)}">
-          ${thumbHtml(w.thumb, w.title)}
+          ${thumbHtml(w.thumb, w.title, w.thumbFit)}
           <p class="work-title">${esc(w.title)}</p>
           ${w.titleEn ? `<p class="work-title-en">${esc(w.titleEn)}</p>` : ''}
           <p class="work-designer">${esc(d ? d.name : '')}</p>
@@ -1649,7 +1651,7 @@
       if (others.length && box) {
         box.hidden = false;
         set('dOtherList', others.map((w) => `<a class="work-other" href="work.html?id=${encodeURIComponent(w.id)}">
-            ${thumbHtml(w.thumb, w.title)}
+            ${thumbHtml(w.thumb, w.title, w.thumbFit)}
             <span><b>${esc(w.title)}</b>${w.titleEn ? `<em class="work-other-en">${esc(w.titleEn)}</em>` : ''}<small>${esc(CATEGORY_NAMES[w.category] || '')}</small></span>
           </a>`).join(''));
       }
