@@ -3885,3 +3885,6 @@ html.no-cursor .custom-cursor { display: none !important; }
 
 /* 작품 상세 이미지: 자르지 않고 가로폭에 맞춰 원래 비율 그대로 (사진 없을 때 회색 칸만 4:3) */
 img.work-detail-image { aspect-ratio: auto; height: auto; object-fit: contain; background: none; }
+
+/* 투명 PNG도 흰 배경 위에 (작품 썸네일·상세·프로필) */
+img.work-thumb, img.work-detail-image, #dPhoto img { background: #fff; }
