@@ -1650,6 +1650,8 @@
       if (d.email) contact.push(`<a href="mailto:${esc(d.email)}">${esc(d.email)}</a>`);
       if (d.phone) contact.push(`<a href="tel:${esc(d.phone.replace(/[^0-9+]/g, ''))}">${esc(d.phone)}</a>`);
       set('dPhoto', d.photo ? `<img src="${esc(d.photo)}" alt="${esc(d.name)}">` : '');
+      const ph = document.getElementById('dPhoto');
+      if (ph) ph.style.display = d.photo ? '' : 'none';   // 프로필 사진 없으면 회색 칸 자체를 숨김
       set('dContact', contact.join('<br>'));
 
       // 같은 디자이너의 다른 작품
