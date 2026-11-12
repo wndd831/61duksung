@@ -1589,6 +1589,13 @@
   ========================================= */
 
   const hasWorks = typeof WORKS !== 'undefined' && typeof DESIGNERS !== 'undefined';
+  // works.js에 오류가 있으면 화면 위에 어디가 틀렸는지 표시 (작품 목록이 통째로 안 보이는 대신)
+  if (!hasWorks && window.__worksErr && document.querySelector('.work-detail, #workGrid, .project-grid, main')) {
+    const bar = document.createElement('div');
+    bar.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99999;background:#f47925;color:#fff;font:600 14px/1.5 sans-serif;padding:10px 16px;';
+    bar.textContent = '⚠ works.js 오류: ' + window.__worksErr + '  (쉼표·따옴표를 확인해 줘. 설명 안에 작은따옴표 \' 가 있으면 \\\' 로)';
+    document.body.appendChild(bar);
+  }
   const designerOf = (id) => (hasWorks ? DESIGNERS.find((d) => d.id === id) : null);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   // thumbFit: 'left' = 사진 왼쪽 선에 맞춰 자르기 / 'contain' = 안 자르고 가로에 맞춤(위아래 흰 여백)
