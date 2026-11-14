@@ -305,7 +305,20 @@
 
   }
 
-    /* =========================================
+  /* 서버 연결 문제를 화면에 표시 (폰에서도 캡처해서 원인 확인 가능) */
+  function showNetError(where, err) {
+    console.warn(where, err);
+    let bar = document.getElementById('netErr');
+    if (!bar) {
+      bar = document.createElement('div'); bar.id = 'netErr';
+      bar.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#222;color:#fff;font:500 12px/1.5 sans-serif;padding:8px 12px;border-radius:6px;white-space:pre-wrap;word-break:break-all;';
+      document.body.appendChild(bar);
+    }
+    const msg = (err && (err.code || err.name)) + ' – ' + (err && err.message || err);
+    bar.textContent += (bar.textContent ? '\n' : '') + '⚠ ' + where + ': ' + msg + '  [' + navigator.userAgent.replace(/^.*?\(/, '(').slice(0, 80) + ']';
+  }
+
+  /* =========================================
      공용: Firebase 연결 (방명록 + 광장)
      js/firebase-config.js 에 설정이 있을 때만 연결, 한 번만 불러옴
   ========================================= */
@@ -553,9 +566,12 @@
 
       // 누가 붙이면 모두의 화면에 바로 반영
       fs.onSnapshot(fs.query(col, fs.orderBy('createdAt', 'asc')), (snap) => {
-        notesCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        renderAllNotes();
-      }, (err) => console.warn('[방명록] 불러오기 실패', err));
+        try {
+          if (/[?&]debug/.test(location.search)) showNetError('확인', { code: 'ok', message: '방명록 ' + snap.size + '장 불러옴 (서버:' + !snap.metadata.fromCache + ')' });
+          notesCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+          renderAllNotes();
+        } catch (e) { showNetError('방명록 그리기 오류 (' + snap.size + '장)', e); }
+      }, (err) => showNetError('방명록 불러오기 실패', err));
 
       return {
         add: (note) => fs.addDoc(col, {
@@ -628,10 +644,11 @@
       clearTimeout(relayoutT);
       relayoutT = setTimeout(() => { if (Math.abs(boardW() - lastW) > 40) { lastW = boardW(); renderAllNotes(); } }, 250);
     });
+    if (/[?&]debug/.test(location.search)) showNetError('확인', { code: 'start', message: 'Firebase 설정 ' + (window.FIREBASE_CONFIG ? '있음' : '없음') });
     if (firebaseKit()) {
       connectRemote()
         .then((r) => { remote = r; })
-        .catch((err) => console.warn('[방명록] 온라인 연결 실패 – 이 브라우저에만 저장합니다', err));
+        .catch((err) => showNetError('방명록 서버 연결 실패', err));
     }
 
     const guestSheet = document.getElementById('guestSheet');
@@ -1378,6 +1395,7 @@
           }),
         };
         fs.onSnapshot(fs.query(col, fs.orderBy('createdAt', 'asc')), (snap) => {
+          if (/[?&]debug/.test(location.search)) showNetError('확인', { code: 'ok', message: '광장 ' + snap.size + '장 불러옴 (서버:' + !snap.metadata.fromCache + ')' });
           plazaStore.cache = snap.docs.map((d) => {
             const v = d.data();
             let L = [];
@@ -1385,8 +1403,8 @@
             return { id: v.cid || d.id, layers: L, word: v.word, name: v.name, bg: v.bg, x: v.x, y: v.y, rot: v.rot };
           }).filter((e) => Array.isArray(e.layers) && e.layers.length);
           if (foldStage.classList.contains('is-plaza')) renderPlaza(lastPlazaId);
-        }, (err) => console.warn('[광장] 불러오기 실패', err));
-      }).catch((err) => console.warn('[광장] 온라인 연결 실패 – 이 브라우저에만 저장합니다', err));
+        }, (err) => showNetError('광장 불러오기 실패', err));
+      }).catch((err) => showNetError('광장 서버 연결 실패', err));
     }
 
     fitView();
